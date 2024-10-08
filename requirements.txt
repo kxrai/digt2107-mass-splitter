@@ -1,0 +1,5 @@
+npm install
+npm i -D daisyui@latest
+npm install -D tailwindcss
+npx tailwindcss init
+npm install @heroicons/react
