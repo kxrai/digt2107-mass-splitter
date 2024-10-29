@@ -13,6 +13,13 @@
 
 **MASS Splitter** is a simple and intuitive app designed to solve the common headache of splitting bills during group outings. Whether you’re out with friends for dinner or on a group trip, MASS Splitter helps you manage shared expenses effortlessly.
 
+Tools We Are Using:
+ReactJS
+NodeJS
+MySQL
+TailwindCSS
+DaisyUI
+
 ---
 
 ### 🎯 Key Features (MVP)
