@@ -1,11 +1,25 @@
 // src/App.js
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import BillEntry from './components/BillEntry';
 import PartyMembers from './components/PartyMembers';
 import BillSplitter from './components/BillSplitter';
 import SplitResult from './components/SplitResult';
+import HomePage from './pages/HomePage.js';
 
-function App() {
+function HomeButton() {
+  const navigate = useNavigate();
+  return (
+    <button
+      onClick={() => navigate('/home')}
+      className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+    >
+      Go to Home
+    </button>
+  );
+}
+
+function MainApp() {
   const [billItems, setBillItems] = useState([]);
   const [partyMembers, setPartyMembers] = useState([]);
   const [splitResult, setSplitResult] = useState(null);
@@ -26,8 +40,21 @@ function App() {
         {splitResult && (
           <SplitResult partyMembers={partyMembers} splitResult={splitResult} />
         )}
+        {/* Button to navigate to Home */}
+        <HomeButton />
       </div>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainApp />} />
+        <Route path="/home" element={<HomePage />} />
+      </Routes>
+    </Router>
   );
 }
 

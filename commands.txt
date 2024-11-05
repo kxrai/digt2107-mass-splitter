@@ -3,3 +3,6 @@ npm i -D daisyui@latest
 npm install -D tailwindcss
 npx tailwindcss init
 npm install @heroicons/react
+
+11/5/24
+npm install react-router-dom
