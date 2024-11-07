@@ -11,7 +11,6 @@ function App() {
   const [splitResult, setSplitResult] = useState(null);
 
   return (
-    <div className="min-h-screen bg-base-200">
       <div className="container mx-auto p-4">
         <h1 className="text-4xl font-bold text-center mb-8">MASS Splitter</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -27,8 +26,6 @@ function App() {
           <SplitResult partyMembers={partyMembers} splitResult={splitResult} />
         )}
       </div>
-    </div>
   );
 }
-
 export default App;

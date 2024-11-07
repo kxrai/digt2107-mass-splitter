@@ -6,3 +6,4 @@ npm install @heroicons/react
 npm install mysql2
 npm install @react-oauth/google
 npm i jwt-decode
+npm install react-router-dom
