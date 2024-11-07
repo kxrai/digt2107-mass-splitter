@@ -2,10 +2,10 @@ import React from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from "jwt-decode";
 
-const LoginPage = () => {
-    const handleLoginSuccess = (credentialResponse) => {
+function LoginPage(){
+    function handleLoginSuccess(credentialResponse) {
         const decoded = jwtDecode(credentialResponse?.credential);
-        window.location.href = "/HomePage";
+        window.location.href = "/";
     };
 
     const handleLoginFailure = (error) => {
@@ -13,10 +13,10 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="container mx-auto p-4">
+        <div class="h-screen grid place-items-center bg-gradient-to-b from-lightBlue-400 to-peach-400">
              <div className="card bg-base-100 shadow-xl">
-                <div className="card-body">
-                    <h2 className="card-title">Login with Google</h2>
+                <div className="w-[600px] h-[300px] card-body">
+                    <h1 className="card-title text-center">Login/Sign-up with Google</h1>
                     <GoogleOAuthProvider clientId="584206264281-4udrb623en2sg85nq3b58eevjm8elf0r.apps.googleusercontent.com">
                         <GoogleLogin
                             onSuccess={handleLoginSuccess}
@@ -30,22 +30,6 @@ const LoginPage = () => {
             </div>
         </div>
     );
-};
-
-const styles = {
-    container: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100vh',
-        backgroundColor: '#FDEADE', // Light Peach
-    },
-    heading: {
-        color: '#4A90E2', // Light Blue
-        marginBottom: '20px',
-        fontFamily: 'Arial, sans-serif',
-    },
 };
 
 export default LoginPage;
