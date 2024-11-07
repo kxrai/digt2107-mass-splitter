@@ -3,3 +3,6 @@ npm i -D daisyui@latest
 npm install -D tailwindcss
 npx tailwindcss init
 npm install @heroicons/react
+npm install mysql2
+npm install @react-oauth/google
+npm i jwt-decode
