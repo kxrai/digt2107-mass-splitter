@@ -1,7 +1,14 @@
-// homepage.js
+// src/Homepage.js
 import React from 'react';
+import RecentSplits from '../components/RecentSplits';
 
-function HomePage() {
+function Homepage() {
+  const recentSplitsData = [
+    { name: 'Cafe Coffee Day', date: '2024-11-01', group: 'Friends', amount: 26.00 },
+    { name: 'Pizza Night', date: '2024-11-03', group: 'Family', amount: 45.50 },
+    { name: 'Grocery Run', date: '2024-11-05', group: 'Roommates', amount: 60.00 },
+  ];
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Most Recent Split */}
@@ -22,7 +29,7 @@ function HomePage() {
           {[...Array(5)].map((_, index) => (
             <img
               key={index}
-              src="https://via.placeholder.com/48" // Replace with actual image URLs
+              src="https://via.placeholder.com/48"
               alt="Friend"
               className="w-12 h-12 rounded-full object-cover"
             />
@@ -37,7 +44,6 @@ function HomePage() {
           <p className="text-sm text-gray-500">see all</p>
         </div>
         <div className="flex mt-2 space-x-4">
-          {/* Group Icons */}
           {[...Array(3)].map((_, index) => (
             <div key={index} className="w-12 h-12 rounded-full bg-black flex items-center justify-center text-white">
               <span className="material-icons">group</span>
@@ -50,27 +56,7 @@ function HomePage() {
       </div>
 
       {/* Recent Splits Section */}
-      <div className="mt-6 px-4 mb-16">
-        <div className="flex justify-between items-center">
-          <p className="font-bold text-lg">Recent Splits</p>
-          <p className="text-sm text-gray-500">see all</p>
-        </div>
-        <div className="mt-2">
-          {/* Split Item */}
-          <div className="flex items-center justify-between p-4 rounded-lg bg-gradient-to-r from-blue-100 to-purple-100 shadow-md">
-            <div className="flex items-center">
-              <div className="w-10 h-10 rounded-full bg-red-500 flex items-center justify-center text-white mr-4">
-                <span className="material-icons">restaurant</span>
-              </div>
-              <div>
-                <p className="font-semibold">Cafe Coffee Day</p>
-                <p className="text-sm text-gray-500">date<br />group name if applicable</p>
-              </div>
-            </div>
-            <p className="font-bold text-blue-600">$26.00</p>
-          </div>
-        </div>
-      </div>
+      <RecentSplits splits={recentSplitsData} />
 
       {/* Bottom Navigation */}
       <div className="fixed bottom-0 w-full bg-white border-t border-gray-200 flex justify-around py-2">
@@ -94,4 +80,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default Homepage;
