@@ -1,12 +1,13 @@
 // src/Homepage.js
 import React from 'react';
+import { Link } from 'react-router-dom';
 import RecentSplits from '../components/RecentSplits';
 
 function Homepage() {
   const recentSplitsData = [
-    { name: 'Cafe Coffee Day', date: '2024-11-01', group: 'Friends', amount: 26.00 },
-    { name: 'Pizza Night', date: '2024-11-03', group: 'Family', amount: 45.50 },
-    { name: 'Grocery Run', date: '2024-11-05', group: 'Roommates', amount: 60.00 },
+    { name: 'Cafe Coffee Day', date: '2024-11-01', group: 'Friends', amount: 26.0 },
+    { name: 'Pizza Night', date: '2024-11-03', group: 'Family', amount: 45.5 },
+    { name: 'Grocery Run', date: '2024-11-05', group: 'Roommates', amount: 60.0 },
   ];
 
   return (
@@ -25,7 +26,6 @@ function Homepage() {
           <p className="text-sm text-gray-500">see all</p>
         </div>
         <div className="flex mt-2 space-x-4">
-          {/* Friend Avatars */}
           {[...Array(5)].map((_, index) => (
             <img
               key={index}
@@ -45,7 +45,10 @@ function Homepage() {
         </div>
         <div className="flex mt-2 space-x-4">
           {[...Array(3)].map((_, index) => (
-            <div key={index} className="w-12 h-12 rounded-full bg-black flex items-center justify-center text-white">
+            <div
+              key={index}
+              className="w-12 h-12 rounded-full bg-black flex items-center justify-center text-white"
+            >
               <span className="material-icons">group</span>
             </div>
           ))}
@@ -56,7 +59,16 @@ function Homepage() {
       </div>
 
       {/* Recent Splits Section */}
-      <RecentSplits splits={recentSplitsData} />
+      <div className="mt-6 px-4">
+        <div className="flex justify-between items-center">
+          <p className="font-bold text-lg">Recent Splits</p>
+          {/* Link to SplitHistory page */}
+          <Link to="/split-history" className="text-sm text-blue-500 underline">
+            see all
+          </Link>
+        </div>
+        <RecentSplits splits={recentSplitsData} />
+      </div>
 
       {/* Bottom Navigation */}
       <div className="fixed bottom-0 w-full bg-white border-t border-gray-200 flex justify-around py-2">

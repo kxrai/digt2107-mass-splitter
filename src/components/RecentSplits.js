@@ -5,8 +5,6 @@ function RecentSplits({ splits }) {
   return (
     <div className="mt-6 px-4">
       <div className="flex justify-between items-center">
-        <p className="font-bold text-lg">Recent Splits</p>
-        <p className="text-sm text-gray-500">see all</p>
       </div>
       <div className="mt-2 space-y-2">
         {splits.map((split, index) => (

@@ -6,6 +6,7 @@ import PartyMembers from './components/PartyMembers';
 import BillSplitter from './components/BillSplitter';
 import SplitResult from './components/SplitResult';
 import HomePage from './pages/HomePage.js';
+import SplitHistory from './pages/SplitHistory.js';
 
 function HomeButton() {
   const navigate = useNavigate();
@@ -53,6 +54,7 @@ function App() {
       <Routes>
         <Route path="/" element={<MainApp />} />
         <Route path="/home" element={<HomePage />} />
+        <Route path="/split-history" element={<SplitHistory />} />
       </Routes>
     </Router>
   );
