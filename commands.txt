@@ -7,9 +7,13 @@ npm install @heroicons/react
 npm install mysql2
 npm install @react-oauth/google
 npm i jwt-decode
+<<<<<<< HEAD
 npm install --save-dev jest
 =======
 
 11/5/24
 npm install react-router-dom
 >>>>>>> Home-Page
+=======
+npm install react-router-dom
+>>>>>>> Login-Page
