@@ -14,11 +14,7 @@
     "mysql2": "^3.11.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-<<<<<<< HEAD
-    "react-router-dom": "^6.27.0",
-=======
     "react-router-dom": "^6.28.0",
->>>>>>> Login-Page
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
@@ -47,7 +43,9 @@
     ]
   },
   "devDependencies": {
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.15",
     "daisyui": "^4.12.14",
+    "html-webpack-plugin": "^5.6.3",
     "jest": "^27.5.1",
     "tailwindcss": "^3.4.14"
   }

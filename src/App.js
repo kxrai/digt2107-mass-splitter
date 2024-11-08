@@ -1,22 +1,18 @@
 // src/App.js
 import React, { useState } from 'react';
-<<<<<<< HEAD
-import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
-=======
 import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import { googleLogout } from '@react-oauth/google';
->>>>>>> Login-Page
 import BillEntry from './components/BillEntry';
 import PartyMembers from './components/PartyMembers';
 import BillSplitter from './components/BillSplitter';
 import SplitResult from './components/SplitResult';
 import HomePage from './pages/HomePage.js';
-<<<<<<< HEAD
 import SplitHistory from './pages/SplitHistory.js';
 import AddFriend from './pages/AddFriend.js';
 import CreateGroup from './pages/CreateGroup.js';
 import AddReceipt from './components/AddReceipt';
 import SplitBill from './pages/SplitBill.js';
+import LoginPage from './pages/LoginPage';
 
 function HomeButton() {
   const navigate = useNavigate();
@@ -30,10 +26,7 @@ function HomeButton() {
   );
 }
 
-=======
-import LoginPage from './pages/LoginPage';
 
->>>>>>> Login-Page
 function MainApp() {
   const [billItems, setBillItems] = useState([]);
   const [partyMembers, setPartyMembers] = useState([]);
@@ -81,8 +74,6 @@ function MainApp() {
 }
 
 function App() {
-<<<<<<< HEAD
-=======
   // Check if the user is logged in based on localStorage
   const loggedIn = Boolean(localStorage.getItem('loggedIn'));
 
@@ -91,22 +82,18 @@ function App() {
       return loggedIn ? children : <Navigate to="/login" />;
     };
 
->>>>>>> Login-Page
   return (
     <Router>
       <Routes>
         <Route path="/" element={<MainApp />} />
         <Route path="/home" element={<HomePage />} />
-<<<<<<< HEAD
         <Route path="/split-history" element={<SplitHistory />} />
         <Route path="/add-friend" element={<AddFriend />} />
         <Route path="/create-group" element={<CreateGroup />} />
         <Route path="/split-bill" element={<SplitBill />} />
-=======
         <Route path="/login" element={<LoginPage />} />
         {/*This is how you would use a protected route for the dashboard page*/}
         {/*<Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />*/}
->>>>>>> Login-Page
       </Routes>
     </Router>
   );
