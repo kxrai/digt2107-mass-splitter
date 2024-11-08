@@ -3,7 +3,13 @@ npm i -D daisyui@latest
 npm install -D tailwindcss
 npx tailwindcss init
 npm install @heroicons/react
+<<<<<<< HEAD
 npm install mysql2
 npm install @react-oauth/google
 npm i jwt-decode
 npm install --save-dev jest
+=======
+
+11/5/24
+npm install react-router-dom
+>>>>>>> Home-Page
