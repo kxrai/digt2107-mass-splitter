@@ -7,6 +7,8 @@ import BillSplitter from './components/BillSplitter';
 import SplitResult from './components/SplitResult';
 import HomePage from './pages/HomePage.js';
 import SplitHistory from './pages/SplitHistory.js';
+import AddFriend from './pages/AddFriend.js';
+import CreateGroup from './pages/CreateGroup.js';
 
 function HomeButton() {
   const navigate = useNavigate();
@@ -55,6 +57,8 @@ function App() {
         <Route path="/" element={<MainApp />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/split-history" element={<SplitHistory />} />
+        <Route path="/add-friend" element={<AddFriend />} />
+        <Route path="/create-group" element={<CreateGroup />} />
       </Routes>
     </Router>
   );
