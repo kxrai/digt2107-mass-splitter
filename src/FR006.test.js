@@ -2,7 +2,7 @@
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { useNavigate } from 'react-router-dom';
-import CreateGroup from './pages/CreateGroup'; // Adjust this if CreateGroup is in a different folder
+import CreateGroup from './pages/CreateGroup'; 
 
 // Mock `useNavigate` explicitly
 jest.mock('react-router-dom', () => ({ useNavigate: jest.fn() }));
