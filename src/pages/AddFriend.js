@@ -1,6 +1,7 @@
 // src/pages/AddFriend.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../components/Navbar';
 
 function AddFriend() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -62,6 +63,7 @@ function AddFriend() {
       >
         Back to Homepage
       </button>
+      <Navbar />
     </div>
   );
 }
