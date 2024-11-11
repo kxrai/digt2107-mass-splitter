@@ -31,7 +31,7 @@ function HomeButton() {
   );
 }
 
-function MainApp() {
+export function MainApp() {
   const loggedIn = Boolean(localStorage.getItem('loggedIn'));
   const navigate = useNavigate();
   
