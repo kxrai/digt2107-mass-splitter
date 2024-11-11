@@ -42,12 +42,12 @@ export function MainApp() {
   // Check if the user is logged in based on localStorage
   const loggedIn = Boolean(localStorage.getItem('loggedIn'));
   const navigate = useNavigate();
-
+  //Log user out
   const handleLogout = () => {
     googleLogout();
-    localStorage.removeItem('loggedIn');
+    localStorage.removeItem('loggedIn'); //Remove user token and logged in status from localStorage
     localStorage.removeItem('googleToken');
-    navigate("/login");
+    navigate("/login"); //Redirect to log in page
   };
 
   return (
