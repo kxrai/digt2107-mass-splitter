@@ -1,5 +1,6 @@
 // src/SplitHistory.js
 import React from 'react';
+import Navbar from '../components/Navbar';
 
 function SplitHistory() {
   return (
@@ -23,6 +24,7 @@ function SplitHistory() {
           <p className="font-bold text-blue-600">$60.00</p>
         </div>
       </div>
+      <Navbar />
     </div>
   );
 }

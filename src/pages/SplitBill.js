@@ -5,6 +5,7 @@ import PartyMembers from '../components/PartyMembers';
 import BillSplitter from '../components/BillSplitter';
 import SplitResult from '../components/SplitResult';
 import AddReceipt from '../components/AddReceipt'; // Import only
+import Navbar from '../components/Navbar';
 
 function App() {
   const [splitResult, setSplitResult] = useState(null);
@@ -18,8 +19,11 @@ function App() {
           <AddReceipt receipts={receipts} setReceipts={setReceipts} />
         </div>
       </div>
+      <Navbar />
     </div>
+    
   );
+
 }
 
 export default App;

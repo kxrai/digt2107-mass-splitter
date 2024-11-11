@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import { googleLogout } from '@react-oauth/google';
 import HomePage from './pages/HomePage.js';
+import SplitHistory from './pages/SplitHistory.js';
+import AddFriend from './pages/AddFriend.js';
+import CreateGroup from './pages/CreateGroup.js';
+import AddReceipt from './components/AddReceipt';
+import SplitBill from './pages/SplitBill.js';
 import LoginPage from './pages/LoginPage';
-import ninjaImage from './assets/ninja_picture.png'; // Update to your actual image path
+import ninjaImage from './assets/ninja_picture.png'; // Adjust path as needed
+import UserProfile from './pages/UserProfile.js';
 
 // Base style for full-page background image
 const baseBackgroundStyle = {
@@ -32,9 +38,11 @@ function HomeButton() {
 }
 
 export function MainApp() {
+
+  // Check if the user is logged in based on localStorage
   const loggedIn = Boolean(localStorage.getItem('loggedIn'));
   const navigate = useNavigate();
-  
+
   const handleLogout = () => {
     googleLogout();
     localStorage.removeItem('loggedIn');
@@ -54,7 +62,8 @@ export function MainApp() {
           /* Apply different background size on larger screens */
           @media (min-width: 768px) {
             .responsive-background {
-              background-size: cover;
+              background-size: 80%; /* Adjust to 80% to show more of the full image on desktop */
+              background-position: center; /* Center the image for better alignment */
             }
           }
         `}
@@ -83,6 +92,7 @@ export function MainApp() {
 }
 
 function App() {
+  // Check if the user is logged in based on localStorage
   const loggedIn = Boolean(localStorage.getItem('loggedIn'));
 
   const ProtectedRoute = ({ children }) => {
@@ -94,7 +104,13 @@ function App() {
       <Routes>
         <Route path="/" element={<MainApp />} />
         <Route path="/home" element={<HomePage />} />
+        <Route path="/split-history" element={<SplitHistory />} />
+        <Route path="/add-friend" element={<AddFriend />} />
+        <Route path="/create-group" element={<CreateGroup />} />
+        <Route path="/add-receipt" element={<AddReceipt />} />
+        <Route path="/split-bill" element={<SplitBill />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/account" element={<UserProfile />} />
       </Routes>
     </Router>
   );

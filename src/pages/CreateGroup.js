@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Navbar from '../components/Navbar';
 
 function GroupPage() {
   const navigate = useNavigate();
@@ -139,6 +140,7 @@ function GroupPage() {
           Save Group
         </button>
       </div>
+      <Navbar />
     </div>
   );
 }
