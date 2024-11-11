@@ -4,7 +4,18 @@ import { Link } from 'react-router-dom';
 import RecentSplits from '../components/RecentSplits';
 import Navbar from '../components/Navbar';
 
+/**
+ * Homepage Component
+ * 
+ * This component serves as the main landing page for users, displaying:
+ * - Most recent split
+ * - Friends section
+ * - Groups section
+ * - Recent splits list
+ * - Bottom navigation for easy access to other parts of the application
+ */
 function Homepage() {
+  // Sample data for recent splits; in production, this data would likely come from a database or API
   const recentSplitsData = [
     { name: 'Cafe Coffee Day', date: '2024-11-01', group: 'Friends', amount: 26.0 },
     { name: 'Pizza Night', date: '2024-11-03', group: 'Family', amount: 45.5 },
@@ -13,7 +24,8 @@ function Homepage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center">
-      {/* Most Recent Split */}
+      
+      {/* Most Recent Split Card */}
       <div className="w-full max-w-3xl mt-6 px-4">
         <div className="recent-history-card bg-gradient-to-r from-pink-200 via-purple-200 to-blue-200 rounded-lg shadow-md p-4">
           <p className="text-lg font-semibold text-blue-700">Most Recent Split</p>
@@ -24,11 +36,13 @@ function Homepage() {
       <div className="w-full max-w-3xl mt-6 px-4">
         <div className="flex justify-between items-center">
           <p className="font-bold text-lg">Friends</p>
+          {/* Link to view all friends */}
           <Link to="/friends" className="text-blue-500 underline text-sm" aria-label="See all friends">
             see all
           </Link>
         </div>
         <div className="flex mt-2 space-x-4">
+          {/* Displaying friend avatars (placeholder images) */}
           {[...Array(4)].map((_, index) => (
             <img
               key={index}
@@ -37,14 +51,14 @@ function Homepage() {
               className="w-12 h-12 rounded-full object-cover"
             />
           ))}
-          {/* Add Friend Button */}
+          {/* Add Friend Button - navigates to add-friend page */}
           <Link
             to="/add-friend"
             className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-blue-500"
             aria-label="Add Friend"
-            data-testid="add-friend-button"  // Added here
+            data-testid="add-friend-button"  // For test targeting
           >
-            {/* SVG Icon for Add Friend */}
+            {/* Icon for Add Friend */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -67,11 +81,13 @@ function Homepage() {
       <div className="w-full max-w-3xl mt-6 px-4">
         <div className="flex justify-between items-center">
           <p className="font-bold text-lg">Groups</p>
+          {/* Link to view all groups */}
           <Link to="/groups" className="text-blue-500 underline text-sm" aria-label="See all groups">
             see all
           </Link>
         </div>
         <div className="flex mt-2 space-x-4">
+          {/* Displaying group icons */}
           {[...Array(3)].map((_, index) => (
             <div
               key={index}
@@ -80,14 +96,14 @@ function Homepage() {
               <span className="material-icons">group</span>
             </div>
           ))}
-          {/* Create Group Button */}
+          {/* Create Group Button - navigates to create-group page */}
           <Link
             to="/create-group"
             className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-blue-500"
             aria-label="Create Group"
-            data-testid="create-group-button"  // Added here
+            data-testid="create-group-button"  // For test targeting
           >
-            {/* SVG Icon for Create Group */}
+            {/* Icon for Create Group */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -107,6 +123,7 @@ function Homepage() {
       </div>
 
       {/* Recent Splits Section */}
+      {/* Render a list of recent splits, passing in sample data */}
       <RecentSplits splits={recentSplitsData} />
 
       {/* Bottom Navigation */}
