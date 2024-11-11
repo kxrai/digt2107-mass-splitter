@@ -32,7 +32,7 @@ describe("GoogleLogin Button Functions and Logout", () => {
     expect(localStorage.getItem('loggedIn')).toBe("true");
     console.log(localStorage.getItem('googleToken'));
     expect(JSON.parse(localStorage.getItem('googleToken'))).toEqual({ user: "testUser" });
-    expect(mockNavigate).toHaveBeenCalledWith('/');
+    expect(mockNavigate).toHaveBeenCalledWith('/home');
   });
 
   it("calls handleLoginFailure on login failure", () => {
