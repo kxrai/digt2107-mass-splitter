@@ -1,6 +1,6 @@
 // src/components/AddReceipt.js
 import React, { useState } from 'react';
-import { DocumentPlusIcon } from '@heroicons/react/24/outline'; // Will need to change icon for a receipt icon instead
+import { DocumentPlusIcon } from '@heroicons/react/24/outline'; 
 import { v4 as uuidv4 } from 'uuid';
 
 function AddReceipt({ receipts, setReceipts }) {
@@ -36,28 +36,37 @@ function AddReceipt({ receipts, setReceipts }) {
           Add Receipt
         </h2>
         <div className="form-control">
-          <label className="label">Total Amount</label>
+          {/* Added id and aria-label for better accessibility and testing */}
+          <label htmlFor="amount" className="label">Total Amount</label>
           <input
             type="number"
             name="amount"
+            id="amount"                          
+            aria-label="Total Amount"            
             placeholder="e.g., 50.00"
             value={receipt.amount}
             onChange={handleChange}
             className="input input-bordered mb-4"
             required
           />
-          <label className="label">Date</label>
+          {/* Added id and aria-label for better accessibility and testing */}
+          <label htmlFor="date" className="label">Date</label>
           <input
             type="date"
             name="date"
+            id="date"                             
+            aria-label="Date"                    
             value={receipt.date}
             onChange={handleChange}
             className="input input-bordered mb-4"
             required
           />
-          <label className="label">Description (Optional)</label>
+          {/* Added id and aria-label for better accessibility and testing */}
+          <label htmlFor="description" className="label">Description (Optional)</label>
           <textarea
             name="description"
+            id="description"                     
+            aria-label="Description"             
             placeholder="e.g., Dinner at restaurant"
             value={receipt.description}
             onChange={handleChange}
