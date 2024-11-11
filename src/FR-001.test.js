@@ -22,26 +22,25 @@ describe("GoogleLogin Button Functions and Logout", () => {
     jwtDecode.mockReturnValue({ user: "testUser" });
     Storage.prototype.removeItem = jest.fn();
   });
-
+  //Test case: Handles a successful login
   it("calls handleLoginSuccess on successful login", () => {
     const credentialResponse = { credential: "fake.jwt.token" };
 
     handleLoginSuccess(credentialResponse, mockNavigate);
 
     expect(jwtDecode).toHaveBeenCalledWith("fake.jwt.token");
-    expect(localStorage.getItem('loggedIn')).toBe("true");
-    console.log(localStorage.getItem('googleToken'));
-    expect(JSON.parse(localStorage.getItem('googleToken'))).toEqual({ user: "testUser" });
-    expect(mockNavigate).toHaveBeenCalledWith('/home');
+    expect(localStorage.getItem('loggedIn')).toBe("true"); //Checks if loggedin is set to true
+    expect(JSON.parse(localStorage.getItem('googleToken'))).toEqual({ user: "testUser" }); //Checks if correct googleToken is stored
+    expect(mockNavigate).toHaveBeenCalledWith('/home'); //Checks if redirects to homepage
   });
-
+  //Test case: Handles a failed login 
   it("calls handleLoginFailure on login failure", () => {
     console.error = jest.fn();
 
     const error = new Error("Login failed");
     handleLoginFailure(error);
 
-    expect(console.error).toHaveBeenCalledWith("Login Failed:", error);
+    expect(console.error).toHaveBeenCalledWith("Login Failed:", error); // Checks if error is logged to console
   });
 
   it("calls handleLogout when Logout button is clicked", () => {
@@ -49,15 +48,10 @@ describe("GoogleLogin Button Functions and Logout", () => {
     const logoutButton = screen.getByText('Logout');
     fireEvent.click(logoutButton);
 
-    // Assert googleLogout was called
-    expect(googleLogout).toHaveBeenCalled();
-
-    // Assert localStorage items were removed
-    expect(localStorage.removeItem).toHaveBeenCalledWith('loggedIn');
+    expect(googleLogout).toHaveBeenCalled(); // Assert googleLogout was called
+    expect(localStorage.removeItem).toHaveBeenCalledWith('loggedIn'); // Assert localStorage items were removed
     expect(localStorage.removeItem).toHaveBeenCalledWith('googleToken');
-
-    // Assert navigation to "/login" occurred
-    expect(mockNavigate).toHaveBeenCalledWith("/login");
+    expect(mockNavigate).toHaveBeenCalledWith("/login"); //Checks if redirects to login page
   });
 
 });
