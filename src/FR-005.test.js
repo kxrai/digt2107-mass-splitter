@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
-import AddReceipt from './AddReceipt';
+import AddReceipt from '../components/AddReceipt';
 
 // Mock function to simulate updating receipts
 const mockSetReceipts = jest.fn();
