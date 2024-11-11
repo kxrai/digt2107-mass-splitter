@@ -1,4 +1,4 @@
-// src/FR-005.test.js
+// src/FR-003.test.js
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import AddReceipt from './components/AddReceipt';
