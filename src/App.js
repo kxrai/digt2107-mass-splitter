@@ -10,6 +10,7 @@ import SplitBill from './pages/SplitBill.js';
 import LoginPage from './pages/LoginPage';
 import ninjaImage from './assets/ninja_picture.png'; // Adjust path as needed
 import UserProfile from './pages/UserProfile.js';
+import ProtectedRoute from './utils/ProtectedRoute.js';
 
 // Base style for full-page background image
 const baseBackgroundStyle = {
@@ -95,22 +96,28 @@ function App() {
   // Check if the user is logged in based on localStorage
   const loggedIn = Boolean(localStorage.getItem('loggedIn'));
 
-  const ProtectedRoute = ({ children }) => {
+  /**const ProtectedRoute = ({ children }) => {
     return loggedIn ? children : <Navigate to="/login" />;
-  };
+  };**/
 
   return (
     <Router>
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={<MainApp />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/split-history" element={<SplitHistory />} />
-        <Route path="/add-friend" element={<AddFriend />} />
-        <Route path="/create-group" element={<CreateGroup />} />
-        <Route path="/add-receipt" element={<AddReceipt />} />
-        <Route path="/split-bill" element={<SplitBill />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/account" element={<UserProfile />} />
+
+        {/* Protected Routes */}
+        <Route element={<ProtectedRoute/>}>
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/split-history" element={<SplitHistory />} />
+          <Route path="/add-friend" element={<AddFriend />} />
+          <Route path="/create-group" element={<CreateGroup />} />
+          <Route path="/add-receipt" element={<AddReceipt />} />
+          <Route path="/split-bill" element={<SplitBill />} />
+          <Route path="/account" element={<UserProfile />} />
+        </Route>
+        
       </Routes>
     </Router>
   );
