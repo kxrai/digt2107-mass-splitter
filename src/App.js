@@ -10,7 +10,7 @@ import SplitBill from './pages/SplitBill.js';
 import LoginPage from './pages/LoginPage';
 import ninjaImage from './assets/ninja_picture.png'; // Adjust path as needed
 import UserProfile from './pages/UserProfile.js';
-import ProtectedRoute from './utils/ProtectedRoute.js';
+import ProtectedRoute from './routes/ProtectedRoute.js';
 
 // Base style for full-page background image
 const baseBackgroundStyle = {
