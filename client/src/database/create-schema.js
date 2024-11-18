@@ -45,7 +45,7 @@ function createSchema() {
               CREATE TABLE IF NOT EXISTS pay_groups (
                 group_id INT AUTO_INCREMENT PRIMARY KEY,
                 group_name VARCHAR(100) NOT NULL,
-                billers VARCHAR(255)
+                billers VARCHAR(255) NOT NULL
               )
             `;
       
@@ -63,7 +63,7 @@ function createSchema() {
                 user_id INT,
                 PRIMARY KEY (group_id, user_id),
                 FOREIGN KEY (group_id) REFERENCES pay_groups(group_id) ON DELETE CASCADE,
-                FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
+                FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
               )
             `;
       
@@ -82,7 +82,7 @@ function createSchema() {
                 receipt_date DATE NOT NULL,
                 group_id INT,
                 billers VARCHAR(255),  -- Assuming this refers to a biller's name or identifier
-                date DATE NOT NULL,
+                date TIMESTAMP DEFAULT NOW(),
                 FOREIGN KEY (group_id) REFERENCES pay_groups(group_id)
               )
             `;
@@ -102,7 +102,7 @@ function createSchema() {
                 user_id INT,
                 debt DECIMAL(10, 2) NOT NULL,
                 paid DECIMAL(10, 2) NOT NULL,
-                date DATE NOT NULL,
+                date TIMESTAMP DEFAULT NOW(),
                 method VARCHAR(50),
                 FOREIGN KEY (receipt_id) REFERENCES receipts(receipt_id) ON DELETE CASCADE,
                 FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
