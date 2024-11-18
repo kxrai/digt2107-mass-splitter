@@ -1,4 +1,4 @@
-const db = require('../config/dbConfig');
+const db = require('../database/db-connection');
 
 const Group = {
     create: (group, callback) => {
