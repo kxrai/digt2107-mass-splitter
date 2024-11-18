@@ -11,21 +11,42 @@ function AddReceipt({ receipts, setReceipts }) {
     setReceipt((prev) => ({ ...prev, [name]: value }));
   };
 
-  const addReceipt = () => {
+  const addReceipt = async () => {
     if (receipt.amount && receipt.date) {
-      setReceipts([
-        ...receipts,
-        {
-          id: uuidv4(),
-          amount: parseFloat(receipt.amount),
-          date: receipt.date,
-          description: receipt.description,
-        },
-      ]);
-      setReceipt({ amount: '', date: '', description: '' });
-    } else {
-      alert('Please enter both amount and date for the receipt.');
-    }
+      try {
+        const response = await fetch('http://localhost:3000/api/receipts/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                total_amount: 100.0,
+                receipt_date: '2024-11-01',
+                group_id: 1,
+                billers: 'John', // Make sure this aligns with your database schema
+            }),
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          setReceipts([
+            ...receipts,
+            {
+              id: uuidv4(),
+              amount: parseFloat(receipt.amount),
+              date: receipt.date,
+              description: receipt.description,
+            },
+          ]);  
+          setReceipt({ amount: '', date: '', description: '' });
+        } else {
+            alert('Please enter both amount and date for the receipt.');
+            console.log(data.error || 'Failed to add receipt');
+        }
+      } catch (error) {
+        console.log('Failed to connect to the server');
+      }
+    };
   };
 
   return (
