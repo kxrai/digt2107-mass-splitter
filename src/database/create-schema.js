@@ -82,7 +82,7 @@ function createSchema() {
                 receipt_date DATE NOT NULL,
                 group_id INT,
                 billers VARCHAR(255),  -- Assuming this refers to a biller's name or identifier
-                date DATE NOT NULL,
+                date TIMESTAMP DEFAULT NOW(),
                 FOREIGN KEY (group_id) REFERENCES pay_groups(group_id)
               )
             `;
