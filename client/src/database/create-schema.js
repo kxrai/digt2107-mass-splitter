@@ -1,7 +1,6 @@
-import db from '../config/dbConfig';
-import mysql from 'mysql2';
+const connection = require('./db-connection');
 
-if(db) {
+if(connection) {
     createSchema();
 }
 
