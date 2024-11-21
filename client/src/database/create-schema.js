@@ -1,128 +1,118 @@
-const connection = require('./db-connection');
+// create-schema.js
 
-if(connection) {
-    createSchema();
+const mysql = require('mysql2/promise');
+const path = require('path');
+
+// Load environment variables from the .env file located one directory up
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+
+// Debug: Log the resolved .env path
+console.log('Resolved .env path:', path.resolve(__dirname, '../.env'));
+
+async function createSchema() {
+  let connection;
+
+  try {
+    // Connect to MySQL without specifying a database
+    connection = await mysql.createConnection({
+      host: process.env.DB_HOST,
+      user: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+    });
+
+    // Create the database if it doesn't exist
+    await connection.query('CREATE DATABASE IF NOT EXISTS massdb');
+    console.log('Database "massdb" created or already exists.');
+
+    // Switch to the newly created database
+    await connection.changeUser({ database: 'massdb' });
+
+    // Create tables
+    await createTables(connection);
+
+    console.log('All tables created successfully.');
+  } catch (err) {
+    console.error('Error during schema creation:', err);
+  } finally {
+    if (connection && connection.end) connection.end();
+  }
 }
 
-function createSchema() {
-    {
-        const createDatabaseQuery = 'CREATE DATABASE IF NOT EXISTS massdb';
-        connection.query(createDatabaseQuery, (err, result) => {
-          if (err) {
-            console.error('Error creating database: ', err.stack);
-            return;
-          }
-          console.log('Database "massdb" created or already exists.');
-      
-          // Switch to the newly created database
-          connection.changeUser({ database: 'massdb' }, (err) => {
-            if (err) {
-              console.error('Error changing to massdb: ', err.stack);
-              return;
-            }
-      
-            // Create tables (schema)
-            const createUsersTableQuery = `
-              CREATE TABLE IF NOT EXISTS users (
-                user_id INT AUTO_INCREMENT PRIMARY KEY,
-                username VARCHAR(50) NOT NULL,
-                email VARCHAR(100) UNIQUE NOT NULL,
-                phone_number VARCHAR(15),
-                password VARCHAR(255) NOT NULL
-              )
-            `;
-      
-            connection.query(createUsersTableQuery, (err, result) => {
-              if (err) {
-                console.error('Error creating users table: ', err.stack);
-                return;
-              }
-              console.log('Users table created or already exists.');
-            });
-      
-            const createGroupsTableQuery = `
-              CREATE TABLE IF NOT EXISTS pay_groups (
-                group_id INT AUTO_INCREMENT PRIMARY KEY,
-                group_name VARCHAR(100) NOT NULL,
-                billers VARCHAR(255) NOT NULL
-              )
-            `;
-      
-            connection.query(createGroupsTableQuery, (err, result) => {
-              if (err) {
-                console.error('Error creating posts table: ', err.stack);
-                return;
-              }
-              console.log('Posts table created or already exists.');
-            });
+async function createTables(connection) {
+  // Create 'users' table
+  const createUsersTableQuery = `
+    CREATE TABLE IF NOT EXISTS users (
+      user_id INT AUTO_INCREMENT PRIMARY KEY,
+      username VARCHAR(50) NOT NULL,
+      email VARCHAR(100) UNIQUE NOT NULL,
+      phone_number VARCHAR(15),
+      password VARCHAR(255) NOT NULL
+    )
+  `;
 
-            const createGroupMembersTableQuery = `
-              CREATE TABLE IF NOT EXISTS group_members (
-                group_id INT,
-                user_id INT,
-                PRIMARY KEY (group_id, user_id),
-                FOREIGN KEY (group_id) REFERENCES pay_groups(group_id) ON DELETE CASCADE,
-                FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
-              )
-            `;
-      
-            connection.query(createGroupMembersTableQuery, (err, result) => {
-              if (err) {
-                console.error('Error creating posts table: ', err.stack);
-                return;
-              }
-              console.log('Posts table created or already exists.');
-            });
+  await connection.query(createUsersTableQuery);
+  console.log('Users table created or already exists.');
 
-            const createReceiptsQuery = `
-            CREATE TABLE IF NOT EXISTS receipts (
-                receipt_id INT AUTO_INCREMENT PRIMARY KEY,
-                total_amount DECIMAL(10, 2) NOT NULL,
-                receipt_date DATE NOT NULL,
-                group_id INT,
-                billers VARCHAR(255),  -- Assuming this refers to a biller's name or identifier
-                date TIMESTAMP DEFAULT NOW(),
-                FOREIGN KEY (group_id) REFERENCES pay_groups(group_id)
-              )
-            `;
-      
-            connection.query(createReceiptsQuery, (err, result) => {
-              if (err) {
-                console.error('Error creating posts table: ', err.stack);
-                return;
-              }
-              console.log('Posts table created or already exists.');
-            });
+  // Create 'pay_groups' table
+  const createGroupsTableQuery = `
+    CREATE TABLE IF NOT EXISTS pay_groups (
+      group_id INT AUTO_INCREMENT PRIMARY KEY,
+      group_name VARCHAR(100) NOT NULL,
+      billers VARCHAR(255) NOT NULL
+    )
+  `;
 
-            const createPaymentsQuery = `
-            CREATE TABLE IF NOT EXISTS payments (
-                payment_id INT AUTO_INCREMENT PRIMARY KEY,
-                receipt_id INT,
-                user_id INT,
-                debt DECIMAL(10, 2) NOT NULL,
-                paid DECIMAL(10, 2) NOT NULL,
-                date TIMESTAMP DEFAULT NOW(),
-                method VARCHAR(50),
-                FOREIGN KEY (receipt_id) REFERENCES receipts(receipt_id) ON DELETE CASCADE,
-                FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
-              )
-            `;
-      
-            connection.query(createPaymentsQuery, (err, result) => {
-              if (err) {
-                console.error('Error creating posts table: ', err.stack);
-                return;
-              }
-              console.log('Posts table created or already exists.');
-            });
+  await connection.query(createGroupsTableQuery);
+  console.log('pay_groups table created or already exists.');
 
-          });
-        });
-      }
-      
-      // Close the connection after all queries are done
-      process.on('exit', () => {
-        connection.end();
-      });
+  // Create 'group_members' table
+  const createGroupMembersTableQuery = `
+    CREATE TABLE IF NOT EXISTS group_members (
+      group_id INT,
+      user_id INT,
+      PRIMARY KEY (group_id, user_id),
+      FOREIGN KEY (group_id) REFERENCES pay_groups(group_id) ON DELETE CASCADE,
+      FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+    )
+  `;
+
+  await connection.query(createGroupMembersTableQuery);
+  console.log('group_members table created or already exists.');
+
+  // Create 'receipts' table
+  const createReceiptsQuery = `
+    CREATE TABLE IF NOT EXISTS receipts (
+      receipt_id INT AUTO_INCREMENT PRIMARY KEY,
+      total_amount DECIMAL(10, 2) NOT NULL,
+      receipt_date DATE NOT NULL,
+      group_id INT,
+      billers VARCHAR(255),
+      date TIMESTAMP DEFAULT NOW(),
+      FOREIGN KEY (group_id) REFERENCES pay_groups(group_id)
+    )
+  `;
+
+  await connection.query(createReceiptsQuery);
+  console.log('Receipts table created or already exists.');
+
+  // Create 'payments' table
+  const createPaymentsQuery = `
+    CREATE TABLE IF NOT EXISTS payments (
+      payment_id INT AUTO_INCREMENT PRIMARY KEY,
+      receipt_id INT,
+      user_id INT,
+      debt DECIMAL(10, 2) NOT NULL,
+      paid DECIMAL(10, 2) NOT NULL,
+      date TIMESTAMP DEFAULT NOW(),
+      method VARCHAR(50),
+      FOREIGN KEY (receipt_id) REFERENCES receipts(receipt_id) ON DELETE CASCADE,
+      FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+    )
+  `;
+
+  await connection.query(createPaymentsQuery);
+  console.log('Payments table created or already exists.');
 }
 
+// Start the schema creation process
+createSchema();
