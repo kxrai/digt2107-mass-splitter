@@ -66,7 +66,7 @@ async function createTables(connection) {
     CREATE TABLE IF NOT EXISTS pay_groups (
       group_id INT AUTO_INCREMENT PRIMARY KEY,
       group_name VARCHAR(100) NOT NULL,
-      billers VARCHAR(255) NOT NULL
+      billers TEXT NOT NULL
     )
   `;
 

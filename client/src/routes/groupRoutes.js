@@ -4,10 +4,19 @@ const Group = require('../models/Group'); // Adjust path if necessary
 
 // Create a new group
 router.post('/create', (req, res) => {
-    const group = req.body; // Expecting { group_name: "Example Group" }
+    const group = req.body;
     Group.create(group, (err, result) => {
         if (err) return res.status(500).json({ error: 'Failed to create group' });
         res.status(201).json({ message: 'Group created', groupId: result.insertId });
+    });
+});
+
+// Add a new group member
+router.post('/addMember', (req, res) => {
+    const group = req.body; 
+    Group.addMember(group, (err, result) => {
+        if (err) return res.status(500).json({ error: 'Failed to add member' });
+        res.status(201).json({ message: 'Added member', groupId: result.insertId });
     });
 });
 
