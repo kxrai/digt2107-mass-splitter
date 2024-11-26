@@ -7,9 +7,10 @@ function AddFriend() {
   const loggedInUser = JSON.parse(localStorage.getItem('googleToken'));
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([
-    { id: 1, name: 'Alice Johnson' },
-    { id: 2, name: 'Bob Smith' },
-    { id: 3, name: 'Charlie Brown' },
+    { id: 1, name: 'Mahjabin' },
+    { id: 2, name: 'Alicia' },
+    { id: 3, name: 'Sienna' },
+    { id: 4, name: 'Steeve'}
   ]); // Placeholder results
   const [addedFriends, setAddedFriends] = useState([]);
   const [message, setMessage] = useState('');
@@ -53,7 +54,7 @@ function AddFriend() {
         type="text"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        placeholder="Search for friends..."
+        placeholder="Search for friends by email..."
         className="w-full max-w-md p-2 border border-gray-300 rounded mb-4"
       />
 
@@ -93,7 +94,7 @@ function AddFriend() {
 
       {/* Back Button */}
       <button
-        onClick={() => navigate(-1)}
+        onClick={() => navigate('/home')}
         className="mt-6 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
       >
         Back to Homepage
