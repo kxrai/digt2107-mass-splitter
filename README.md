@@ -61,9 +61,9 @@ DaisyUI
 2. Set up the mysql database:
    - Download MySQL from https://dev.mysql.com/downloads/installer/
    - Install the MySQL Server and any additional products are optional like MySQL Workbench
-   - Copy/Move the 'env.sample' file from the samples directory into your root directory
-   - Rename 'env.sample' file to '.env' in your root directory
-   - Replace my_db_password with your MySQL root password and it's recommended to leave the other default settings - make sure to save it!
+   - Copy/Move the ```env.sample``` file from the ```samples``` directory into your root directory
+   - Rename ```env.sample``` file to ```.env``` in your root directory
+   - Replace ```my_db_password``` with your MySQL root password and it's recommended to leave the other default settings - make sure to save it!
    - Run the create-schema script to create your database:
       ```bash
       node client/src/database/create-schema.js
