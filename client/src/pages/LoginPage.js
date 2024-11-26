@@ -13,7 +13,6 @@ export const handleLoginFailure = (error) => {
 function LoginPage() {
     const navigate = useNavigate();
     const location = useLocation();
-    const [user, setUser] = useState(null);
 
     // Handle user login
     const handleLoginSuccess = async (credentialResponse, navigate, location) => {
@@ -37,7 +36,6 @@ function LoginPage() {
                 // Save user info in localStorage
                 const userInfo = { id: data.user_id, name: data.username, email: data.email };
                 localStorage.setItem('googleToken', JSON.stringify(userInfo));
-                setUser(userInfo);
                 console.log('User found and stored:', userInfo);
                 return true;
             } else {
@@ -55,9 +53,8 @@ function LoginPage() {
 
                 if (createResponse.ok) {
                     const newUser = await createResponse.json();
-                    const userInfo = { id: newUser.user_id, name: newUser.username, email: newUser.email };
+                    const userInfo = { id: newUser.userId, name: token.name, email: token.email };
                     localStorage.setItem('googleToken', JSON.stringify(userInfo));
-                    setUser(userInfo);
                     console.log('New user created and stored:', userInfo);
                     return true;
                 } else {
