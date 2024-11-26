@@ -35,7 +35,7 @@ function LoginPage() {
 
             if (response.ok) {
                 // Save user info in localStorage
-                const userInfo = { id: data.user_id, name: data.username };
+                const userInfo = { id: data.user_id, name: data.username, email: data.email };
                 localStorage.setItem('googleToken', JSON.stringify(userInfo));
                 setUser(userInfo);
                 console.log('User found and stored:', userInfo);
@@ -55,7 +55,7 @@ function LoginPage() {
 
                 if (createResponse.ok) {
                     const newUser = await createResponse.json();
-                    const userInfo = { id: newUser.user_id, name: newUser.username };
+                    const userInfo = { id: newUser.user_id, name: newUser.username, email: newUser.email };
                     localStorage.setItem('googleToken', JSON.stringify(userInfo));
                     setUser(userInfo);
                     console.log('New user created and stored:', userInfo);
