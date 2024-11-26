@@ -19,8 +19,11 @@ function SplitHistory() {
   // Function to render transaction cards
   const renderTransactions = (data) => {
     return data.map((transaction, index) => (
-      <div key={index} className="p-4 bg-white rounded shadow-md">
-        <p className="font-semibold">{transaction.name}</p>
+      <div
+        key={index}
+        className="p-4 bg-white rounded-lg shadow-md border border-blue-100 hover:shadow-lg"
+      >
+        <p className="font-semibold text-blue-900">{transaction.name}</p>
         <p className="text-sm text-gray-500">{transaction.date} - {transaction.description}</p>
         <p className="font-bold text-blue-600">${transaction.amount.toFixed(2)}</p>
       </div>
@@ -28,27 +31,24 @@ function SplitHistory() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
-      <h2 className="text-2xl font-bold mb-4">Payment History</h2>
+    <div className="min-h-screen bg-blue-50 p-4">
+      {/* Page Title */}
+      <h2 className="text-2xl font-bold text-blue-900 text-center mb-4">Payment History</h2>
 
-      {/* Tabs for Incoming and Outgoing */}
-      <div className="flex space-x-4 mb-4">
-        <button
+      {/* Centered Tabs */}
+      <div className="tabs tabs-boxed justify-center bg-blue-100 rounded-lg p-2 mb-4">
+        <a
+          className={`tab ${activeTab === 'incoming' ? 'tab-active text-blue-600' : 'text-blue-900'}`}
           onClick={() => setActiveTab('incoming')}
-          className={`px-4 py-2 rounded ${
-            activeTab === 'incoming' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'
-          }`}
         >
           Incoming
-        </button>
-        <button
+        </a>
+        <a
+          className={`tab ${activeTab === 'outgoing' ? 'tab-active text-blue-600' : 'text-blue-900'}`}
           onClick={() => setActiveTab('outgoing')}
-          className={`px-4 py-2 rounded ${
-            activeTab === 'outgoing' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'
-          }`}
         >
           Outgoing
-        </button>
+        </a>
       </div>
 
       {/* Content for the selected tab */}
@@ -57,6 +57,7 @@ function SplitHistory() {
         {activeTab === 'outgoing' && renderTransactions(outgoingData)}
       </div>
 
+      {/* Bottom Navbar */}
       <Navbar />
     </div>
   );
