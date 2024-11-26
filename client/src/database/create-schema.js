@@ -7,7 +7,7 @@ const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../../../.env') });
 
 // Debug: Log the resolved .env path
-console.log('Resolved .env path:', path.resolve(__dirname, '../.env'));
+console.log('Resolved .env path:', path.resolve(__dirname, '../../../.env'));
 
 async function createSchema() {
   let connection;

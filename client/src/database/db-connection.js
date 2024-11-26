@@ -3,11 +3,11 @@
 const path = require('path');
 const mysql = require('mysql2');
 
-// Load environment variables from the .env file located one directory up
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+// Load environment variables from the .env file located three directories up
+require('dotenv').config({ path: path.resolve(__dirname, '../../../.env') });
 
 // Debug: Log the resolved .env path
-console.log('Resolved .env path:', path.resolve(__dirname, '../.env'));
+console.log('Resolved .env path:', path.resolve(__dirname, '../../../.env'));
 
 // Debug: Log the loaded database config to verify environment variables
 console.log('Database Config:', {
