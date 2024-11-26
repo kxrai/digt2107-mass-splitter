@@ -26,7 +26,7 @@ router.get('/:id', (req, res) => {
     Group.findById(id, (err, results) => {
         if (err) return res.status(500).json({ error: 'Failed to fetch group' });
         if (results.length === 0) return res.status(404).json({ error: 'Group not found' });
-        res.status(200).json(results[0]); // Send the group details
+        res.status(200).json(results); // Send the list of groups
     });
 });
 
@@ -34,7 +34,7 @@ router.get('/:id', (req, res) => {
 router.get('/', (req, res) => {
     Group.findAll((err, results) => {
         if (err) return res.status(500).json({ error: 'Failed to fetch groups' });
-        res.status(200).json(results); // Send the list of groups
+        res.status(200).json(results); // Send the total list of groups
     });
 });
 

@@ -13,7 +13,7 @@ const Group = {
     },
     
     findById: (id, callback) => {
-        const sql = 'SELECT * FROM pay_groups WHERE group_id = ?';
+        const sql = 'SELECT pg.group_name FROM pay_groups pg WHERE pg.group_id IN (SELECT gm.group_id FROM group_members gm WHERE gm.user_id = ?)';
         db.query(sql, [id], callback);
     },
     

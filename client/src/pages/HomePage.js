@@ -15,12 +15,28 @@ import Navbar from '../components/Navbar';
  * - Bottom navigation for easy access to other parts of the application
  */
 function Homepage() {
+  const loggedInUser = JSON.parse(localStorage.getItem('googleToken'));
+  const [groups, setGroups] = useState([]);
   // Sample data for recent splits; in production, this data would likely come from a database or API
   const recentSplitsData = [
     { name: 'Cafe Coffee Day', date: '2024-11-01', group: 'Friends', amount: 26.0 },
     { name: 'Pizza Night', date: '2024-11-03', group: 'Family', amount: 45.5 },
     { name: 'Grocery Run', date: '2024-11-05', group: 'Roommates', amount: 60.0 },
   ];
+  // Get all the user's groups
+  const getGroups = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/groups/${loggedInUser.id}`, { method: 'GET' });
+      const data = await response.json();
+      if (response.ok) {
+        setGroups(data);
+      }
+    }
+    catch (err) {
+      console.log('Error fetching groups', err);
+    }
+    return;
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center">
