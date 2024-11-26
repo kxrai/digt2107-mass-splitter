@@ -1,8 +1,10 @@
 // src/pages/Homepage.js
 import React from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import RecentSplits from '../components/RecentSplits';
 import Navbar from '../components/Navbar';
+import { get } from '../routes/userRoutes';
 
 /**
  * Homepage Component
@@ -15,6 +17,9 @@ import Navbar from '../components/Navbar';
  * - Bottom navigation for easy access to other parts of the application
  */
 function Homepage() {
+  //Logged in user
+  const loggedInUser = JSON.parse(localStorage.getItem('googleToken'));
+  const [friends, setFriends] = useState([]);
   // Sample data for recent splits; in production, this data would likely come from a database or API
   const recentSplitsData = [
     { name: 'Cafe Coffee Day', date: '2024-11-01', group: 'Friends', amount: 26.0 },
@@ -22,7 +27,22 @@ function Homepage() {
     { name: 'Grocery Run', date: '2024-11-05', group: 'Roommates', amount: 60.0 },
   ];
 
+  const getFriends = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/friends/${loggedInUser.id}`, { method: 'GET' });
+      const data = await response.json();
+      if (response.ok) {
+        setFriends(data);
+      }
+    }
+    catch (err) {
+      console.log('Error fetching friends', err);
+    }
+    return;
+  };
+
   return (
+    
     <div className="min-h-screen bg-gray-50 flex flex-col items-center">
       
       {/* Most Recent Split Card */}
@@ -43,13 +63,16 @@ function Homepage() {
         </div>
         <div className="flex mt-2 space-x-4">
           {/* Displaying friend avatars (placeholder images) */}
-          {[...Array(4)].map((_, index) => (
-            <img
-              key={index}
-              src="https://via.placeholder.com/48"
-              alt="Friend"
-              className="w-12 h-12 rounded-full object-cover"
-            />
+          {friends.map((friend) => (
+            <div>
+              {friend.username}
+              <img
+                key={friends.user_id}
+                src="https://via.placeholder.com/48"
+                alt="Friend"
+                className="w-12 h-12 rounded-full object-cover"
+              />
+            </div>
           ))}
           {/* Add Friend Button - navigates to add-friend page */}
           <Link
