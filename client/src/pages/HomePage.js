@@ -1,5 +1,6 @@
 // src/pages/Homepage.js
 import React from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import RecentSplits from '../components/RecentSplits';
 import Navbar from '../components/Navbar';
@@ -16,6 +17,7 @@ import Navbar from '../components/Navbar';
  */
 function Homepage() {
   const loggedInUser = JSON.parse(localStorage.getItem('googleToken'));
+  const [friends, setFriends] = useState([]);
   const [groups, setGroups] = useState([]);
   // Sample data for recent splits; in production, this data would likely come from a database or API
   const recentSplitsData = [
@@ -23,6 +25,20 @@ function Homepage() {
     { name: 'Pizza Night', date: '2024-11-03', group: 'Family', amount: 45.5 },
     { name: 'Grocery Run', date: '2024-11-05', group: 'Roommates', amount: 60.0 },
   ];
+  // Get all the user's friends
+  const getFriends = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/friends/${loggedInUser.id}`, { method: 'GET' });
+      const data = await response.json();
+      if (response.ok) {
+        setFriends(data);
+      }
+    }
+    catch (err) {
+      console.log('Error fetching friends', err);
+    }
+    return;
+  };
   // Get all the user's groups
   const getGroups = async () => {
     try {

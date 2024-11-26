@@ -8,9 +8,10 @@ const cors = require('cors');
 const mysql = require('mysql2');
 const findFreePort = require('find-free-port');
 
-const userRoutes = require('../client/src/routes/userRoutes'); // Adjust paths as needed
+const userRoutes = require('../client/src/routes/userRoutes'); 
 const receiptRoutes = require('../client/src/routes/receiptRoutes');
 const groupRoutes = require('../client/src/routes/groupRoutes');
+const friendRoutes = require('../client/src/routes/friendRoutes');
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use(express.static(path.join(__dirname, '../client/build')));
 app.use('/api/users', userRoutes);
 app.use('/api/receipts', receiptRoutes);
 app.use('/api/groups', groupRoutes);
+app.use('/api/friends', friendRoutes);
 
 // Database connection
 const db = mysql.createConnection({
