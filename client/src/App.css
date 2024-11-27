@@ -36,3 +36,19 @@
     transform: rotate(360deg);
   }
 }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  color: black; /* Changes the color of the calendar icon */
+  background-color: transparent; /* Ensures no background color override */
+  opacity: 1; /* Makes the icon fully visible */
+}
+
+input[type="date"] {
+  color: black; /* Ensures text color matches the icon */
+  appearance: none; /* Removes default browser styling */
+  -webkit-appearance: none; /* Removes webkit-specific styling */
+}
+
+input[type="date"]:focus::-webkit-calendar-picker-indicator {
+  color: black; /* Ensures color remains black on focus */
+}
