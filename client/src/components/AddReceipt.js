@@ -1,11 +1,9 @@
 // src/components/AddReceipt.js
 import React, { useState } from 'react';
-import { DocumentPlusIcon } from '@heroicons/react/24/outline'; 
-import { v4 as uuidv4 } from 'uuid';
 
 function AddReceipt({ receipts, setReceipts }) {
   const [receipt, setReceipt] = useState({ amount: '', date: '', description: '' });
-  const [editId, setEditId] = useState(null); // New: Track the receipt being edited
+  const [editId, setEditId] = useState(null); // Track the receipt being edited
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -16,7 +14,7 @@ function AddReceipt({ receipts, setReceipts }) {
     if (receipt.amount && receipt.date) {
       try {
         if (editId) {
-          // New: Update existing receipt
+          // Update existing receipt
           const response = await fetch(`http://localhost:3000/api/receipts/${editId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -71,7 +69,7 @@ function AddReceipt({ receipts, setReceipts }) {
   };
 
   const deleteReceipt = async (id) => {
-    // New: Delete receipt functionality
+    // Delete receipt functionality
     try {
       const response = await fetch(`http://localhost:3000/api/receipts/${id}`, { method: 'DELETE' });
       if (response.ok) {
@@ -85,7 +83,7 @@ function AddReceipt({ receipts, setReceipts }) {
   };
 
   const startEdit = (id) => {
-    // New: Start editing a receipt
+    // Start editing a receipt
     const receiptToEdit = receipts.find((item) => item.id === id);
     setReceipt({ amount: receiptToEdit.amount, date: receiptToEdit.date, description: receiptToEdit.description });
     setEditId(id); // Set the ID of the receipt being edited
@@ -96,19 +94,47 @@ function AddReceipt({ receipts, setReceipts }) {
       <div className="card-body">
         <h2 className="card-title">Add Receipt</h2>
         <div className="form-control">
-          <input type="number" name="amount" value={receipt.amount} onChange={handleChange} placeholder="Amount" />
-          <input type="date" name="date" value={receipt.date} onChange={handleChange} placeholder="Date" />
-          <textarea name="description" value={receipt.description} onChange={handleChange} placeholder="Description" />
+          <input
+            type="number"
+            name="amount"
+            value={receipt.amount}
+            onChange={handleChange}
+            placeholder="Amount"
+            className="input input-bordered mb-4"
+          />
+          <input
+            type="date"
+            name="date"
+            value={receipt.date}
+            onChange={handleChange}
+            placeholder="Date"
+            className="input input-bordered mb-4"
+          />
+          <textarea
+            name="description"
+            value={receipt.description}
+            onChange={handleChange}
+            placeholder="Description"
+            className="textarea textarea-bordered mb-4"
+          />
           <button className="btn btn-primary" onClick={addOrUpdateReceipt}>
-            {editId ? 'Update Receipt' : 'Save Receipt'} {/* New: Dynamic button text */}
+            {editId ? 'Update Receipt' : 'Save Receipt'}
           </button>
         </div>
-        <ul>
+        <ul className="mt-4">
           {receipts.map((item) => (
-            <li key={item.id}>
-              {item.amount} - {item.date} - {item.description}
-              <button onClick={() => startEdit(item.id)}>Edit</button> {/* New: Edit button */}
-              <button onClick={() => deleteReceipt(item.id)}>Delete</button> {/* New: Delete button */}
+            <li key={item.id} className="flex items-center justify-between">
+              <span>
+                ${item.amount} - {item.date} - {item.description}
+              </span>
+              <div>
+                <button className="btn btn-sm btn-secondary mr-2" onClick={() => startEdit(item.id)}>
+                  Edit
+                </button>
+                <button className="btn btn-sm btn-error" onClick={() => deleteReceipt(item.id)}>
+                  Delete
+                </button>
+              </div>
             </li>
           ))}
         </ul>
@@ -116,3 +142,6 @@ function AddReceipt({ receipts, setReceipts }) {
     </div>
   );
 }
+
+// Export the component as default
+export default AddReceipt;
