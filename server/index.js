@@ -24,7 +24,7 @@ app.use(express.static(path.join(__dirname, '../client/build')));
 app.use('/api/users', userRoutes);
 app.use('/api/receipts', receiptRoutes);
 app.use('/api/groups', groupRoutes);
-app.use('/api/friends', groupRoutes);
+app.use('/api/friends', friendRoutes);
 
 // Database connection
 const db = mysql.createConnection({
