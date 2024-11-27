@@ -31,6 +31,22 @@ router.get('/:id', (req, res) => {
     });
 });
 
+// Route to find a user by email
+router.get('/email/:email', (req, res) => {
+    const email = req.params.email;
+
+    User.findByEmail(email, (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ error: 'Failed to fetch user' });
+        }
+        if (result.length === 0) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json(result[0]);
+    });
+});
+
 // Route to find all users
 router.get('/', (req, res) => {
     User.findAll((err, results) => {
