@@ -1,7 +1,13 @@
 // src/components/AddReceipt.js
 import React, { useState } from 'react';
 
-function AddReceipt({ receipts, setReceipts }) {
+function AddReceipt() {
+  // Mock data for testing purposes
+  const [receipts, setReceipts] = useState([
+    { id: '1', amount: 100, date: '2024-11-26', description: 'Dinner' },
+    { id: '2', amount: 50, date: '2024-11-25', description: 'Taxi' },
+  ]);
+
   const [receipt, setReceipt] = useState({ amount: '', date: '', description: '' });
   const [editId, setEditId] = useState(null); // Track the receipt being edited
 
@@ -12,74 +18,35 @@ function AddReceipt({ receipts, setReceipts }) {
 
   const addOrUpdateReceipt = async () => {
     if (receipt.amount && receipt.date) {
-      try {
-        if (editId) {
-          // Update existing receipt
-          const response = await fetch(`http://localhost:3000/api/receipts/${editId}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              total_amount: parseFloat(receipt.amount),
-              receipt_date: receipt.date,
-              group_id: 1,
-              billers: 'John',
-            }),
-          });
-
-          if (response.ok) {
-            setReceipts((prev) =>
-              prev.map((item) =>
-                item.id === editId
-                  ? { ...item, amount: parseFloat(receipt.amount), date: receipt.date, description: receipt.description }
-                  : item
-              )
-            );
-            setEditId(null); // Reset edit mode
-          } else {
-            console.error('Failed to update receipt');
-          }
-        } else {
-          // Create new receipt
-          const response = await fetch('http://localhost:3000/api/receipts/create', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              total_amount: parseFloat(receipt.amount),
-              receipt_date: receipt.date,
-              group_id: 1,
-              billers: 'John',
-            }),
-          });
-
-          const data = await response.json();
-          if (response.ok) {
-            setReceipts([
-              ...receipts,
-              { id: data.receiptId, amount: parseFloat(receipt.amount), date: receipt.date, description: receipt.description },
-            ]);
-          } else {
-            console.error('Failed to add receipt');
-          }
-        }
-        setReceipt({ amount: '', date: '', description: '' }); // Reset form
-      } catch (error) {
-        console.error('Failed to connect to the server');
+      if (editId) {
+        // Update an existing receipt
+        setReceipts((prev) =>
+          prev.map((item) =>
+            item.id === editId
+              ? { ...item, amount: parseFloat(receipt.amount), date: receipt.date, description: receipt.description }
+              : item
+          )
+        );
+        setEditId(null); // Reset edit mode
+      } else {
+        // Add a new receipt
+        setReceipts((prev) => [
+          ...prev,
+          {
+            id: Math.random().toString(36).substring(2, 15), // Generate a mock ID for the new receipt
+            amount: parseFloat(receipt.amount),
+            date: receipt.date,
+            description: receipt.description,
+          },
+        ]);
       }
+      setReceipt({ amount: '', date: '', description: '' }); // Reset form
     }
   };
 
-  const deleteReceipt = async (id) => {
-    // Delete receipt functionality
-    try {
-      const response = await fetch(`http://localhost:3000/api/receipts/${id}`, { method: 'DELETE' });
-      if (response.ok) {
-        setReceipts((prev) => prev.filter((item) => item.id !== id));
-      } else {
-        console.error('Failed to delete receipt');
-      }
-    } catch (error) {
-      console.error('Failed to connect to the server');
-    }
+  const deleteReceipt = (id) => {
+    // Delete a receipt
+    setReceipts((prev) => prev.filter((item) => item.id !== id));
   };
 
   const startEdit = (id) => {
@@ -121,27 +88,35 @@ function AddReceipt({ receipts, setReceipts }) {
             {editId ? 'Update Receipt' : 'Save Receipt'}
           </button>
         </div>
-        <ul className="mt-4">
-          {receipts.map((item) => (
-            <li key={item.id} className="flex items-center justify-between">
-              <span>
-                ${item.amount} - {item.date} - {item.description}
-              </span>
-              <div>
-                <button className="btn btn-sm btn-secondary mr-2" onClick={() => startEdit(item.id)}>
-                  Edit
-                </button>
-                <button className="btn btn-sm btn-error" onClick={() => deleteReceipt(item.id)}>
-                  Delete
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
+
+        {receipts.length > 0 && (
+          <ul className="mt-4">
+            {receipts.map((item) => (
+              <li key={item.id} className="flex items-center justify-between">
+                <span>
+                  ${item.amount.toFixed(2)} - {item.date} - {item.description}
+                </span>
+                <div>
+                  <button
+                    className="btn btn-sm btn-secondary mr-2"
+                    onClick={() => startEdit(item.id)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="btn btn-sm btn-error"
+                    onClick={() => deleteReceipt(item.id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );
 }
 
-// Export the component as default
 export default AddReceipt;
