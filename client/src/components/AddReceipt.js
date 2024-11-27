@@ -1,59 +1,99 @@
-// src/components/AddReceipt.js
 import React, { useState } from 'react';
 
 function AddReceipt() {
-  // Mock data for testing purposes
-  const [receipts, setReceipts] = useState([
-    { id: '1', amount: 100, date: '2024-11-26', description: 'Dinner' },
-    { id: '2', amount: 50, date: '2024-11-25', description: 'Taxi' },
-  ]);
-
-  const [receipt, setReceipt] = useState({ amount: '', date: '', description: '' });
-  const [editId, setEditId] = useState(null); // Track the receipt being edited
+  const [receipts, setReceipts] = useState([]);
+  const [receipt, setReceipt] = useState({ id: '', amount: '', date: '', description: '', groupName: '' });
+  const [editId, setEditId] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setReceipt((prev) => ({ ...prev, [name]: value }));
   };
 
-  const addOrUpdateReceipt = async () => {
-    if (receipt.amount && receipt.date) {
-      if (editId) {
-        // Update an existing receipt
-        setReceipts((prev) =>
-          prev.map((item) =>
-            item.id === editId
-              ? { ...item, amount: parseFloat(receipt.amount), date: receipt.date, description: receipt.description }
-              : item
-          )
-        );
-        setEditId(null); // Reset edit mode
-      } else {
-        // Add a new receipt
-        setReceipts((prev) => [
-          ...prev,
-          {
-            id: Math.random().toString(36).substring(2, 15), // Generate a mock ID for the new receipt
-            amount: parseFloat(receipt.amount),
-            date: receipt.date,
-            description: receipt.description,
-          },
-        ]);
+  const fetchGroupByName = async (groupName) => {
+    try {
+      const response = await fetch(`/api/groups/name/${groupName}`);
+      if (!response.ok) {
+        throw new Error('Group not found');
       }
-      setReceipt({ amount: '', date: '', description: '' }); // Reset form
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching group ID:', error);
+      alert('Could not find group. Please check the group name.');
+      throw error;
     }
   };
 
-  const deleteReceipt = (id) => {
-    // Delete a receipt
-    setReceipts((prev) => prev.filter((item) => item.id !== id));
+  const addOrUpdateReceipt = async () => {
+    if (receipt.amount && receipt.date && receipt.groupName) {
+      try {
+        const group = await fetchGroupByName(receipt.groupName);
+        const method = editId ? 'PUT' : 'POST';
+        const url = editId ? `/api/receipts/${receipt.date}` : '/api/receipts/create';
+
+        const receiptData = {
+          amount: parseFloat(receipt.amount),
+          date: receipt.date,
+          description: receipt.description,
+          group_id: group.group_id,
+          billers: JSON.parse(group.billers),
+        };
+
+        const response = await fetch(url, {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(receiptData),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to save receipt');
+        }
+
+        const data = await response.json();
+
+        if (editId) {
+          setReceipts((prev) =>
+            prev.map((item) => (item.id === editId ? { id: editId, ...receiptData } : item))
+          );
+        } else {
+          setReceipts((prev) => [...prev, { id: data.date, ...receiptData }]);
+        }
+
+        setEditId(null);
+        setReceipt({ id: '', amount: '', date: '', description: '', groupName: '' });
+      } catch (error) {
+        console.error('Error saving receipt:', error);
+        alert('Failed to save the receipt. Please try again.');
+      }
+    } else {
+      alert('Please fill in all fields, including the group name.');
+    }
   };
 
-  const startEdit = (id) => {
-    // Start editing a receipt
-    const receiptToEdit = receipts.find((item) => item.id === id);
-    setReceipt({ amount: receiptToEdit.amount, date: receiptToEdit.date, description: receiptToEdit.description });
-    setEditId(id); // Set the ID of the receipt being edited
+  const deleteReceipt = async (date, id) => {
+    try {
+      const response = await fetch(`/api/receipts/${date}`, { method: 'DELETE' });
+      if (!response.ok) {
+        throw new Error('Failed to delete receipt');
+      }
+      setReceipts((prev) => prev.filter((item) => item.date !== date));
+    } catch (error) {
+      console.error('Error deleting receipt:', error);
+      alert('Failed to delete the receipt.');
+    }
+  };
+
+  const startEdit = (date) => {
+    const receiptToEdit = receipts.find((item) => item.date === date);
+    setReceipt({
+      id: receiptToEdit.date,
+      amount: receiptToEdit.amount,
+      date: receiptToEdit.date,
+      description: receiptToEdit.description,
+      groupName: receiptToEdit.groupName,
+    });
+    setEditId(date);
   };
 
   return (
@@ -84,6 +124,14 @@ function AddReceipt() {
             placeholder="Description"
             className="textarea textarea-bordered mb-4"
           />
+          <input
+            type="text"
+            name="groupName"
+            value={receipt.groupName}
+            onChange={handleChange}
+            placeholder="Group Name"
+            className="input input-bordered mb-4"
+          />
           <button className="btn btn-primary" onClick={addOrUpdateReceipt}>
             {editId ? 'Update Receipt' : 'Save Receipt'}
           </button>
@@ -91,7 +139,7 @@ function AddReceipt() {
 
         {receipts.length > 0 && (
           <div className="mt-4">
-            <h3 className="font-bold">Current Receipts:</h3> {/* Added the subheading here */}
+            <h3 className="font-bold">Current Receipts:</h3>
             <ul>
               {receipts.map((item) => (
                 <li key={item.id} className="flex items-center justify-between">
@@ -101,13 +149,13 @@ function AddReceipt() {
                   <div>
                     <button
                       className="btn btn-sm btn-secondary mr-2"
-                      onClick={() => startEdit(item.id)}
+                      onClick={() => startEdit(item.date)}
                     >
                       Edit
                     </button>
                     <button
                       className="btn btn-sm btn-error"
-                      onClick={() => deleteReceipt(item.id)}
+                      onClick={() => deleteReceipt(item.date, item.id)}
                     >
                       Delete
                     </button>

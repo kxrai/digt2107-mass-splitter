@@ -74,11 +74,12 @@ async function createTables(connection) {
   console.log('Pay_groups table created or already exists.');
 
   // Create pay_groups sample data
+  const jsonString = JSON.stringify(["jabineus25@gmail.com"]);
   const groupsSampleDataQuery = `
-    INSERT INTO pay_groups (group_name, billers) VALUES ('Group1', 'Mahjabin'), ('Group2','Alicia')
+    INSERT INTO pay_groups (group_name, billers) VALUES ('Group1', ?)
     `;
 
-  await connection.query(groupsSampleDataQuery);
+  await connection.query(groupsSampleDataQuery, [jsonString]);
   console.log('Pay_groups table sample data created.');
   
   // Create 'group_members' table
@@ -97,7 +98,7 @@ async function createTables(connection) {
   
   // Create group_members sample data
   const groupMembersSampleDataQuery = `
-    INSERT INTO group_members (group_id, user_id) VALUES (1, 1), (1, 3), (2, 2), (2, 4)
+    INSERT INTO group_members (group_id, user_id) VALUES (1, 1), (1, 3)
     `;
 
   await connection.query(groupMembersSampleDataQuery);
@@ -110,6 +111,7 @@ async function createTables(connection) {
       receipt_id INT AUTO_INCREMENT PRIMARY KEY,
       total_amount DECIMAL(10, 2) NOT NULL,
       receipt_date DATE NOT NULL,
+      description VARCHAR(500),
       group_id INT NOT NULL,
       billers VARCHAR(255) NOT NULL,
       date TIMESTAMP DEFAULT NOW(),
@@ -122,10 +124,10 @@ async function createTables(connection) {
 
   // Create receipts sample data
   const receiptsSampleDataQuery = `
-    INSERT INTO receipts (total_amount, receipt_date, group_id, billers) VALUES (500, '2024-05-06', 1, 'Mahjabin'), (200, '2024-07-08',2, 'Alicia')
+    INSERT INTO receipts (total_amount, receipt_date, group_id, billers) VALUES (500, '2024-05-06', 1, ?)
     `;
 
-  await connection.query(receiptsSampleDataQuery);
+  await connection.query(receiptsSampleDataQuery, [jsonString]);
   console.log('Receipts table sample data created.');
   
   // Create 'payments' table
@@ -148,7 +150,7 @@ async function createTables(connection) {
   
   // Create payments sample data
   const paymentsSampleDataQuery = `
-    INSERT INTO payments (receipt_id, user_id, debt, paid, method) VALUES (1, 3, 500, 500, 'credit card'), (2, 4, 200, 200, 'debit card')
+    INSERT INTO payments (receipt_id, user_id, debt, paid, method) VALUES (1, 3, 500, 500, 'credit card')
     `;
 
   await connection.query(paymentsSampleDataQuery);
