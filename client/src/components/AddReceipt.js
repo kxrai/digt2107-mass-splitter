@@ -90,29 +90,32 @@ function AddReceipt() {
         </div>
 
         {receipts.length > 0 && (
-          <ul className="mt-4">
-            {receipts.map((item) => (
-              <li key={item.id} className="flex items-center justify-between">
-                <span>
-                  ${item.amount.toFixed(2)} - {item.date} - {item.description}
-                </span>
-                <div>
-                  <button
-                    className="btn btn-sm btn-secondary mr-2"
-                    onClick={() => startEdit(item.id)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="btn btn-sm btn-error"
-                    onClick={() => deleteReceipt(item.id)}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <div className="mt-4">
+            <h3 className="font-bold">Current Receipts:</h3> {/* Added the subheading here */}
+            <ul>
+              {receipts.map((item) => (
+                <li key={item.id} className="flex items-center justify-between">
+                  <span>
+                    ${item.amount.toFixed(2)} on {item.date} - {item.description}
+                  </span>
+                  <div>
+                    <button
+                      className="btn btn-sm btn-secondary mr-2"
+                      onClick={() => startEdit(item.id)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="btn btn-sm btn-error"
+                      onClick={() => deleteReceipt(item.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
       </div>
     </div>
