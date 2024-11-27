@@ -23,10 +23,10 @@ function AddFriend() {
     });
     if (response.ok) {
       setAddedFriends([...addedFriends, friend.id]);
-      alert(`${friend.name} added as a friend!`);
+      setMessage(`${friend.name} added as a friend!`);
     }
     else {
-      alert('Could not add as friend or maybe already a friend');
+      setMessage('Could not add as friend or maybe already a friend');
       console.log(response.json());
     } 
   };

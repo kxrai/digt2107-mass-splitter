@@ -94,12 +94,13 @@ function CreateGroup() {
           throw new Error('Failed to add member');
         }
       }
-
-      setErrorMessage('');
-      alert('Group created successfully!');
-      navigate('/home');
+      setErrorMessage('Group created successfully!');
+      setTimeout(() => {
+        navigate('/home');
+      }, 3000);
+      
     } catch (error) {
-      setErrorMessage(error.message || 'Failed to create group. Please try again.');
+      setErrorMessage('Failed to create group. Please try again.' || error.message);
     }
   };
 
