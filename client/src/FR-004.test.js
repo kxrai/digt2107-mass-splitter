@@ -1,87 +1,153 @@
-// src/__tests__/FR006.test.js
 import '@testing-library/jest-dom';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/react';
+import CreateGroup from '../src/pages/CreateGroup';
 import { useNavigate } from 'react-router-dom';
-import CreateGroup from './pages/CreateGroup'; 
 
-// Mock `useNavigate` explicitly
-jest.mock('react-router-dom', () => ({ useNavigate: jest.fn() }));
+jest.mock('react-router-dom', () => ({
+  useNavigate: jest.fn(),
+}));
 
-describe("CreateGroup Component", () => {
+global.fetch = jest.fn();
+
+describe('CreateGroup Component', () => {
   const mockNavigate = jest.fn();
-  const mockAddMember = jest.fn();
-  const mockCreateGroup = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
     useNavigate.mockReturnValue(mockNavigate);
+    cleanup();
   });
 
-  it("creates a new group", async () => {
-    const memberEmail = 'testuser@example.com';
-    const groupName = 'Test Group';
+  it('renders the component correctly', () => {
+    render(<CreateGroup />);
+    expect(screen.getByText('Create Group')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Enter group name')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Enter email to add')).toBeInTheDocument();
+    expect(screen.getByText('Add')).toBeInTheDocument();
+    expect(screen.getByText('Save Group')).toBeInTheDocument();
+  });
 
-    // Mock addMember function to simulate adding a member
-    mockAddMember.mockResolvedValue({ email: memberEmail });
-
-    render(
-      <CreateGroup addMember={mockAddMember} createGroup={mockCreateGroup} />
-    );
-
-    // Enter group name
-    fireEvent.change(screen.getByLabelText('Group Name'), { target: { value: groupName } });
-
-    // Enter member email
-    fireEvent.change(screen.getByPlaceholderText('Enter email to add'), {
-      target: { value: memberEmail },
+  it('adds a valid member email', async () => {
+    fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ user_id: 1, email: 'testuser@example.com' }),
     });
 
-    // Click Add button
+    render(<CreateGroup />);
+
+    fireEvent.change(screen.getByPlaceholderText('Enter email to add'), {
+      target: { value: 'testuser@example.com' },
+    });
     fireEvent.click(screen.getByText('Add'));
 
-    // Wait for the member to be added to the UI
-    await waitFor(() => expect(screen.getByText(memberEmail)).toBeInTheDocument());
+    expect(screen.findAllByText('testuser@example.com')).toBeInTheDocument();
+  });
 
-    // Click Save Group
-    fireEvent.click(screen.getByText('Save Group'));
+  it('shows error for invalid email', () => {
+    render(<CreateGroup />);
 
-    // Assert mock functions were called with correct data
+    fireEvent.change(screen.getByPlaceholderText('Enter email to add'), {
+      target: { value: 'invalidemail' },
+    });
+    fireEvent.click(screen.getByText('Add'));
+
+    expect(screen.getByText('Please enter a valid email address')).toBeInTheDocument();
+  });
+
+  it('removes a member', async () => {
+    fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ user_id: 1, email: 'testuser@example.com' }),
+    });
+
+    render(<CreateGroup />);
+
+    fireEvent.change(screen.getByPlaceholderText('Enter email to add'), {
+      target: { value: 'testuser@example.com' },
+    });
+    fireEvent.click(screen.getByText('Add'));
+
     await waitFor(() => {
-      expect(mockCreateGroup).toHaveBeenCalledWith({ name: groupName, members: [{ email: memberEmail }] });
-      expect(mockNavigate).toHaveBeenCalledWith('/');
-    });
-  });
-
-  it("edits the group by deleting a user", async () => {
-    const memberEmail = 'testuser@example.com';
-
-    // Mock addMember function to simulate adding a member
-    mockAddMember.mockResolvedValue({ email: memberEmail });
-
-    render(
-      <CreateGroup addMember={mockAddMember} createGroup={mockCreateGroup} />
-    );
-
-    // Enter member email
-    fireEvent.change(screen.getByPlaceholderText('Enter email to add'), {
-      target: { value: memberEmail },
+      expect(screen.getByText('testuser@example.com')).toBeInTheDocument();
     });
 
-    // Click Add button
-    fireEvent.click(screen.getByText('Add'));
-
-    // Wait for the member to be added to the UI
-    await waitFor(() => expect(screen.getByText(memberEmail)).toBeInTheDocument());
-
-    // Click Remove button next to the member's name
     fireEvent.click(screen.getByText('Remove'));
 
-    // Assert the member is removed from the UI
-    await waitFor(() => {
-      expect(screen.queryByText(memberEmail)).not.toBeInTheDocument();
+    expect(screen.queryByText('testuser@example.com')).not.toBeInTheDocument();
+  });
+
+  it('designates and removes a biller', async () => {
+    fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ user_id: 1, email: 'testuser@example.com' }),
     });
 
-    // Assert the "No members added yet." message is displayed
-    expect(screen.getByText('No members added yet.')).toBeInTheDocument();
+    render(<CreateGroup />);
+
+    fireEvent.change(screen.getByPlaceholderText('Enter email to add'), {
+      target: { value: 'testuser@example.com' },
+    });
+    fireEvent.click(screen.getByText('Add'));
+
+    await waitFor(() => {
+      expect(screen.getByText('testuser@example.com')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Add as Biller'));
+    expect(screen.getByText('Remove as Biller')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('Remove as Biller'));
+    expect(screen.queryByText('Add as Biller')).not.toBeInTheDocument();
+  });
+
+  it('saves the group successfully', async () => {
+    fetch.mockResolvedValueOnce({
+      ok: true,
+    });
+
+    fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ groupId: 123 }),
+    });
+
+    fetch.mockResolvedValueOnce({
+      ok: true,
+    });
+
+    render(<CreateGroup />);
+
+    fireEvent.change(screen.getByPlaceholderText('Enter group name'), {
+      target: { value: 'Test Group' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('Enter email to add'), {
+      target: { value: 'testuser@example.com' },
+    });
+    fireEvent.click(screen.getByText('Add'));
+    fireEvent.click(screen.getByText('Save Group'));
+    expect(screen.findByText('Group created successfully!')).toBeInTheDocument();
+  });
+
+  it('shows error when saving group fails', async () => {
+    fetch.mockResolvedValueOnce({
+      ok: false,
+      status: 500,
+    });
+
+    render(<CreateGroup />);
+
+    fireEvent.change(screen.getByPlaceholderText('Enter group name'), {
+      target: { value: 'Test Group' },
+    });
+
+    fireEvent.change(screen.getByPlaceholderText('Enter email to add'), {
+      target: { value: 'testuser@example.com' },
+    });
+    fireEvent.click(screen.getByText('Add'));
+
+    fireEvent.click(screen.getByText('Save Group'));
+
+    await waitFor(() => {
+      expect(screen.getByText('User not found')).toBeInTheDocument();
+    });
   });
 });
