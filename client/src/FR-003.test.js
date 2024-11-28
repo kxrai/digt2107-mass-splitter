@@ -1,51 +1,67 @@
-// src/FR-003.test.js
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import AddReceipt from './components/AddReceipt';
+import { act } from 'react';
+
+// Mock Fetch API
+global.fetch = jest.fn((url) => {
+  if (url.includes('fetch-group-id')) {
+    return Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve({ id: 'mock-group-id' }),
+    });
+  }
+  if (url.includes('save-receipt')) {
+    return Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve({ success: true }),
+    });
+  }
+  return Promise.reject(new Error('Mock API Error'));
+});
 
 describe('AddReceipt Component - Valid Inputs', () => {
   const mockSetReceipts = jest.fn();
 
   beforeEach(() => {
-    // Clear all mocks before each test
     jest.clearAllMocks();
-
-    // Render the AddReceipt component with an empty receipts array and the mock setReceipts function
-    render(<AddReceipt receipts={[]} setReceipts={mockSetReceipts} />);
-
-    // Mock the alert function to prevent actual alerts from showing during the tests
-    window.alert = jest.fn();
+    window.alert = jest.fn(); // Mock alert
+    act(() => {
+      render(
+        <AddReceipt
+          receipts={[]}
+          setReceipts={mockSetReceipts}
+          participants={['John', 'Jane', 'Doe']}
+        />
+      );
+    });
   });
 
   it('TC-005: Renders the AddReceipt component correctly', () => {
-    // Check if all form fields and the Save Receipt button are present in the document
     expect(screen.getByLabelText(/total amount/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/date/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/description \(optional\)/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /save receipt/i })).toBeInTheDocument();
+    expect(screen.getByLabelText(/group name/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /add receipt/i })).toBeInTheDocument();
   });
 
   it('TC-005: Allows user to enter valid data and submit the form', async () => {
-    // Enter a valid amount
-    fireEvent.change(screen.getByLabelText(/total amount/i), { target: { value: '50.00' } });
-
-    // Enter a valid date
+    fireEvent.change(screen.getByLabelText(/total amount/i), { target: { value: '120.00' } });
     fireEvent.change(screen.getByLabelText(/date/i), { target: { value: '2023-11-08' } });
+    fireEvent.change(screen.getByLabelText(/description \(optional\)/i), { target: { value: 'Grocery shopping' } });
+    fireEvent.change(screen.getByLabelText(/group name/i), { target: { value: 'Household' } });
 
-    // Enter a description
-    fireEvent.change(screen.getByLabelText(/description \(optional\)/i), { target: { value: 'Dinner at restaurant' } });
+    fireEvent.click(screen.getByRole('button', { name: /add receipt/i }));
 
-    // Click Save Receipt button
-    fireEvent.click(screen.getByRole('button', { name: /save receipt/i }));
-
-    // Wait for the mockSetReceipts function to be called with the correct data
     await waitFor(() => {
       expect(mockSetReceipts).toHaveBeenCalledWith(
         expect.arrayContaining([
           expect.objectContaining({
-            amount: 50.00,
+            amount: 120.0,
             date: '2023-11-08',
-            description: 'Dinner at restaurant',
+            description: 'Grocery shopping',
+            group: 'Household',
+            splits: [],
           }),
         ])
       );
@@ -53,10 +69,34 @@ describe('AddReceipt Component - Valid Inputs', () => {
   });
 
   it('TC-005: Shows alert when trying to submit without entering amount or date', () => {
-    // Leave the amount and date fields empty and click Save Receipt
-    fireEvent.click(screen.getByRole('button', { name: /save receipt/i }));
+    fireEvent.click(screen.getByRole('button', { name: /add receipt/i }));
+    expect(window.alert).toHaveBeenCalledWith('Please fill in all fields, including the group name.');
+  });
 
-    // Check if the alert function was called with the correct message
-    expect(window.alert).toHaveBeenCalledWith('Please enter both amount and date for the receipt.');
+  it('TC-006: Adds bill and splits the amount correctly among participants', async () => {
+    fireEvent.change(screen.getByLabelText(/total amount/i), { target: { value: '90.00' } });
+    fireEvent.change(screen.getByLabelText(/date/i), { target: { value: '2023-11-08' } });
+    fireEvent.change(screen.getByLabelText(/description \(optional\)/i), { target: { value: 'Team lunch' } });
+    fireEvent.change(screen.getByLabelText(/group name/i), { target: { value: 'Work Friends' } });
+
+    fireEvent.click(screen.getByRole('button', { name: /add receipt/i }));
+
+    await waitFor(() => {
+      expect(mockSetReceipts).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            amount: 90.0,
+            date: '2023-11-08',
+            description: 'Team lunch',
+            group: 'Work Friends',
+            splits: [
+              { name: 'John', share: 30.0 },
+              { name: 'Jane', share: 30.0 },
+              { name: 'Doe', share: 30.0 },
+            ],
+          }),
+        ])
+      );
+    });
   });
 });

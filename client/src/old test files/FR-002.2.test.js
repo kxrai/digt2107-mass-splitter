@@ -2,7 +2,7 @@
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import HomePage from './pages/HomePage';
+import HomePage from '../pages/HomePage';
 
 describe("HomePage Button Interactions and Responsiveness Tests", () => {
   // Test Case: Verify Add Friend Button in Friends Section

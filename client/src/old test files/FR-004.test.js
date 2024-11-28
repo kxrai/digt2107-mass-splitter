@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/react';
-import CreateGroup from '../src/pages/CreateGroup';
+import CreateGroup from '../pages/CreateGroup';
 import { useNavigate } from 'react-router-dom';
 
 jest.mock('react-router-dom', () => ({

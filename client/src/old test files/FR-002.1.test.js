@@ -2,8 +2,8 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import HomePage from './pages/HomePage';
-import Navbar from './components/Navbar';
+import HomePage from '../pages/HomePage';
+import Navbar from '../components/Navbar';
 
 describe("HomePage Layout and Key Sections Tests", () => {
   // Test Case: Render HomePage Layout
