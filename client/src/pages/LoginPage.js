@@ -8,65 +8,66 @@ import { jwtDecode } from "jwt-decode";
 export const handleLoginFailure = (error) => {
     console.error('Login Failed:', error);
 };
+// Handle user login
+export const handleLoginSuccess = async (credentialResponse, navigate, location) => {
+    const token = jwtDecode(credentialResponse?.credential); // Decode token
+    const userExists = await checkUser(token);
+
+    if (userExists) {
+        localStorage.setItem('loggedIn', true); // Store logged-in status
+        navigate(location.state?.from || '/home'); // Redirect user
+    }
+};
+
+// Check user in database
+export async function checkUser(token) {
+    try {
+        const email = token.email;
+        const response = await fetch(`http://localhost:3000/api/users/email/${email}`, { method: 'GET' });
+        const data = await response.json();
+
+        if (response.ok) {
+            // Save user info in localStorage
+            const userInfo = { id: data.user_id, name: data.username, email: data.email };
+            localStorage.setItem('googleToken', JSON.stringify(userInfo));
+            console.log('User found and stored:', userInfo);
+            return true;
+        } else {
+            // User not found, create new user
+            const createResponse = await fetch('/api/users/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username: token.name,
+                    email: token.email,
+                    phone_number: '',
+                    password: '',
+                }),
+            });
+
+            if (createResponse.ok) {
+                const newUser = await createResponse.json();
+                const userInfo = { id: newUser.userId, name: token.name, email: token.email };
+                localStorage.setItem('googleToken', JSON.stringify(userInfo));
+                console.log('New user created and stored:', userInfo);
+                return true;
+            } else {
+                const error = await createResponse.json();
+                alert(`Error creating user: ${error.error}`);
+                return false;
+            }
+        }
+    } catch (error) {
+        console.error('Failed to connect to the server:', error);
+        return false;
+    }
+}
+
 
 function LoginPage() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Handle user login
-    const handleLoginSuccess = async (credentialResponse, navigate, location) => {
-        const token = jwtDecode(credentialResponse?.credential); // Decode token
-        const userExists = await checkUser(token);
-
-        if (userExists) {
-            localStorage.setItem('loggedIn', true); // Store logged-in status
-            navigate(location.state?.from || '/home'); // Redirect user
-        }
-    };
-
-    // Check user in database
-    async function checkUser(token) {
-        try {
-            const email = token.email;
-            const response = await fetch(`http://localhost:3000/api/users/email/${email}`, { method: 'GET' });
-            const data = await response.json();
-
-            if (response.ok) {
-                // Save user info in localStorage
-                const userInfo = { id: data.user_id, name: data.username, email: data.email };
-                localStorage.setItem('googleToken', JSON.stringify(userInfo));
-                console.log('User found and stored:', userInfo);
-                return true;
-            } else {
-                // User not found, create new user
-                const createResponse = await fetch('/api/users/create', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        username: token.name,
-                        email: token.email,
-                        phone_number: '',
-                        password: '',
-                    }),
-                });
-
-                if (createResponse.ok) {
-                    const newUser = await createResponse.json();
-                    const userInfo = { id: newUser.userId, name: token.name, email: token.email };
-                    localStorage.setItem('googleToken', JSON.stringify(userInfo));
-                    console.log('New user created and stored:', userInfo);
-                    return true;
-                } else {
-                    const error = await createResponse.json();
-                    alert(`Error creating user: ${error.error}`);
-                    return false;
-                }
-            }
-        } catch (error) {
-            console.error('Failed to connect to the server:', error);
-            return false;
-        }
-    }
 
     return (
 
