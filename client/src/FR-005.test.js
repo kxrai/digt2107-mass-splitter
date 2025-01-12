@@ -103,7 +103,7 @@ describe('AddFriend Page', () => {
     fireEvent.click(addButton);
 
     expect(fetch).toHaveBeenCalledWith(
-      '/api/friends',
+      '/api/friends/create',
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

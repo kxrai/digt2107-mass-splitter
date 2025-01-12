@@ -108,7 +108,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
 
         {/* Protected Routes */}
-        {/* <Route element={<ProtectedRoute/>}> */}
+        <Route element={<ProtectedRoute/>}> 
           <Route path="/home" element={<HomePage />} />
           <Route path="/split-history" element={<SplitHistory />} />
           <Route path="/add-friend" element={<AddFriend />} />
@@ -116,7 +116,7 @@ function App() {
           <Route path="/add-receipt" element={<AddReceipt />} />
           <Route path="/split-bill" element={<SplitBill />} />
           <Route path="/account" element={<UserProfile />} />
-        {/* </Route> */}
+        </Route>
         
       </Routes>
     </Router>
