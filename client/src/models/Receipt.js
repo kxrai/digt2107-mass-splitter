@@ -17,15 +17,15 @@ const Receipt = {
         db.query(sql, callback);
     },
     
-    update: (date, receipt, callback) => {
-        const sql = 'UPDATE receipts SET total_amount = ?, receipt_date = ?, description = ?, group_id = ?, billers = ? WHERE receipt_date = ?';
+    update: (id, receipt, callback) => {
+        const sql = 'UPDATE receipts SET total_amount = ?, receipt_date = ?, description = ?, group_id = ?, billers = ? WHERE receipt_id = ?';
         const billersJson = JSON.stringify(receipt.billers); // Convert billers array to JSON string
-        db.query(sql, [receipt.amount, receipt.date, receipt.description, receipt.group_id, billersJson, date], callback);
+        db.query(sql, [receipt.amount, receipt.date, receipt.description, receipt.group_id, billersJson, id], callback);
     },
     
-    delete: (date, callback) => {
-        const sql = 'DELETE FROM receipts WHERE receipt_date = ?';
-        db.query(sql, [date], callback);
+    delete: (id, callback) => {
+        const sql = 'DELETE FROM receipts WHERE receipt_id = ?';
+        db.query(sql, [id], callback);
     }
 };
 
