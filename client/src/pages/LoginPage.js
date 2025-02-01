@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {useNavigate, useLocation } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from "jwt-decode";
@@ -23,7 +23,14 @@ export const handleLoginSuccess = async (credentialResponse, navigate, location)
 export async function checkUser(token) {
     try {
         const email = token.email;
-        const response = await fetch(`http://localhost:3000/api/users/email/${email}`, { method: 'GET' });
+        const response = await fetch(`http://localhost:5000/api/users/email/${email}`, { 
+            method: 'GET',
+            headers: { 
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include' // 🔥 Important: ensures cookies & authentication tokens are sent
+        });
+        
         const data = await response.json();
 
         if (response.ok) {
@@ -63,26 +70,30 @@ export async function checkUser(token) {
     }
 }
 
-
 function LoginPage() {
     const navigate = useNavigate();
     const location = useLocation();
 
+    useEffect(() => {
+        // 🔥 Check if user is already logged in and redirect to home
+        const user = localStorage.getItem('googleToken');
+        if (user) {
+            navigate('/home'); // Redirect if user is already logged in
+        }
+    }, [navigate]);
 
     return (
-
         <div className="h-screen grid place-items-center bg-gradient-to-b from-lightBlue-400 to-peach-400">
-             <div className="card bg-base-100 shadow-xl">
+            <div className="card bg-base-100 shadow-xl">
                 <div className="w-[600px] h-[300px] card-body grid place-items-center">
                     <h1 className="card-title">Login/Sign-up with Google</h1> 
-                    {/*Google sign in button*/}
-                        <GoogleLogin
-                            onSuccess={(response) => handleLoginSuccess(response, navigate, location)}
-                            onError={handleLoginFailure}
-                            theme="outline"
-                            size="large"
-                            text="signin_with" 
-                        />                                 
+                    <GoogleLogin
+                        onSuccess={(response) => handleLoginSuccess(response, navigate, location)}
+                        onError={handleLoginFailure}
+                        theme="outline"
+                        size="large"
+                        text="signin_with" 
+                    />                                 
                 </div>
             </div>
         </div>
