@@ -215,7 +215,7 @@ function AddReceipt() {
       try {
         const group = await fetchGroupByName(receipt.groupName);
         const method = editId ? 'PUT' : 'POST';
-        const url = editId ? `/api/receipts/${receipt.date}` : '/api/receipts/create';
+        const url = editId ? `/api/receipts/${receipt.id}` : '/api/receipts/create';
 
         const receiptData = {
           amount: parseFloat(receipt.amount),
@@ -240,7 +240,7 @@ function AddReceipt() {
         // Update the receipts state properly
         if (editId) {
           setReceipts(prev => prev.map(item => 
-            item.date === editId 
+            item.id === editId 
               ? {
                   ...item,
                   amount: receiptData.amount,
@@ -254,7 +254,7 @@ function AddReceipt() {
           ));
         } else {
           const newReceipt = {
-            id: data.date, // or use data.id if your API returns one
+            id: data.receiptId, 
             date: receiptData.date,
             amount: receiptData.amount,
             description: receiptData.description,
@@ -277,26 +277,26 @@ function AddReceipt() {
     }
   };
 
-  const startEdit = (date) => {
-    const receiptToEdit = receipts.find((item) => item.date === date);
+  const startEdit = (id) => {
+    const receiptToEdit = receipts.find((item) => item.id === id);
     if (receiptToEdit) {
       setReceipt({
-        id: receiptToEdit.date,
+        id: receiptToEdit.id,
         amount: String(receiptToEdit.amount), // Convert to string for input field
         date: receiptToEdit.date,
         description: receiptToEdit.description, // '',
         groupName: receiptToEdit.groupName // '',
       });
-      setEditId(date);
+      setEditId(id);
     }
   };
-  const deleteReceipt = async (date, id) => {
+  const deleteReceipt = async (id) => {
     try {
-      const response = await fetch(`/api/receipts/${date}`, { method: 'DELETE' });
+      const response = await fetch(`/api/receipts/${id}`, { method: 'DELETE' });
       if (!response.ok) {
         throw new Error('Failed to delete receipt');
       }
-      setReceipts((prev) => prev.filter((item) => item.date !== date));
+      setReceipts((prev) => prev.filter((item) => item.id !== id));
       setSelectedReceipts(prev => prev.filter(receiptId => receiptId !== id));
     } catch (error) {
       console.error('Error deleting receipt:', error);
@@ -418,13 +418,13 @@ function AddReceipt() {
                     <button
                       className="btn btn-sm"
                       style={{ backgroundColor: '#A3E4A5', color: 'white' }}
-                      onClick={() => startEdit(item.date)}
+                      onClick={() => startEdit(item.id)}
                     >
                       <PencilSquareIcon className="h-4 w-4" />
                     </button>
                     <button
                       className="btn btn-sm btn-error"
-                      onClick={() => deleteReceipt(item.date, item.id)}
+                      onClick={() => deleteReceipt(item.id, item.id)}
                     >
                       <TrashIcon className="h-4 w-4" />
                     </button>
