@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
-function SubmitBill({ receipts }) {
+function SubmitBill() {
   const [selectedGroup, setSelectedGroup] = useState('');
   const [selectedReceipt, setSelectedReceipt] = useState('');
   const [splitMethod, setSplitMethod] = useState('even');
   const [groups, setGroups] = useState([]);
+  const [receipts, setReceipts] = useState([]);
 
   // Fetch groups from API
   useEffect(() => {
@@ -12,6 +13,13 @@ function SubmitBill({ receipts }) {
       .then((res) => res.json())
       .then((data) => setGroups(data))
       .catch((err) => console.error('Error fetching groups:', err));
+  }, []);
+
+  useEffect(() => {
+    fetch('/api/receipts')
+      .then((res) => res.json())
+      .then((data) => setReceipts(data))
+      .catch((err) => console.error('Error fetching receipts:', err));
   }, []);
 
   const handleSubmitBill = async () => {
@@ -71,8 +79,8 @@ function SubmitBill({ receipts }) {
       >
         <option value="">-- Select a Receipt --</option>
         {receipts.map((receipt) => (
-          <option key={receipt.id} value={receipt.id}>
-            {receipt.description} - ${receipt.amount.toFixed(2)}
+          <option key={receipt.receipt_id} value={receipt.receipt_id}>
+            {receipt.description} - ${receipt.total_amount}
           </option>
         ))}
       </select>
