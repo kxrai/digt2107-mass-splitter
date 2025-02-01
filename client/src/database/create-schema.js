@@ -124,7 +124,7 @@ async function createTables(connection) {
 
   // Create receipts sample data
   const receiptsSampleDataQuery = `
-    INSERT INTO receipts (total_amount, receipt_date, group_id, billers) VALUES (500, '2024-05-06', 1, ?)
+    INSERT INTO receipts (total_amount, receipt_date, description, group_id, billers) VALUES (500, '2024-05-06', 'birthday party', 1, ?)
     `;
 
   await connection.query(receiptsSampleDataQuery, [jsonString]);
@@ -150,7 +150,7 @@ async function createTables(connection) {
   
   // Create payments sample data
   const paymentsSampleDataQuery = `
-    INSERT INTO payments (receipt_id, user_id, debt, paid, method) VALUES (1, 3, 500, 500, 'credit card')
+    INSERT INTO payments (receipt_id, user_id, debt, paid, method) VALUES (1, 3, 500, 500, 'incoming')
     `;
 
   await connection.query(paymentsSampleDataQuery);

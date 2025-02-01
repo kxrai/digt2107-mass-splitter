@@ -1,4 +1,6 @@
+import React from "react";
 import { render, screen, fireEvent } from '@testing-library/react';
+import "@testing-library/jest-dom";
 import { handleLoginSuccess, checkUser, handleLoginFailure } from '../src/pages/LoginPage';
 import { useNavigate } from 'react-router-dom';
 import { googleLogout } from '@react-oauth/google';

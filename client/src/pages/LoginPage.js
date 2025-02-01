@@ -35,7 +35,7 @@ export async function checkUser(token) {
 
         if (response.ok) {
             // Save user info in localStorage
-            const userInfo = { id: data.user_id, name: data.username, email: data.email };
+            const userInfo = { id: data.user_id, name: data.username, email: data.email, picture: token.picture };
             localStorage.setItem('googleToken', JSON.stringify(userInfo));
             console.log('User found and stored:', userInfo);
             return true;
@@ -54,7 +54,7 @@ export async function checkUser(token) {
 
             if (createResponse.ok) {
                 const newUser = await createResponse.json();
-                const userInfo = { id: newUser.userId, name: token.name, email: token.email };
+                const userInfo = { id: newUser.userId, name: token.name, email: token.email, picture: token.picture };
                 localStorage.setItem('googleToken', JSON.stringify(userInfo));
                 console.log('New user created and stored:', userInfo);
                 return true;
