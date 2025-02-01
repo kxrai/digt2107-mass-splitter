@@ -11,7 +11,8 @@ function UserProfile() {
         {/* User Info Section */}
         <div className="text-center">
           <img
-            src="https://via.placeholder.com/150"
+            src={loggedInUser.picture}
+            //src="https://via.placeholder.com/150"
             alt="User Avatar"
             className="w-24 h-24 rounded-full mx-auto mb-4"
           />
