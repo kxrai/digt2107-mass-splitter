@@ -12,6 +12,7 @@ const userRoutes = require('../client/src/routes/userRoutes'); // Adjust paths a
 const receiptRoutes = require('../client/src/routes/receiptRoutes');
 const groupRoutes = require('../client/src/routes/groupRoutes');
 const friendRoutes = require('../client/src/routes/friendRoutes');
+const paymentRoutes = require('../client/src/routes/paymentRoutes');
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/receipts', receiptRoutes);
 app.use('/api/groups', groupRoutes);
 app.use('/api/friends', friendRoutes);
+app.use('/api/payments', paymentRoutes);
 
 // Database connection
 const db = mysql.createConnection({
