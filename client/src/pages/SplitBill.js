@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import AddReceipt from '../components/AddReceipt';
 import Navbar from '../components/Navbar';
+import ReceiptList from '../components/ReceiptList'; 
 
 function App() {
   const [splitResult, setSplitResult] = useState(null);
@@ -15,6 +16,11 @@ function App() {
         {/* Add Receipt Section */}
         <div className="mb-8">
           <AddReceipt receipts={receipts} setReceipts={setReceipts} />
+        </div>
+
+        {/* Display Added Receipts Below */}
+        <div className="mb-8">
+          <ReceiptList receipts={receipts} setReceipts={setReceipts} />
         </div>
       </div>
       
