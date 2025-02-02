@@ -1,11 +1,21 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import SplitHistory from "./pages/SplitHistory";
 
 // Mock Navbar component to prevent unnecessary rendering issues
 jest.mock("./components/Navbar", () => () => <div data-testid="navbar">Navbar</div>);
 
 describe("SplitHistory Component", () => {
+  beforeAll(() => {
+    global.localStorage = {
+      getItem: jest.fn(() => JSON.stringify({ id: "test-user-id" })), // Mock user ID
+      setItem: jest.fn(),
+      removeItem: jest.fn(),
+      clear: jest.fn(),
+    };
+  });
+  
   beforeEach(() => {
     // Mock localStorage to simulate logged-in user
     global.localStorage.setItem(

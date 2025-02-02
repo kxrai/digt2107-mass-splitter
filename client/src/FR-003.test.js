@@ -1,4 +1,5 @@
 // src/FR-003.test.js
+import React from "react";
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import AddReceipt from './components/AddReceipt';
@@ -36,7 +37,7 @@ describe('AddReceipt Component - Valid Inputs', () => {
     fireEvent.change(screen.getByLabelText(/description \(optional\)/i), { target: { value: 'Dinner at restaurant' } });
 
     // Click Save Receipt button
-    fireEvent.click(screen.getByRole('button', { name: /save receipt/i }));
+    fireEvent.click(screen.getByRole('button', {name: /Add Receipt/i}));
 
     // Wait for the mockSetReceipts function to be called with the correct data
     await waitFor(() => {
@@ -54,7 +55,7 @@ describe('AddReceipt Component - Valid Inputs', () => {
 
   it('TC-005: Shows alert when trying to submit without entering amount or date', () => {
     // Leave the amount and date fields empty and click Save Receipt
-    fireEvent.click(screen.getByRole('button', { name: /save receipt/i }));
+    fireEvent.click(screen.getByText('Add Receipt'));
 
     // Check if the alert function was called with the correct message
     expect(window.alert).toHaveBeenCalledWith('Please enter both amount and date for the receipt.');

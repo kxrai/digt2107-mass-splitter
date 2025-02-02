@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1738456323599" clover="3.2.0">
+  <project timestamp="1738456323600" name="All files">
+    <metrics statements="73" coveredstatements="19" conditionals="41" coveredconditionals="8" methods="31" coveredmethods="4" elements="145" coveredelements="31" complexity="0" loc="73" ncloc="73" packages="1" files="1" classes="1"/>
+    <file name="AddReceipt.js" path="C:\Users\LENOVO\Documents\digt2107-mass-splitter\client\src\components\AddReceipt.js">
+      <metrics statements="73" coveredstatements="19" conditionals="41" coveredconditionals="8" methods="31" coveredmethods="4"/>
+      <line num="180" count="6" type="stmt"/>
+      <line num="181" count="6" type="stmt"/>
+      <line num="188" count="6" type="stmt"/>
+      <line num="189" count="6" type="stmt"/>
+      <line num="190" count="6" type="stmt"/>
+      <line num="191" count="6" type="stmt"/>
+      <line num="193" count="6" type="stmt"/>
+      <line num="194" count="3" type="stmt"/>
+      <line num="195" count="3" type="stmt"/>
+      <line num="198" count="6" type="stmt"/>
+      <line num="199" count="0" type="stmt"/>
+      <line num="200" count="0" type="stmt"/>
+      <line num="201" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="202" count="0" type="stmt"/>
+      <line num="204" count="0" type="stmt"/>
+      <line num="205" count="0" type="stmt"/>
+      <line num="207" count="0" type="stmt"/>
+      <line num="208" count="0" type="stmt"/>
+      <line num="209" count="0" type="stmt"/>
+      <line num="213" count="6" type="stmt"/>
+      <line num="214" count="1" type="cond" truecount="4" falsecount="1"/>
+      <line num="215" count="0" type="stmt"/>
+      <line num="216" count="0" type="stmt"/>
+      <line num="217" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="218" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="220" count="0" type="stmt"/>
+      <line num="228" count="0" type="stmt"/>
+      <line num="234" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="235" count="0" type="stmt"/>
+      <line num="238" count="0" type="stmt"/>
+      <line num="241" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="242" count="0" type="stmt"/>
+      <line num="243" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="256" count="0" type="stmt"/>
+      <line num="265" count="0" type="stmt"/>
+      <line num="269" count="0" type="stmt"/>
+      <line num="270" count="0" type="stmt"/>
+      <line num="272" count="0" type="stmt"/>
+      <line num="273" count="0" type="stmt"/>
+      <line num="276" count="1" type="stmt"/>
+      <line num="280" count="6" type="stmt"/>
+      <line num="281" count="0" type="stmt"/>
+      <line num="282" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="283" count="0" type="stmt"/>
+      <line num="290" count="0" type="stmt"/>
+      <line num="293" count="6" type="stmt"/>
+      <line num="294" count="0" type="stmt"/>
+      <line num="295" count="0" type="stmt"/>
+      <line num="296" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="297" count="0" type="stmt"/>
+      <line num="299" count="0" type="stmt"/>
+      <line num="300" count="0" type="stmt"/>
+      <line num="302" count="0" type="stmt"/>
+      <line num="303" count="0" type="stmt"/>
+      <line num="307" count="6" type="stmt"/>
+      <line num="308" count="0" type="stmt"/>
+      <line num="309" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="313" count="6" type="stmt"/>
+      <line num="314" count="0" type="stmt"/>
+      <line num="315" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="319" count="6" type="stmt"/>
+      <line num="320" count="0" type="stmt"/>
+      <line num="321" count="0" type="stmt"/>
+      <line num="322" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="323" count="0" type="stmt"/>
+      <line num="326" count="6" type="stmt"/>
+      <line num="402" count="0" type="stmt"/>
+      <line num="407" count="0" type="stmt"/>
+      <line num="421" count="0" type="stmt"/>
+      <line num="427" count="0" type="stmt"/>
+      <line num="438" count="0" type="stmt"/>
+      <line num="456" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="471" count="0" type="stmt"/>
+    </file>
+  </project>
+</coverage>

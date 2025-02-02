@@ -1,3 +1,4 @@
+import React from "react";
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/react';
 import CreateGroup from '../src/pages/CreateGroup';
