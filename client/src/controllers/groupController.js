@@ -42,10 +42,34 @@ const getGroupByName = async (req, res) => {
 };
 
 // Get all groups
+// const getAllGroups = async (req, res) => {
+//     const userEmail = req.query.email; // Get user's email from the request
+//     if (!userEmail) {
+//         return res.status(400).json({ error: 'User email is required' });
+//     }
+
+//     Group.findByUserEmail(userEmail, (err, results) => {
+//         if (err) return res.status(500).json({ error: 'Failed to fetch user groups' });
+//         res.status(200).json(results); // Send only groups the user is part of
+//     });
+// };
+
+// Hard coded groups
 const getAllGroups = async (req, res) => {
     Group.findAll((err, results) => {
         if (err) return res.status(500).json({ error: 'Failed to fetch groups' });
-        res.status(200).json(results); // Send the list of groups
+
+        // ✅ Hardcoded test group
+        const testGroup = {
+            group_id: 9999, // Unique ID for testing
+            group_name: "testGroup-1",
+            billers: JSON.stringify(["testAlicia", "testMahjabin", "testSienna", "testSteeve"]),
+        };
+
+        // ✅ Ensure test group is **always included** with actual user groups
+        const updatedResults = [...results, testGroup];
+
+        res.status(200).json(updatedResults);
     });
 };
 

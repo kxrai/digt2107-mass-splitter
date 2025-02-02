@@ -22,9 +22,28 @@ const Group = {
         db.query(sql, [id], callback);
     },
     
+    // findAll: (callback) => {
+    //     const sql = 'SELECT * FROM pay_groups';
+    //     db.query(sql, callback);
+    // },
     findAll: (callback) => {
         const sql = 'SELECT * FROM pay_groups';
-        db.query(sql, callback);
+        db.query(sql, (err, results) => {
+            if (err) return callback(err, null);
+
+            callback(null, results); // ✅ No hardcoded groups here (handled in controller)
+        });
+    },
+
+    // ✅ NEW FUNCTION: Find groups by user's email
+    findByUserEmail: (email, callback) => {
+        const sql = `
+            SELECT g.group_id, g.group_name
+            FROM pay_groups g
+            JOIN group_members gm ON g.group_id = gm.group_id
+            JOIN users u ON gm.user_id = u.user_id
+            WHERE u.email = ?`;
+        db.query(sql, [email], callback);
     },
     
     update: (id, group, callback) => {
