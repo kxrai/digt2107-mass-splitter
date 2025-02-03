@@ -1,36 +1,57 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import '../App.css';
 
 function SplitBill() {
-  const location = useLocation();
-  const { receipts, selectedGroup } = location.state || { receipts: [], selectedGroup: null };
+  const [receipts, setReceipts] = useState([]);
+  const [selectedGroup, setSelectedGroup] = useState(null);
   const [splitType, setSplitType] = useState('even');
-  const [splitAmounts, setSplitAmounts] = useState([]);
+  const [splitPercentages, setSplitPercentages] = useState([]);
   const [groupMembers, setGroupMembers] = useState([]);
 
+  // ✅ Load stored receipts and group details
   useEffect(() => {
-    if (!selectedGroup) return;
+    const storedReceipts = JSON.parse(localStorage.getItem('receipts')) || [];
+    setReceipts(storedReceipts);
 
-    // Fetch group members from backend (dummy data for now)
+    const storedGroup = JSON.parse(localStorage.getItem('selectedGroup')) || null;
+    setSelectedGroup(storedGroup);
+
+    // Dummy group members
     const dummyMembers = ['testAlicia', 'testMahjabin', 'testSienna', 'testSteeve'];
     setGroupMembers(dummyMembers);
-    
-    // Default split (evenly)
-    const total = receipts.reduce((sum, receipt) => sum + receipt.amount, 0);
-    const evenSplit = total / dummyMembers.length;
-    setSplitAmounts(new Array(dummyMembers.length).fill(evenSplit));
-  }, [selectedGroup, receipts]);
 
+    // Initialize even split (100% divided among members)
+    const evenSplit = 100 / dummyMembers.length;
+    setSplitPercentages(new Array(dummyMembers.length).fill(evenSplit));
+  }, []);
+
+  // ✅ Compute total receipt amount
+  const totalAmount = receipts.reduce((sum, receipt) => sum + receipt.amount, 0);
+
+  // ✅ Handle Split Type Change
   const handleSplitTypeChange = (event) => {
     setSplitType(event.target.value);
   };
 
+  // ✅ Adjust Split Percentage While Keeping Total 100%
   const handleCustomSplitChange = (index, value) => {
-    const newSplitAmounts = [...splitAmounts];
-    newSplitAmounts[index] = parseFloat(value);
-    setSplitAmounts(newSplitAmounts);
+    let newPercentages = [...splitPercentages];
+    newPercentages[index] = parseFloat(value);
+
+    // Ensure total is 100%
+    const totalPercentage = newPercentages.reduce((sum, p) => sum + p, 0);
+    if (totalPercentage !== 100) {
+      const remaining = 100 - newPercentages[index];
+      const otherMembers = groupMembers.length - 1;
+      const adjustedValue = remaining / otherMembers;
+
+      newPercentages = newPercentages.map((p, i) =>
+        i === index ? p : adjustedValue
+      );
+    }
+    
+    setSplitPercentages(newPercentages);
   };
 
   return (
@@ -42,7 +63,7 @@ function SplitBill() {
         <div className="bg-gray-100 p-4 rounded-md shadow-md mb-6">
           <h2 className="text-xl font-semibold mb-3">Receipts</h2>
           {receipts.length === 0 ? (
-            <p className="text-gray-500">No receipts available.</p>
+            <p className="text-gray-500 text-center">No receipts available.</p>
           ) : (
             <ul>
               {receipts.map((receipt, index) => (
@@ -53,7 +74,9 @@ function SplitBill() {
               ))}
             </ul>
           )}
-          <h3 className="text-lg font-semibold mt-4">Total: ${receipts.reduce((sum, r) => sum + r.amount, 0).toFixed(2)}</h3>
+          <h3 className="text-lg font-semibold mt-4">
+            Total: ${totalAmount.toFixed(2)}
+          </h3>
         </div>
 
         {/* Split Options */}
@@ -82,13 +105,30 @@ function SplitBill() {
                   type="range"
                   min="0"
                   max="100"
-                  value={splitAmounts[index]}
+                  value={splitPercentages[index]}
                   onChange={(e) => handleCustomSplitChange(index, e.target.value)}
                   className="slider w-1/2"
                 />
-                <span className="font-bold">${splitAmounts[index].toFixed(2)}</span>
+                <span className="font-bold">{splitPercentages[index].toFixed(2)}%</span>
+                <span className="font-bold">${((totalAmount * splitPercentages[index]) / 100).toFixed(2)}</span>
               </div>
             ))}
+          </div>
+        )}
+
+        {/* Show Split Evenly Breakdown */}
+        {splitType === 'even' && totalAmount > 0 && (
+          <div className="bg-gray-100 p-4 rounded-md shadow-md mt-4">
+            <h2 className="text-xl font-semibold mb-3">Split Evenly Breakdown</h2>
+            {groupMembers.map((member, index) => (
+              <div key={index} className="flex justify-between py-2 border-b">
+                <span>{member} owes:</span>
+                <span className="font-bold">${(totalAmount / groupMembers.length).toFixed(2)}</span>
+              </div>
+            ))}
+            <h3 className="mt-4 font-semibold text-center">
+              📩 Everyone sends ${(totalAmount / groupMembers.length).toFixed(2)} to **dummyUser1**
+            </h3>
           </div>
         )}
       </div>

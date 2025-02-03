@@ -25,7 +25,8 @@ function CreateBill() {
   // Handle Confirm - Redirects to Split Bill Page
   const handleConfirm = () => {
     if (receipts.length === 0) return; // Prevent confirm if no receipts
-    navigate('/split-bill'); // Redirect to the split bill process
+    localStorage.setItem('receipts', JSON.stringify(receipts)); // ✅ Save receipts before navigating
+    navigate('/split-bill'); // Redirect to Split Bill page
   };
 
   return (
