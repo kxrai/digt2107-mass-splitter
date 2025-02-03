@@ -1,0 +1,169 @@
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import CreateGroup from './pages/CreateGroup';
+import { MemoryRouter } from 'react-router-dom';
+
+describe('CreateGroup Component', () => {
+  beforeEach(() => {
+    render(
+      <MemoryRouter>
+        <CreateGroup />
+      </MemoryRouter>
+    );
+  });
+
+  test('renders Create Group page correctly', () => {
+    expect(screen.getByText(/Create Group/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Enter group name/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Enter email to add/i)).toBeInTheDocument();
+  });
+
+  test('handles entering a group name', () => {
+    const groupNameInput = screen.getByPlaceholderText(/Enter group name/i);
+    fireEvent.change(groupNameInput, { target: { value: 'Weekend Getaway' } });
+    expect(groupNameInput.value).toBe('Weekend Getaway');
+  });
+
+  test('shows error when adding an invalid email', () => {
+    fireEvent.change(screen.getByPlaceholderText(/Enter email to add/i), { target: { value: 'invalidemail' } });
+    fireEvent.click(screen.getByRole('button',{ name: /Add/i }));
+    expect(screen.getByText(/Please enter a valid email address/i)).toBeInTheDocument();
+  });
+
+  test('adds a valid member successfully', async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ user_id: 1, email: 'test@example.com' }),
+      })
+    );
+
+    fireEvent.change(screen.getByPlaceholderText(/Enter email to add/i), { target: { value: 'test@example.com' } });
+    fireEvent.click(screen.getByRole('button',{ name: /Add/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText('test@example.com')).toBeInTheDocument();
+    });
+  });
+
+  test('prevents adding duplicate members', async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ user_id: 1, email: 'test@example.com' }),
+      })
+    );
+
+    fireEvent.change(screen.getByPlaceholderText(/Enter email to add/i), { target: { value: 'test@example.com' } });
+    fireEvent.click(screen.getByRole('button',{ name: /Add/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText('test@example.com')).toBeInTheDocument();
+    });
+
+    fireEvent.change(screen.getByPlaceholderText(/Enter email to add/i), { target: { value: 'test@example.com' } });
+    fireEvent.click(screen.getByRole('button',{ name: /Add/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Member already added/i)).toBeInTheDocument();
+    });
+  });
+
+  test('removes a member successfully', async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ user_id: 1, email: 'test@example.com' }),
+      })
+    );
+
+    fireEvent.change(screen.getByPlaceholderText(/Enter email to add/i), { target: { value: 'test@example.com' } });
+    fireEvent.click(screen.getByRole('button',{ name: /Add/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText('test@example.com')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText(/Remove/i));
+
+    await waitFor(() => {
+      expect(screen.queryByText('test@example.com')).not.toBeInTheDocument();
+    });
+  });
+
+  test('adds and removes a biller successfully', async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ user_id: 1, email: 'test@example.com' }),
+      })
+    );
+
+    fireEvent.change(screen.getByPlaceholderText(/Enter email to add/i), { target: { value: 'test@example.com' } });
+    fireEvent.click(screen.getByRole('button',{ name: /Add/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText('test@example.com')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText(/Add as Biller/i));
+    await waitFor(() => {
+      expect(screen.getByText(/Remove as Biller/i)).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText(/Remove as Biller/i));
+    await waitFor(() => {
+      expect(screen.getByText(/Add as Biller/i)).toBeInTheDocument();
+    });
+  });
+
+  test('prevents selecting a biller who is not a member', () => {
+    fireEvent.click(screen.getByText(/Add as Biller/i));
+    expect(screen.getByText(/The selected biller must be a member of the group/i)).toBeInTheDocument();
+  });
+
+  test('displays an error if trying to save a group without name or members', () => {
+    fireEvent.click(screen.getByText(/Save Group/i));
+    expect(screen.getByText(/Please enter a group name and add at least one member/i)).toBeInTheDocument();
+  });
+
+  test('handles saving group successfully', async () => {
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce({ ok: true, json: () => Promise.resolve({ groupId: 123 }) }) // Create group
+      .mockResolvedValueOnce({ ok: true }) // Add member
+
+    fireEvent.change(screen.getByPlaceholderText(/Enter group name/i), { target: { value: 'Test Group' } });
+    fireEvent.change(screen.getByPlaceholderText(/Enter email to add/i), { target: { value: 'test@example.com' } });
+    fireEvent.click(screen.getByRole('button',{ name: /Add/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText('test@example.com')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText(/Save Group/i));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Group created successfully!/i)).toBeInTheDocument();
+    });
+  });
+
+  test('shows error if group creation fails', async () => {
+    global.fetch = jest.fn().mockResolvedValueOnce({ ok: false });
+
+    fireEvent.change(screen.getByPlaceholderText(/Enter group name/i), { target: { value: 'Test Group' } });
+    fireEvent.change(screen.getByPlaceholderText(/Enter email to add/i), { target: { value: 'test@example.com' } });
+    fireEvent.click(screen.getByRole('button',{ name: /Add/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText('test@example.com')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText(/Save Group/i));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Failed to create group. Please try again/i)).toBeInTheDocument();
+    });
+  });
+});

@@ -24,6 +24,13 @@ describe('CreateGroup Component - Test Cases TC-007 and TC-008', () => {
     cleanup();
   });
 
+  it('renders Create Group page correctly', () => {
+      render(<CreateGroup />);
+      expect(screen.getByText(/Create Group/i)).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/Enter group name/i)).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/Enter email to add/i)).toBeInTheDocument();
+  });
+
   it('TC-007: Create Group with Existing Users', async () => {
     // Mock user lookup and group creation
     fetch.mockImplementation((url, options) => {

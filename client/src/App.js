@@ -108,7 +108,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
 
         {/* Protected Routes */}
-        <Route element={<ProtectedRoute/>}> 
+        <Route element={<ProtectedRoute/>}>
           <Route path="/home" element={<HomePage />} />
           <Route path="/split-history" element={<SplitHistory />} />
           <Route path="/add-friend" element={<AddFriend />} />

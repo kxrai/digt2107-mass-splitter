@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/SplitResult.js</title>
+    <title>Code coverage report for UserProfile.js</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../prettify.css" />
-    <link rel="stylesheet" href="../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
+    <link rel="stylesheet" href="prettify.css" />
+    <link rel="stylesheet" href="base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../sort-arrow-sprite.png);
+            background-image: url(sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/components</a> SplitResult.js</h1>
+        <h1><a href="index.html">All files</a> UserProfile.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -93,24 +93,16 @@
 <a name='L28'></a><a href='#L28'>28</a>
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -123,53 +115,73 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// src/components/SplitResult.js
-import React from 'react';
-import { CurrencyDollarIcon } from '@heroicons/react/24/outline'; // Updated import path
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+import Navbar from '../components/Navbar'; // Adjust the path as necessary
 &nbsp;
-function <span class="fstat-no" title="function not covered" >SplitResult(</span>{ partyMembers, splitResult }) {
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;div className="card bg-base-100 shadow-xl my-8"&gt;
-      &lt;div className="card-body"&gt;
-        &lt;h2 className="card-title flex items-center"&gt;
-          &lt;CurrencyDollarIcon className="h-6 w-6 mr-2" /&gt;
-          Split Result
-        &lt;/h2&gt;
-        &lt;ul className="list-disc list-inside"&gt;
-          {splitResult.map(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; {
-            const member = <span class="cstat-no" title="statement not covered" >partyMembers.find(</span>
-<span class="fstat-no" title="function not covered" >              (m</span>ember) =&gt; <span class="cstat-no" title="statement not covered" >member.id === result.memberId</span>
-            );
-<span class="cstat-no" title="statement not covered" >            return (</span>
-              &lt;li key={result.memberId}&gt;
-                {member.name} owes ${result.amountOwed.toFixed(2)}
-              &lt;/li&gt;
-            );
-          })}
-        &lt;/ul&gt;
+function UserProfile() {
+  const loggedInUser = JSON.parse(localStorage.getItem('googleToken'));
+  return (
+    &lt;div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4"&gt;
+      &lt;div className="bg-white shadow-md rounded-lg p-6 w-full max-w-md"&gt;
+        &lt;h1 className="text-2xl font-bold mb-4 text-center"&gt;User Profile&lt;/h1&gt;
+&nbsp;
+        {/* User Info Section */}
+        &lt;div className="text-center"&gt;
+          &lt;img
+            src={loggedInUser.picture}
+            //src="https://via.placeholder.com/150"
+            alt="User Avatar"
+            className="w-24 h-24 rounded-full mx-auto mb-4"
+          /&gt;
+          &lt;h2 className="text-xl font-semibold"&gt;{loggedInUser.name}&lt;/h2&gt;
+          &lt;p className="text-gray-600"&gt;{loggedInUser.email}&lt;/p&gt;
+&nbsp;
+          {/* Additional User Info */}
+          &lt;div className="mt-4"&gt;
+        
+          &lt;/div&gt;
+        &lt;/div&gt;
       &lt;/div&gt;
+&nbsp;
+      {/* Navbar at the bottom */}
+      &lt;Navbar /&gt;
     &lt;/div&gt;
   );
 }
 &nbsp;
-export default SplitResult;
-&nbsp;</pre></td></tr></table></pre>
+export default UserProfile;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-02-03T02:55:25.119Z
+                at 2025-02-03T00:35:01.570Z
             </div>
-        <script src="../../prettify.js"></script>
+        <script src="prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../sorter.js"></script>
-        <script src="../../block-navigation.js"></script>
+        <script src="sorter.js"></script>
+        <script src="block-navigation.js"></script>
     </body>
 </html>
     
