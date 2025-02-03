@@ -35,7 +35,7 @@ function Navbar() {
       </Link>
       
       {/* Add Receipt Link - Directs to a page for adding new bills/receipts for splitting */}
-      <Link to="/split-bill" className="text-gray-700" aria-label="Add Receipt">
+      <Link to="/create-bill" className="text-gray-700" aria-label="Add Receipt">
         <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" strokeLinecap="round" strokeLinejoin="round" />
         </svg>

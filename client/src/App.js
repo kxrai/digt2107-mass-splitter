@@ -6,7 +6,8 @@ import SplitHistory from './pages/SplitHistory.js';
 import AddFriend from './pages/AddFriend.js';
 import CreateGroup from './pages/CreateGroup.js';
 import AddReceipt from './components/AddReceipt';
-import SplitBill from './pages/SplitBill.js';
+import CreateBill from './pages/CreateBill.js';
+import SplitBill from './pages/SplitBill';
 import LoginPage from './pages/LoginPage';
 import ninjaImage from './assets/ninja_picture.png'; // Adjust path as needed
 import UserProfile from './pages/UserProfile.js';
@@ -115,6 +116,7 @@ function App() {
           <Route path="/add-friend" element={<AddFriend />} />
           <Route path="/create-group" element={<CreateGroup />} />
           <Route path="/add-receipt" element={<AddReceipt />} />
+          <Route path="/create-bill" element={<CreateBill />} />
           <Route path="/split-bill" element={<SplitBill />} />
           <Route path="/account" element={<UserProfile />} />
         {/* </Route> */}
