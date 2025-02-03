@@ -75,5 +75,5 @@ input[type="date"]:focus::-webkit-calendar-picker-indicator {
 body {
   overflow-y: auto; /* Allows vertical scrolling */
   height: auto;
-  padding-bottom: 200px; /* ✅ Adds extra space at the bottom */
+  padding-bottom: 100px; /* ✅ Adds extra space at the bottom */
 }
