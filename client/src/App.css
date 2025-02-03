@@ -54,11 +54,11 @@ input[type="date"]:focus::-webkit-calendar-picker-indicator {
 }
 
 .grid-bg {
-  position: fixed; /* Ensures it doesn't cover inputs */
+  position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   background-color: white;
   background-image: 
     repeating-linear-gradient(
@@ -69,4 +69,11 @@ input[type="date"]:focus::-webkit-calendar-picker-indicator {
     );
   background-size: cover;
   z-index: -10; /* Moves it behind everything */
+}
+
+/* ✅ Ensure full scrolling & prevent background from cutting content */
+body {
+  overflow-y: auto; /* Allows vertical scrolling */
+  height: auto;
+  padding-bottom: 200px; /* ✅ Adds extra space at the bottom */
 }

@@ -37,8 +37,8 @@ function CreateBill() {
   };
 
   return (
-    <div className="relative min-h-screen bg-white grid-bg">
-      <div className="container mx-auto p-4">
+    <div className="relative min-h-screen flex flex-col bg-white grid-bg">
+      <div className="container mx-auto p-4 flex-grow"> {/* ✅ Ensures content expands */}
         <h1 className="text-4xl font-bold text-center mb-8">MASS Splitter</h1>
 
         {/* Add Receipt Component */}
@@ -73,45 +73,49 @@ function CreateBill() {
           </button>
         </div>
 
-        {/* DaisyUI Modal for Cancel Confirmation */}
-        {showCancelModal && (
-          <dialog className="modal modal-open">
-            <div className="modal-box">
-              <h3 className="font-bold text-lg">⚠️ Warning</h3>
-              <p className="py-4">Your receipts will be deleted and not saved. Are you sure?</p>
-              <div className="modal-action">
-                <button className="btn btn-error" onClick={confirmCancel}>
-                  Yes, Cancel
-                </button>
-                <button className="btn btn-primary" onClick={() => setShowCancelModal(false)}>
-                  No, Go Back
-                </button>
-              </div>
-            </div>
-          </dialog>
-        )}
-
-        {/* ✅ New DaisyUI Modal for Confirm Lock-in */}
-        {showConfirmModal && (
-          <dialog className="modal modal-open">
-            <div className="modal-box">
-              <h3 className="font-bold text-lg">🔒 Final Confirmation</h3>
-              <p className="py-4">
-                Once you confirm, you <strong>cannot</strong> go back to edit receipts. Are you sure?
-              </p>
-              <div className="modal-action">
-                <button className="btn btn-error" onClick={() => setShowConfirmModal(false)}>
-                  No, Go Back
-                </button>
-                <button className="btn btn-success" onClick={confirmProceed}>
-                  Yes, Proceed
-                </button>
-              </div>
-            </div>
-          </dialog>
-        )}
+        {/* ✅ Empty div to push content and prevent Navbar overlap */}
+        <div className="h-32"></div>
       </div>
 
+      {/* DaisyUI Modal for Cancel Confirmation */}
+      {showCancelModal && (
+        <dialog className="modal modal-open">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg">⚠️ Warning</h3>
+            <p className="py-4">Your receipts will be deleted and not saved. Are you sure?</p>
+            <div className="modal-action">
+              <button className="btn btn-error" onClick={confirmCancel}>
+                Yes, Cancel
+              </button>
+              <button className="btn btn-primary" onClick={() => setShowCancelModal(false)}>
+                No, Go Back
+              </button>
+            </div>
+          </div>
+        </dialog>
+      )}
+
+      {/* ✅ New DaisyUI Modal for Confirm Lock-in */}
+      {showConfirmModal && (
+        <dialog className="modal modal-open">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg">🔒 Final Confirmation</h3>
+            <p className="py-4">
+              Once you confirm, you <strong>cannot</strong> go back to edit receipts. Are you sure?
+            </p>
+            <div className="modal-action">
+              <button className="btn btn-error" onClick={() => setShowConfirmModal(false)}>
+                No, Go Back
+              </button>
+              <button className="btn btn-success" onClick={confirmProceed}>
+                Yes, Proceed
+              </button>
+            </div>
+          </div>
+        </dialog>
+      )}
+
+      {/* ✅ Navbar stays fixed below */}
       <Navbar />
     </div>
   );
