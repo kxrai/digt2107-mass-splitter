@@ -47,22 +47,20 @@ describe('AddReceipt Component - Valid Inputs', () => {
     // Click Save Receipt button
     fireEvent.click(screen.getByRole('button', { name: /Add Receipt/i }));
     //expect(screen.getByText("$50.00 - Dinner Party")).toBeInTheDocument();
-    expect(screen.getByText("2023-11-08")).toBeInTheDocument();
+
+  //Wait for the mockSetReceipts function to be called with the correct data
+    await waitFor(() => {
+      expect(mockSetReceipts).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            amount: 50.0, // Ensure it's stored as a number
+            date: '2023-11-08',
+            description: 'Dinner Party',
+          }),
+        ])
+      );
+    });
   });
-  
-  //   // Wait for the mockSetReceipts function to be called with the correct data
-  //   await waitFor(() => {
-  //     expect(mockSetReceipts).toHaveBeenCalledWith(
-  //       expect.arrayContaining([
-  //         expect.objectContaining({
-  //           amount: 50.0, // Ensure it's stored as a number
-  //           date: '2023-11-08',
-  //           description: 'Dinner at restaurant',
-  //         }),
-  //       ])
-  //     );
-  //   });
-  // });
   
 
   it('TC-005: Shows alert when trying to submit without entering amount or date', () => {
