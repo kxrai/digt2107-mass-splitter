@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/RecentSplits.js</title>
+    <title>Code coverage report for UserProfile.js</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../prettify.css" />
-    <link rel="stylesheet" href="../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
+    <link rel="stylesheet" href="prettify.css" />
+    <link rel="stylesheet" href="base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../sort-arrow-sprite.png);
+            background-image: url(sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/components</a> RecentSplits.js</h1>
+        <h1><a href="index.html">All files</a> UserProfile.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -30,16 +30,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/2</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/2</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
@@ -97,30 +97,12 @@
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a>
-<a name='L38'></a><a href='#L38'>38</a>
-<a name='L39'></a><a href='#L39'>39</a>
-<a name='L40'></a><a href='#L40'>40</a>
-<a name='L41'></a><a href='#L41'>41</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L35'></a><a href='#L35'>35</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -143,63 +125,63 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// src/components/RecentSplits.js
-import React from 'react';
-import { Link } from 'react-router-dom';
-import '../styles/RecentSplits.css';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+import Navbar from '../components/Navbar'; // Adjust the path as necessary
 &nbsp;
-function RecentSplits({ splits }) {
+function UserProfile() {
+  const loggedInUser = JSON.parse(localStorage.getItem('googleToken'));
   return (
-    &lt;div className="recent-splits-container"&gt;
-      &lt;div className="recent-splits-wrapper"&gt;
-        &lt;div className="recent-splits-header"&gt;
-          &lt;p className="recent-splits-title"&gt;Recent Splits&lt;/p&gt;
-          &lt;Link to="/split-history" className="recent-splits-link"&gt;
-            see all
-          &lt;/Link&gt;
-        &lt;/div&gt;
-        &lt;div className="mt-2 space-y-2"&gt;
-          {splits.map((split, index) =&gt; (
-            &lt;div key={index} className="split-card"&gt;
-              &lt;div className="flex items-center"&gt;
-                &lt;div className="split-icon"&gt;
-                  &lt;span className="material-icons"&gt;restaurant&lt;/span&gt;
-                &lt;/div&gt;
-                &lt;div&gt;
-                  &lt;p className="split-details"&gt;{split.name}&lt;/p&gt;
-                  &lt;p className="split-subtext"&gt;
-                    {split.date} &lt;br /&gt;
-                    {split.group || <span class="branch-1 cbranch-no" title="branch not covered" >'No group'}</span>
-                  &lt;/p&gt;
-                &lt;/div&gt;
-              &lt;/div&gt;
-              &lt;p className="split-amount"&gt;${split.amount.toFixed(2)}&lt;/p&gt;
-            &lt;/div&gt;
-          ))}
+    &lt;div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4"&gt;
+      &lt;div className="bg-white shadow-md rounded-lg p-6 w-full max-w-md"&gt;
+        &lt;h1 className="text-2xl font-bold mb-4 text-center"&gt;User Profile&lt;/h1&gt;
+&nbsp;
+        {/* User Info Section */}
+        &lt;div className="text-center"&gt;
+          &lt;img
+            src={loggedInUser.picture}
+            //src="https://via.placeholder.com/150"
+            alt="User Avatar"
+            className="w-24 h-24 rounded-full mx-auto mb-4"
+          /&gt;
+          &lt;h2 className="text-xl font-semibold"&gt;{loggedInUser.name}&lt;/h2&gt;
+          &lt;p className="text-gray-600"&gt;{loggedInUser.email}&lt;/p&gt;
+&nbsp;
+          {/* Additional User Info */}
+          &lt;div className="mt-4"&gt;
+        
+          &lt;/div&gt;
         &lt;/div&gt;
       &lt;/div&gt;
+&nbsp;
+      {/* Navbar at the bottom */}
+      &lt;Navbar /&gt;
     &lt;/div&gt;
   );
 }
 &nbsp;
-export default RecentSplits;
-&nbsp;</pre></td></tr></table></pre>
+export default UserProfile;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-02-03T05:50:28.993Z
+                at 2025-02-03T00:35:01.570Z
             </div>
-        <script src="../../prettify.js"></script>
+        <script src="prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../sorter.js"></script>
-        <script src="../../block-navigation.js"></script>
+        <script src="sorter.js"></script>
+        <script src="block-navigation.js"></script>
     </body>
 </html>
     

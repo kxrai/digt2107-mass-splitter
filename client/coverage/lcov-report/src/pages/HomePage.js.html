@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -216,13 +216,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -244,7 +244,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">32x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -289,7 +289,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">24x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -349,15 +349,15 @@ import Navbar from '../components/Navbar';
  * - Recent splits list
  * - Bottom navigation for easy access to other parts of the application
  */
-function <span class="fstat-no" title="function not covered" >Homepage(</span>) {
+function Homepage() {
   // Sample data for recent splits; in production, this data would likely come from a database or API
-  const recentSplitsData = <span class="cstat-no" title="statement not covered" >[</span>
+  const recentSplitsData = [
     { name: 'Cafe Coffee Day', date: '2024-11-01', group: 'Friends', amount: 26.0 },
     { name: 'Pizza Night', date: '2024-11-03', group: 'Family', amount: 45.5 },
     { name: 'Grocery Run', date: '2024-11-05', group: 'Roommates', amount: 60.0 },
   ];
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;div className="min-h-screen bg-gray-50 flex flex-col items-center"&gt;
       
       {/* Most Recent Split Card */}
@@ -378,8 +378,8 @@ function <span class="fstat-no" title="function not covered" >Homepage(</span>) 
         &lt;/div&gt;
         &lt;div className="flex mt-2 space-x-4"&gt;
           {/* Displaying friend avatars (placeholder images) */}
-          {[...Array(4)].map(<span class="fstat-no" title="function not covered" >(_</span>, index) =&gt; (
-<span class="cstat-no" title="statement not covered" >            &lt;img</span>
+          {[...Array(4)].map((_, index) =&gt; (
+            &lt;img
               key={index}
               src="https://via.placeholder.com/48"
               alt="Friend"
@@ -423,8 +423,8 @@ function <span class="fstat-no" title="function not covered" >Homepage(</span>) 
         &lt;/div&gt;
         &lt;div className="flex mt-2 space-x-4"&gt;
           {/* Displaying group icons */}
-          {[...Array(3)].map(<span class="fstat-no" title="function not covered" >(_</span>, index) =&gt; (
-<span class="cstat-no" title="statement not covered" >            &lt;div</span>
+          {[...Array(3)].map((_, index) =&gt; (
+            &lt;div
               key={index}
               className="w-12 h-12 rounded-full bg-black flex items-center justify-center text-white"
             &gt;
@@ -475,7 +475,7 @@ export default Homepage;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-02-02T00:15:40.956Z
+                at 2025-02-03T05:50:28.993Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

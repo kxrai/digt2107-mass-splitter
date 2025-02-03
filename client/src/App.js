@@ -109,8 +109,12 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
 
         {/* Protected Routes */}
+<<<<<<< HEAD
         {/* comment out outer route tags to bypass protected route */}
         <Route element={<ProtectedRoute/>}> 
+=======
+        <Route element={<ProtectedRoute/>}>
+>>>>>>> development
           <Route path="/home" element={<HomePage />} />
           <Route path="/split-history" element={<SplitHistory />} />
           <Route path="/add-friend" element={<AddFriend />} />
