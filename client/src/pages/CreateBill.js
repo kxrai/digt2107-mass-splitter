@@ -8,6 +8,7 @@ function CreateBill() {
   const [receipts, setReceipts] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false); // ✅ New Confirm Modal
   const navigate = useNavigate();
 
   // Handle Cancel Confirmation Modal
@@ -22,11 +23,17 @@ function CreateBill() {
     setShowCancelModal(false); // Close modal
   };
 
-  // Handle Confirm - Redirects to Split Bill Page
-  const handleConfirm = () => {
-    if (receipts.length === 0) return; // Prevent confirm if no receipts
-    localStorage.setItem('receipts', JSON.stringify(receipts)); // ✅ Save receipts before navigating
-    navigate('/split-bill'); // Redirect to Split Bill page
+  // Handle Confirm Click - Open Confirmation Modal Before Proceeding
+  const handleConfirmClick = () => {
+    if (receipts.length === 0) return;
+    setShowConfirmModal(true); // Show confirm modal before proceeding
+  };
+
+  // Confirm & Proceed to Split Bill
+  const confirmProceed = () => {
+    localStorage.setItem('receipts', JSON.stringify(receipts)); // ✅ Save receipts
+    setShowConfirmModal(false);
+    navigate('/split-bill'); // Redirect to split bill process
   };
 
   return (
@@ -59,7 +66,7 @@ function CreateBill() {
             className={`btn px-6 ${
               receipts.length === 0 ? 'btn-disabled opacity-50 cursor-not-allowed' : 'btn-success text-white'
             }`}
-            onClick={handleConfirm}
+            onClick={handleConfirmClick}
             disabled={receipts.length === 0} // Disable if no receipts
           >
             Confirm
@@ -78,6 +85,26 @@ function CreateBill() {
                 </button>
                 <button className="btn btn-primary" onClick={() => setShowCancelModal(false)}>
                   No, Go Back
+                </button>
+              </div>
+            </div>
+          </dialog>
+        )}
+
+        {/* ✅ New DaisyUI Modal for Confirm Lock-in */}
+        {showConfirmModal && (
+          <dialog className="modal modal-open">
+            <div className="modal-box">
+              <h3 className="font-bold text-lg">🔒 Final Confirmation</h3>
+              <p className="py-4">
+                Once you confirm, you <strong>cannot</strong> go back to edit receipts. Are you sure?
+              </p>
+              <div className="modal-action">
+                <button className="btn btn-error" onClick={() => setShowConfirmModal(false)}>
+                  No, Go Back
+                </button>
+                <button className="btn btn-success" onClick={confirmProceed}>
+                  Yes, Proceed
                 </button>
               </div>
             </div>

@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import '../App.css';
 
 function SplitBill() {
+  const navigate = useNavigate();
   const [receipts, setReceipts] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [splitType, setSplitType] = useState('even');
   const [splitPercentages, setSplitPercentages] = useState([]);
   const [groupMembers, setGroupMembers] = useState([]);
 
-  // ✅ Load stored receipts and group details
+  // ✅ Load stored receipts and group details from localStorage
   useEffect(() => {
     const storedReceipts = JSON.parse(localStorage.getItem('receipts')) || [];
     setReceipts(storedReceipts);
@@ -54,10 +56,25 @@ function SplitBill() {
     setSplitPercentages(newPercentages);
   };
 
+  // ✅ Handle Back Button & Preserve Data
+  const handleBack = () => {
+    navigate('/create-bill'); // Navigates back to CreateBill page
+  };
+
   return (
     <div className="min-h-screen bg-white p-6 grid-bg">
       <div className="container mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-6">Split Bill</h1>
+        
+        {/* 🔹 Title & Back Button Aligned (Commented Out) */}
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold">Split Bill</h1>
+          {/* <button 
+            className="btn btn-outline btn-primary text-lg px-6"
+            onClick={handleBack}
+          >
+            ← Back to Edit
+          </button> */}
+        </div>
 
         {/* Display Receipts */}
         <div className="bg-gray-100 p-4 rounded-md shadow-md mb-6">
