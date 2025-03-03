@@ -21,6 +21,8 @@ function SplitBill() {
     setSelectedGroup(storedGroup);
     console.log(selectedGroup);
   }, []);
+
+  //Fetch Group details (memebers, billers)
   useEffect(() => {
     if (!selectedGroup) return; // Prevent fetch if selectedGroup is null
 
@@ -64,35 +66,38 @@ function SplitBill() {
   // Adjust Split Percentage While Keeping Total 100%
   const handleCustomSplitChange = (index, value) => {
     let newPercentages = [...splitPercentages];
-    newPercentages[index] = parseFloat(value);
+    newPercentages[index] = parseFloat(value); 
   
-    // Ensure no negative or NaN values
-    if (isNaN(newPercentages[index]) || newPercentages[index] < 0) {
-      newPercentages[index] = 0;
-    }
-    // Calculate the remaining percentage to distribute
-    const totalPercentage = newPercentages.reduce((sum, p) => sum + p, 0);
-    let excess = totalPercentage - 100;
+    // Ensure total is 100% without modifying locked values
+    let lockedSum = 0;
+    let unlockedIndexes = [];
   
-    if (excess !== 0) {
-      // Get indices of other members
-      let otherIndices = newPercentages
-        .map((p, i) => (i !== index ? i : null))
-        .filter(i => i !== null);
-      let totalOther = otherIndices.reduce((sum, i) => sum + newPercentages[i], 0);
-  
-      if (totalOther > 0) {
-        // Scale down/up other values proportionally
-        otherIndices.forEach(i => {
-          newPercentages[i] -= (newPercentages[i] / totalOther) * excess;
-        });
+    // Identify locked and unlocked sliders
+    newPercentages.forEach((p, i) => {
+      if (i === index || p > 0) {
+        lockedSum += p;
+      } else {
+        unlockedIndexes.push(i);
       }
+    });
+  
+    let remainingPercentage = 100 - lockedSum;
+    if (remainingPercentage < 0) {
+      // Normalize: If locked values exceed 100%, scale down
+      let scalingFactor = 100 / lockedSum;
+      newPercentages = newPercentages.map((p, i) =>
+        i === index || p > 0 ? p * scalingFactor : 0
+      );
+    } else {
+      // Distribute remaining percentage to unlocked members
+      let distributeValue = unlockedIndexes.length > 0 ? remainingPercentage / unlockedIndexes.length : 0;
+      newPercentages = newPercentages.map((p, i) =>
+        i === index || p > 0 ? p : distributeValue
+      );
     }
-    // Ensure no floating-point issues
-    newPercentages = newPercentages.map(p => Math.max(0, parseFloat(p.toFixed(2))));
+  
     setSplitPercentages(newPercentages);
   };
-
   // Handle Back Button & Preserve Data
   const handleBack = () => {
     navigate('/create-bill'); // Navigates back to CreateBill page
