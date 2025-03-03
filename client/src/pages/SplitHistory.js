@@ -80,7 +80,7 @@ function SplitHistory() {
   };
 
   return (
-    <div className="min-h-screen bg-blue-50 p-4">
+    <div className="grid-bg min-h-screen bg-blue-50 p-4">
       {/* Page Title */}
       <h2 className="text-2xl font-bold text-blue-900 text-center mb-4">Payment History</h2>
 

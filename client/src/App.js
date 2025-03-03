@@ -11,6 +11,7 @@ import SplitBill from './pages/SplitBill';
 import LoginPage from './pages/LoginPage';
 import ninjaImage from './assets/ninja_picture.png'; // Adjust path as needed
 import UserProfile from './pages/UserProfile.js';
+import './App.css';
 import ProtectedRoute from './routes/ProtectedRoute.js';
 
 // Base style for full-page background image
@@ -102,6 +103,7 @@ function App() {
   };**/
 
   return (
+    <div className="grid-bg min-h-screen flex flex-col"> {/* ✅ Grid background applied globally */}
     <Router>
       <Routes>
         {/* Public Routes */}
@@ -109,19 +111,20 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
 
         {/* Protected Routes */}
-        <Route element={<ProtectedRoute/>}> 
+        {/* <Route element={<ProtectedRoute/>}>  */}
           <Route path="/home" element={<HomePage />} />
           <Route path="/split-history" element={<SplitHistory />} />
-          <Route path="/add-friend" element={<AddFriend />} />
+          {/* <Route path="/add-friend" element={<AddFriend />} /> */}
           <Route path="/create-group" element={<CreateGroup />} />
           <Route path="/add-receipt" element={<AddReceipt />} />
           <Route path="/create-bill" element={<CreateBill />} />
           <Route path="/split-bill" element={<SplitBill />} />
           <Route path="/account" element={<UserProfile />} />
-        </Route>
+        {/* </Route> */}
         
       </Routes>
     </Router>
+    </div>
   );
 }
 

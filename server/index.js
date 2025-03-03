@@ -51,7 +51,7 @@ db.connect((err) => {
 app.use('/api/users', userRoutes);
 app.use('/api/receipts', receiptRoutes);
 app.use('/api/groups', groupRoutes);
-app.use('/api/friends', friendRoutes);
+// app.use('/api/friends', friendRoutes);
 app.use('/api/payments', paymentRoutes);
 
 // ✅ Default Route (Fixes "Cannot GET /" Error)

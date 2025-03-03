@@ -23,57 +23,12 @@ function Homepage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center">
+    <div className="grid-bg min-h-screen bg-gray-50 flex flex-col items-center">
       
       {/* Most Recent Split Card */}
       <div className="w-full max-w-3xl mt-6 px-4">
         <div className="recent-history-card bg-gradient-to-r from-pink-200 via-purple-200 to-blue-200 rounded-lg shadow-md p-4">
           <p className="text-lg font-semibold text-blue-700">Most Recent Split</p>
-        </div>
-      </div>
-
-      {/* Friends Section */}
-      <div className="w-full max-w-3xl mt-6 px-4">
-        <div className="flex justify-between items-center">
-          <p className="font-bold text-lg">Friends</p>
-          {/* Link to view all friends */}
-          <Link to="/friends" className="text-blue-500 underline text-sm" aria-label="See all friends">
-            see all
-          </Link>
-        </div>
-        <div className="flex mt-2 space-x-4">
-          {/* Displaying friend avatars (placeholder images) */}
-          {[...Array(4)].map((_, index) => (
-            <img
-              key={index}
-              src="https://via.placeholder.com/48"
-              alt="Friend"
-              className="w-12 h-12 rounded-full object-cover"
-            />
-          ))}
-          {/* Add Friend Button - navigates to add-friend page */}
-          <Link
-            to="/add-friend"
-            className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-blue-500"
-            aria-label="Add Friend"
-            data-testid="add-friend-button"  // For test targeting
-          >
-            {/* Icon for Add Friend */}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z"
-              />
-            </svg>
-          </Link>
         </div>
       </div>
 
