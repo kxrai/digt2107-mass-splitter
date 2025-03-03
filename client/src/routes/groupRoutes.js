@@ -2,7 +2,8 @@ const express = require('express');
 const groupController = require('../controllers/groupController');
 const router = express.Router();
 
-router.get('/', groupController.getAllGroups);
+router.get('/email/:email', groupController.getAllGroups);
+router.get('/members/:id', groupController.getAllMembers);
 router.get('/:id', groupController.getGroupById);
 router.get('/name/:groupName', groupController.getGroupByName);
 router.post('/create', groupController.createGroup);

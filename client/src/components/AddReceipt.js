@@ -19,7 +19,11 @@ function AddReceipt({ receipts, setReceipts }) {
 
         let userGroups = [];
         if (userInfo) {
-          const response = await fetch(`http://localhost:5000/api/groups?email=${userInfo.email}`);
+          const email = userInfo.email;
+          const response = await fetch(`http://localhost:3000/api/groups/email/${email}`, { method: 'GET', headers: {
+            'Cache-Control': 'no-cache',  // Disable cache
+            'Pragma': 'no-cache',        // Disable cache for older HTTP versions
+        } });
           if (response.ok) {
             userGroups = await response.json();
           }
@@ -67,6 +71,8 @@ function AddReceipt({ receipts, setReceipts }) {
 
       // Lock the group selection after first receipt is added
       if (!selectedGroup) setSelectedGroup(receipt.groupId);
+      localStorage.setItem('selectedGroup', (receipt.groupId)); // Save group
+      console.log(localStorage.getItem('selectedGroup'));
     } else {
       alert('Please provide amount, date, and select a group.');
     }

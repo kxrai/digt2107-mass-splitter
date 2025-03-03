@@ -8,7 +8,7 @@ function CreateBill() {
   const [receipts, setReceipts] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [showCancelModal, setShowCancelModal] = useState(false);
-  const [showConfirmModal, setShowConfirmModal] = useState(false); // ✅ New Confirm Modal
+  const [showConfirmModal, setShowConfirmModal] = useState(false); 
   const navigate = useNavigate();
 
   // Handle Cancel Confirmation Modal
@@ -31,14 +31,14 @@ function CreateBill() {
 
   // Confirm & Proceed to Split Bill
   const confirmProceed = () => {
-    localStorage.setItem('receipts', JSON.stringify(receipts)); // ✅ Save receipts
+    localStorage.setItem('receipts', JSON.stringify(receipts)); // Save receipts
     setShowConfirmModal(false);
     navigate('/split-bill'); // Redirect to split bill process
   };
 
   return (
     <div className="relative min-h-screen flex flex-col bg-white grid-bg">
-      <div className="container mx-auto p-4 flex-grow"> {/* ✅ Ensures content expands */}
+      <div className="container mx-auto p-4 flex-grow"> {/* Ensures content expands */}
         <h1 className="text-4xl font-bold text-center mb-8">MASS Splitter</h1>
 
         {/* Add Receipt Component */}
@@ -73,7 +73,7 @@ function CreateBill() {
           </button>
         </div>
 
-        {/* ✅ Empty div to push content and prevent Navbar overlap */}
+        {/* Empty div to push content and prevent Navbar overlap */}
         <div className="h-32"></div>
       </div>
 
@@ -95,7 +95,7 @@ function CreateBill() {
         </dialog>
       )}
 
-      {/* ✅ New DaisyUI Modal for Confirm Lock-in */}
+      {/* New DaisyUI Modal for Confirm Lock-in */}
       {showConfirmModal && (
         <dialog className="modal modal-open">
           <div className="modal-box">
@@ -115,7 +115,7 @@ function CreateBill() {
         </dialog>
       )}
 
-      {/* ✅ Navbar stays fixed below */}
+      {/* Navbar stays fixed below */}
       <Navbar />
     </div>
   );
