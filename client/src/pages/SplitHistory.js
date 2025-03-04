@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
+import ConfirmationModal from '../components/ConfirmationModal';
 
 function SplitHistory() {
 
   const [incomingData, setIncomingData] = useState([]);
   const [outgoingData, setOutgoingData] = useState([]);
+  const [showForm, setShowForm] = useState(null);
+  const [paymentDate, setPaymentDate] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [confirmation, setConfirmation] = useState(null);
 
   useEffect(() => {
     const fetchPayments = async () => {
@@ -30,11 +35,14 @@ function SplitHistory() {
           const date = new Date(details.receipt_date);
           const formattedDate = date.toLocaleDateString();
           const formattedPayment = {
+            receipt_id: details.receipt_id,
+            payment_id: payment.payment_id,
             name: details.billers,
             date: formattedDate,
             amount: payment.debt,
             description: details.description,
           };
+          console.log(formattedPayment);
 
           if (payment.method === 'incoming') {
             incoming.push(formattedPayment);
@@ -75,8 +83,71 @@ function SplitHistory() {
         <p className="font-semibold text-blue-900">{transaction.description || 'No Description'}</p>
         <p className="text-sm text-gray-500">{transaction.date} - Billers: {transaction.name}</p>
         <p className="font-bold text-blue-600">${transaction.amount}</p>
+        <button className="btn btn-success text-white px-3" onClick={() =>  setShowForm(transaction.receipt_id)}>Pay</button>
+
+        {showForm === transaction.receipt_id && (
+            <div className='flex items-center justify-between'>
+              <label className='font-semibold'>Date Paid:  </label>
+              <input type="date" value={paymentDate} onChange={(e) => setPaymentDate(e.target.value)} />
+
+              <label className='font-semibold'>Payment Method:  </label>
+              <select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
+                <option value="">Select Method</option>
+                <option value="Credit Card">Credit Card</option>
+                <option value="PayPal">PayPal</option>
+                <option value="Bank Transfer">E-Transfer / Bank Transfer</option>
+                <option value="Cash">Cash</option>
+              </select>
+              
+              <button className='btn btn-success text-white px-3 mx-1' onClick={() => handleSubmitPayment(transaction)}>
+              Submit Payment</button>
+            </div>
+          )}
+          <ConfirmationModal
+            isOpen={confirmation}
+            title="✅ Payment Receipt"
+            message='It is recommended to dowwnload your Payment Receipt as proof of payment'
+            onConfirm={handleDownloadReceipt}
+            onCancel={() => setConfirmation(false)}
+            cancelText="Close"
+            successText="Download Receipt"
+          />
       </div>
     ));
+  };
+
+  const handleSubmitPayment = async (transaction) => {
+    // const paymentDetails = { 
+    //   amount: paymentDate,
+    //   method: paymentMethod,
+    // };
+
+    try {
+    //   const response = await fetch(`http://localhost:3000/api/payments/${transactionpayment_id}`, {
+    //     method: "PUT",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify(paymentDetails),
+    //   });
+
+    //   if (response.ok) {
+    //     const data = await response.json();
+        setConfirmation(transaction);
+        setShowForm(null); // Close form after successful payment
+      // } else {
+        // alert("Payment failed. Please try again.");
+      // }
+    } catch (error) {
+      console.error("Error processing payment:", error);
+    }
+  };
+
+  const handleDownloadReceipt = () => {
+    const receiptContent = `Receipt ID: ${confirmation.receipt_id}\nReceipt Description: ${confirmation.description}\nDue: $${confirmation.amount}\nPaid: $${confirmation.amount}\nDate Paid: ${paymentDate}\nPayment Method: ${paymentMethod}\nStatus: Payment Successful!`;
+    const blob = new Blob([receiptContent], { type: "text/plain" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `Receipt_${confirmation.receipt_id}.txt`;
+    link.click();
   };
 
   return (
