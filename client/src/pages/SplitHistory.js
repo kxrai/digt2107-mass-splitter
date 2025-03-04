@@ -25,14 +25,14 @@ function SplitHistory() {
         for (const payment of data) {
           const detailsResponse = await fetch(`http://localhost:3000/api/receipts/${payment.receipt_id}`);
           if (!detailsResponse.ok) continue;
-
           const details = await detailsResponse.json();
+
           const date = new Date(details.receipt_date);
           const formattedDate = date.toLocaleDateString();
           const formattedPayment = {
             name: details.billers,
             date: formattedDate,
-            amount: details.total_amount,
+            amount: payment.debt,
             description: details.description,
           };
 
@@ -72,9 +72,9 @@ function SplitHistory() {
         key={index}
         className="p-4 bg-white rounded-lg shadow-md border border-blue-100 hover:shadow-lg"
       >
-        <p className="font-semibold text-blue-900">{transaction.name}</p>
-        <p className="text-sm text-gray-500">{transaction.date} - {transaction.description}</p>
-        <p className="font-bold text-blue-600">{transaction.amount}</p>
+        <p className="font-semibold text-blue-900">{transaction.description || 'No Description'}</p>
+        <p className="text-sm text-gray-500">{transaction.date} - Billers: {transaction.name}</p>
+        <p className="font-bold text-blue-600">${transaction.amount}</p>
       </div>
     ));
   };

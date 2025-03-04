@@ -32,7 +32,7 @@ function CreateGroup() {
         throw new Error('User not found');
       }
       const user = await response.json();
-      setMembers([...members, { id: user.user_id, email: user.email }]);
+      setMembers([...members, { id: user.user_id, email: user.email, name: user.username}]);
       setMemberEmail('');
       setErrorMessage('');
     } catch (error) {
@@ -45,19 +45,19 @@ function CreateGroup() {
     setBillers(billers.filter((billerEmail) => billerEmail !== email));
   };
 
-  const handleSelectBiller = (email) => {
-    if (!members.some((member) => member.email === email)) {
+  const handleSelectBiller = (name) => {
+    if (!members.some((member) => member.name === name)) {
       setErrorMessage('The selected biller must be a member of the group');
       return;
     }
-    if (!billers.includes(email)) {
-      setBillers([...billers, email]);
+    if (!billers.includes(name)) {
+      setBillers([...billers, name]);
       setErrorMessage('');
     }
   };
 
-  const handleDeselectBiller = (email) => {
-    setBillers(billers.filter((billerEmail) => billerEmail !== email));
+  const handleDeselectBiller = (name) => {
+    setBillers(billers.filter((billerName) => billerName !== name));
   };
 
   const handleSaveGroup = async () => {
@@ -146,7 +146,7 @@ function CreateGroup() {
           <ul className="mt-2 space-y-2">
             {members.map((member) => (
               <li key={member.id} className="flex items-center justify-between">
-                <span>{member.email}</span>
+                <span>{member.name}</span>
                 <button onClick={() => handleRemoveMember(member.email)} className="text-red-500 font-semibold text-sm">
                   Remove
                 </button>
@@ -160,13 +160,13 @@ function CreateGroup() {
           <ul className="mt-2 space-y-2">
             {members.map((member) => (
               <li key={member.id} className="flex items-center justify-between">
-                <span>{member.email}</span>
-                {billers.includes(member.email) ? (
-                  <button onClick={() => handleDeselectBiller(member.email)} className="text-red-500 font-semibold text-sm">
+                <span>{member.name}</span>
+                {billers.includes(member.name) ? (
+                  <button onClick={() => handleDeselectBiller(member.name)} className="text-red-500 font-semibold text-sm">
                     Remove as Biller
                   </button>
                 ) : (
-                  <button onClick={() => handleSelectBiller(member.email)} className="text-blue-500 font-semibold text-sm">
+                  <button onClick={() => handleSelectBiller(member.name)} className="text-blue-500 font-semibold text-sm">
                     Add as Biller
                   </button>
                 )}
