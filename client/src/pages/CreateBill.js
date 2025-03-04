@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import AddReceipt from '../components/AddReceipt';
 import ReceiptList from '../components/ReceiptList';
 import Navbar from '../components/Navbar';
+import ConfirmationModal from '../components/ConfirmationModal';
 
 function CreateBill() {
   const [receipts, setReceipts] = useState([]);
@@ -77,8 +78,28 @@ function CreateBill() {
         <div className="h-32"></div>
       </div>
 
+      <ConfirmationModal
+        isOpen={showCancelModal}
+        title="⚠️ Warning"
+        message="Your receipts will be deleted and not saved. Are you sure?"
+        onConfirm={() => setShowCancelModal(false)}
+        onCancel={confirmCancel}
+        cancelText="Yes, Cancel"
+        successText="No, Go Back"
+      />
+
+      <ConfirmationModal
+        isOpen={showConfirmModal}
+        title="🔒 Final Confirmation"
+        message="Once you confirm, you cannot go back to edit receipts. Are you sure?"
+        onConfirm={confirmProceed}
+        onCancel={() => setShowConfirmModal(false)}
+        cancelText="No, Go Back"
+        successText="Yes, Proceed"
+      />
+
       {/* DaisyUI Modal for Cancel Confirmation */}
-      {showCancelModal && (
+      {/* {showCancelModal && (
         <dialog className="modal modal-open">
           <div className="modal-box">
             <h3 className="font-bold text-lg">⚠️ Warning</h3>
@@ -93,10 +114,10 @@ function CreateBill() {
             </div>
           </div>
         </dialog>
-      )}
+      )} */}
 
       {/* New DaisyUI Modal for Confirm Lock-in */}
-      {showConfirmModal && (
+      {/* {showConfirmModal && (
         <dialog className="modal modal-open">
           <div className="modal-box">
             <h3 className="font-bold text-lg">🔒 Final Confirmation</h3>
@@ -113,7 +134,7 @@ function CreateBill() {
             </div>
           </div>
         </dialog>
-      )}
+      )} */}
 
       {/* Navbar stays fixed below */}
       <Navbar />
