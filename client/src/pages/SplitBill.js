@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import ConfirmationModal from '../components/ConfirmationModal';
 import '../App.css';
 
 function SplitBill() {
@@ -11,6 +12,8 @@ function SplitBill() {
   const [splitPercentages, setSplitPercentages] = useState([]);
   const [groupMembers, setGroupMembers] = useState([]);
   const [billers, setBiller] = useState([]);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   // Load stored receipts and group details from localStorage
   useEffect(() => {
@@ -36,8 +39,8 @@ function SplitBill() {
         const members = await response.json();
         setGroupMembers(members);
         // Initialize even split (100% divided among members)
-        const evenSplit = 100 / groupMembers.length;
-        setSplitPercentages(new Array(groupMembers.length).fill(evenSplit));
+        const evenSplit = 100 / members.length;
+        setSplitPercentages(new Array(members.length).fill(evenSplit));
       }
 
       //Get the group's biller(s)
@@ -54,6 +57,78 @@ function SplitBill() {
 
     fetchGroupDetails();
   }, [selectedGroup]);
+
+  // Handle Cancel Confirmation Modal
+  const handleCancel = () => {
+    setShowCancelModal(true); // Open modal
+  };
+
+  // Confirm Cancel - Clears Receipts & Resets Group
+  const confirmCancel = () => {
+    localStorage.removeItem('receipts');
+    localStorage.removeItem('selectedGroup');
+    navigate('/create-bill'); // Redirect to add receipt process
+  };
+
+  // Handle Confirm Click - Open Confirmation Modal Before Proceeding
+  const handleConfirmClick = () => {
+    if (splitPercentages.reduce((sum, p) => sum + p, 0) !== 100 && splitType == 'custom') return;
+    setShowConfirmModal(true); // Show confirm modal before proceeding
+  };
+
+  // Confirm & Proceed to Save Bill
+  const confirmProceed = async () => {
+    // Step 1: Save all the receipts in the database
+    try {
+      const receiptPromises = receipts.map((receipt) =>
+        fetch(`http://localhost:3000/api/receipts/create`, {method: "POST", headers: { "Content-Type": "application/json", },
+          body: JSON.stringify({
+            amount: receipt.amount,
+            date: receipt.date,
+            description: receipt.description,
+            group_id: selectedGroup,
+            billers: JSON.parse(billers),
+          }),
+        })
+      );
+      // Execute all API calls concurrently
+      const receiptResponses = await Promise.all(receiptPromises); 
+      const receiptData = await Promise.all(receiptResponses.map((res) => res.json()));
+      const receiptIds = receiptData.map((receipt) => receipt.receiptId); // Extract the receipt ids
+
+      // Step 2: Create Payments for Each Group Member and Receipt
+      const paymentPromises = [];
+      console.log("Total Amount:", totalAmount);
+      console.log("Split Percentages:", splitPercentages);
+      receiptIds.forEach((receiptId) => {
+        groupMembers.forEach((member, index) => {
+          const amountOwed = ((splitPercentages[index] / 100) * totalAmount); // Get the amount owed by this member
+          const method = billers.includes(member.email) ? 'incoming' : 'outgoing'; // Check if they are a biller
+  
+          const paymentPromise = fetch(`http://localhost:3000/api/payments/create`, {method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              receipt_id: receiptId,
+              user_id: member.user_id,
+              amount: amountOwed,
+              type: method,
+            }),
+          });
+          paymentPromises.push(paymentPromise);
+        });
+      });
+      // Execute all payment requests concurrently
+      const paymentResponses = await Promise.all(paymentPromises);
+      const paymentData = await Promise.all(paymentResponses.map((res) => res.json()));
+      console.log("Payments created:", paymentData);
+    } catch (error) {
+      console.error("Error submitting receipts and payments:", error);
+    }
+    
+    localStorage.removeItem('receipts');
+    localStorage.removeItem('selectedGroup');
+    setShowConfirmModal(false);
+    navigate('/split-history'); // Redirect to split bill process
+  };
 
   // Compute total receipt amount
   const totalAmount = receipts.reduce((sum, receipt) => sum + receipt.amount, 0);
@@ -97,10 +172,6 @@ function SplitBill() {
     }
   
     setSplitPercentages(newPercentages);
-  };
-  // Handle Back Button & Preserve Data
-  const handleBack = () => {
-    navigate('/create-bill'); // Navigates back to CreateBill page
   };
 
   return (
@@ -193,6 +264,41 @@ function SplitBill() {
             </h3>
           </div>
         )}
+
+        {/* Action Buttons - Cancel & Submit */}
+        <div className="flex justify-center gap-4 mt-6">
+          <button className="btn btn-error text-white px-6" onClick={handleCancel}>Cancel Bill</button>
+          <button
+            className={`btn px-6 ${
+              splitPercentages.reduce((sum, p) => sum + p, 0) !== 100 && splitType == 'custom' ? 'btn-disabled opacity-50 cursor-not-allowed' : 'btn-success text-white'
+            }`}
+            onClick={handleConfirmClick}
+            disabled={splitPercentages.reduce((sum, p) => sum + p, 0) !== 100 === 0 && splitType == 'custom'} // Disable if not 100% custom split
+          >Submit Bill</button>
+        </div>
+
+        <ConfirmationModal
+        isOpen={showCancelModal}
+        title="⚠️ Warning"
+        message="Your receipts will be deleted permanently and your bill will not be saved. Are you sure?"
+        onConfirm={() => setShowCancelModal(false)}
+        onCancel={confirmCancel}
+        cancelText="Yes, Cancel"
+        successText="No, Go Back"
+      />
+
+      <ConfirmationModal
+        isOpen={showConfirmModal}
+        title="🔒 Final Confirmation"
+        message="Once you confirm, your bill will be submitted and all group members will be notified. Are you sure?"
+        onConfirm={confirmProceed}
+        onCancel={() => setShowConfirmModal(false)}
+        cancelText="No, Go Back"
+        successText="Yes, Proceed"
+      />
+
+        {/* Empty div to push content and prevent Navbar overlap */}
+        <div className="h-32"></div>
       </div>
       <Navbar />
     </div>

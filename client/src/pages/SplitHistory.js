@@ -38,7 +38,7 @@ function SplitHistory() {
 
           if (payment.method === 'incoming') {
             incoming.push(formattedPayment);
-          } else if (payment.method === 'outcoming') {
+          } else if (payment.method === 'outgoing') {
             outgoing.push(formattedPayment);
           }
         }

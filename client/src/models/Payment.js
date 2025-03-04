@@ -2,8 +2,8 @@ const db = require('../database/db-connection');
 
 const Payment = {
     create: (bill, callback) => {
-        const sql = 'INSERT INTO payments (receipt_id, user_id, debt, method) VALUES (?, ?, ?, ?, ?)';
-        db.query(sql, [bill.receipt_id, bill.user_id, bill.amount, bill.type], callback);
+        const sql = 'INSERT INTO payments (receipt_id, user_id, debt, paid, method) VALUES (?, ?, ?, ?, ?)';
+        db.query(sql, [bill.receipt_id, bill.user_id, bill.amount, 0, bill.type], callback);
     },
 
     findById: (id, callback) => {

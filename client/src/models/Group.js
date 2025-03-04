@@ -47,7 +47,7 @@ const Group = {
     
     findAllMembers: (id, callback) => {
         const sql = `
-            SELECT u.user_id, u.username
+            SELECT u.user_id, u.username, u.email
             FROM group_members gm
             JOIN users u ON gm.user_id = u.user_id
             WHERE gm.group_id = ?`;
