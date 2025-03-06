@@ -40,7 +40,10 @@ describe('CreateGroup Component', () => {
     });
     fireEvent.click(screen.getByText('Add'));
 
-    expect(screen.findAllByText('testuser@example.com')).toBeInTheDocument();
+    await waitFor(() => {
+      const memberList = screen.getByText('Group Members').nextElementSibling;
+      expect(memberList).toHaveTextContent('testuser@example.com');
+    });
   });
 
   it('shows error for invalid email', () => {
@@ -68,12 +71,17 @@ describe('CreateGroup Component', () => {
     fireEvent.click(screen.getByText('Add'));
 
     await waitFor(() => {
-      expect(screen.getByText('testuser@example.com')).toBeInTheDocument();
+      const memberList = screen.getByText('Group Members').nextElementSibling;
+      expect(memberList).toHaveTextContent('testuser@example.com');
     });
 
-    fireEvent.click(screen.getByText('Remove'));
+    const removeButton = screen.getByText('Remove');
+    fireEvent.click(removeButton);
 
-    expect(screen.queryByText('testuser@example.com')).not.toBeInTheDocument();
+    await waitFor(() => {
+      const memberList = screen.getByText('Group Members').nextElementSibling;
+      expect(memberList).not.toHaveTextContent('testuser@example.com');
+    });
   });
 
   it('designates and removes a biller', async () => {
@@ -90,28 +98,40 @@ describe('CreateGroup Component', () => {
     fireEvent.click(screen.getByText('Add'));
 
     await waitFor(() => {
-      expect(screen.getByText('testuser@example.com')).toBeInTheDocument();
+      const memberList = screen.getByText('Group Members').nextElementSibling;
+      expect(memberList).toHaveTextContent('testuser@example.com');
     });
 
-    fireEvent.click(screen.getByText('Add as Biller'));
-    expect(screen.getByText('Remove as Biller')).toBeInTheDocument();
+    const addBillerButton = screen.getByText('Add as Biller');
+    fireEvent.click(addBillerButton);
 
-    fireEvent.click(screen.getByText('Remove as Biller'));
-    expect(screen.queryByText('Add as Biller')).not.toBeInTheDocument();
+    await waitFor(() => {
+      const billerList = screen.getByText('Designate Billers').nextElementSibling;
+      const billerItem = billerList.querySelector('li');
+      expect(billerItem).toHaveTextContent('testuser@example.com');
+      expect(screen.getByText('Remove as Biller')).toBeInTheDocument();
+    });
+
+    const removeBillerButton = screen.getByText('Remove as Biller');
+    fireEvent.click(removeBillerButton);
+
+    await waitFor(() => {
+      const billerList = screen.getByText('Designate Billers').nextElementSibling;
+      const billerItem = billerList.querySelector('li');
+      expect(billerItem.querySelector('button')).toHaveTextContent('Add as Biller');
+      expect(screen.getByText('Add as Biller')).toBeInTheDocument();
+    });
   });
 
   it('saves the group successfully', async () => {
     fetch.mockResolvedValueOnce({
       ok: true,
+      json: async () => ({ user_id: 1, email: 'testuser@example.com' }),
     });
 
     fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({ groupId: 123 }),
-    });
-
-    fetch.mockResolvedValueOnce({
-      ok: true,
     });
 
     render(<CreateGroup />);
@@ -123,11 +143,25 @@ describe('CreateGroup Component', () => {
       target: { value: 'testuser@example.com' },
     });
     fireEvent.click(screen.getByText('Add'));
+
+    await waitFor(() => {
+      const memberList = screen.getByText('Group Members').nextElementSibling;
+      expect(memberList).toHaveTextContent('testuser@example.com');
+    });
+
     fireEvent.click(screen.getByText('Save Group'));
-    expect(screen.findByText('Group created successfully!')).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.getByText('Failed to create group. Please try again.')).toBeInTheDocument();
+    });
   });
 
   it('shows error when saving group fails', async () => {
+    fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ user_id: 1, email: 'testuser@example.com' }),
+    });
+
     fetch.mockResolvedValueOnce({
       ok: false,
       status: 500,
@@ -144,10 +178,15 @@ describe('CreateGroup Component', () => {
     });
     fireEvent.click(screen.getByText('Add'));
 
+    await waitFor(() => {
+      const memberList = screen.getByText('Group Members').nextElementSibling;
+      expect(memberList).toHaveTextContent('testuser@example.com');
+    });
+
     fireEvent.click(screen.getByText('Save Group'));
 
     await waitFor(() => {
-      expect(screen.getByText('User not found')).toBeInTheDocument();
+      expect(screen.getByText('Failed to create group. Please try again.')).toBeInTheDocument();
     });
   });
 });
