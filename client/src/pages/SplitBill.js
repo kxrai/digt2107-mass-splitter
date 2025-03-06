@@ -12,6 +12,7 @@ function SplitBill() {
   const [splitPercentages, setSplitPercentages] = useState([]);
   const [groupMembers, setGroupMembers] = useState([]);
   const [billers, setBiller] = useState([]);
+  const [billerOwedAmounts, setBillerOwedAmounts] = useState(null);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
@@ -58,6 +59,33 @@ function SplitBill() {
     fetchGroupDetails();
   }, [selectedGroup]);
 
+  // Compute total receipt amount
+  const totalAmount = receipts.reduce((sum, receipt) => sum + receipt.amount, 0);
+
+  // Function to calculate how much each biller is owed
+  useEffect(() => {
+    if (splitPercentages.length === 0 || billers.length === 0) return;
+  
+    const calculateBillersOwed = () => {
+      let billerIndexes = groupMembers
+        .map((member, index) => (billers.includes(member.email) ? index : null))
+        .filter((index) => index !== null);
+  
+      let totalBillerContribution = billerIndexes.reduce((sum, index) => sum + splitPercentages[index], 0);
+      let totalNonBillerContribution = 100 - totalBillerContribution;
+      let totalNonBillerAmount = (totalNonBillerContribution / 100) * totalAmount; // Amount billers should be reimbursed
+  
+      // Divide equally among billers
+      let splitAmount = totalNonBillerAmount / billerIndexes.length;
+      // Further divide this amount by the number of receipts
+      let amountPerReceipt = splitAmount / receipts.length;
+      console.log("Biller reimbursements:", amountPerReceipt);
+      setBillerOwedAmounts(amountPerReceipt);
+    };
+  
+    calculateBillersOwed();
+  }, [splitPercentages, billers, totalAmount]);
+
   // Handle Cancel Confirmation Modal
   const handleCancel = () => {
     setShowCancelModal(true); // Open modal
@@ -102,7 +130,7 @@ function SplitBill() {
       console.log("Split Percentages:", splitPercentages);
       receiptIds.forEach((receiptId) => {
         groupMembers.forEach((member, index) => {
-          const amountOwed = ((splitPercentages[index] / 100) * totalAmount); // Get the amount owed by this member
+          const amountOwed = billers.includes(member.email) ? billerOwedAmounts : ((splitPercentages[index] / 100) * totalAmount); // Get the amount owed by this member
           const method = billers.includes(member.email) ? 'incoming' : 'outgoing'; // Check if they are a biller
   
           const paymentPromise = fetch(`http://localhost:3000/api/payments/create`, {method: "POST", headers: { "Content-Type": "application/json" },
@@ -129,9 +157,6 @@ function SplitBill() {
     setShowConfirmModal(false);
     navigate('/split-history'); // Redirect to split bill process
   };
-
-  // Compute total receipt amount
-  const totalAmount = receipts.reduce((sum, receipt) => sum + receipt.amount, 0);
 
   // Handle Split Type Change
   const handleSplitTypeChange = (event) => {
