@@ -1,6 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useReactToPrint } from "react-to-print";
 import Navbar from '../components/Navbar';
 import ConfirmationModal from '../components/ConfirmationModal';
+import PaymentReceipt from '../components/PaymentReceipt';
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 function SplitHistory() {
 
@@ -10,6 +14,7 @@ function SplitHistory() {
   const [paymentDate, setPaymentDate] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [confirmation, setConfirmation] = useState(null);
+  const [activeTab, setActiveTab] = useState('incoming'); // State to track the active tab
 
   useEffect(() => {
     const fetchPayments = async () => {
@@ -55,23 +60,32 @@ function SplitHistory() {
         setOutgoingData(outgoing);
       } catch (error) {
         console.error('Error fetching data:', error);
-        // Fallback mock data
-        setIncomingData([
-          { name: 'Friend A', date: '2024-11-01', amount: 20, description: 'Lunch' },
-          { name: 'Friend B', date: '2024-11-03', amount: 35, description: 'Movie tickets' },
-        ]);
-        setOutgoingData([
-          { name: 'Friend C', date: '2024-11-02', amount: 15, description: 'Coffee' },
-          { name: 'Friend D', date: '2024-11-04', amount: 40, description: 'Dinner' },
-        ]);
       }
     };
-
     fetchPayments();
   }, []); // Runs only once when component mounts
 
-  // State to track the active tab
-  const [activeTab, setActiveTab] = useState('incoming');
+  useEffect(() => {
+    if (confirmation) {
+      console.log('confirmation is true');
+    }
+    if (paymentDate) {
+      console.log(paymentDate);
+    }
+    if (paymentMethod) {
+      console.log(paymentMethod);
+    }
+  }, [confirmation, paymentDate, paymentMethod]);
+
+  const handleDownload = () => {
+    const receiptHTML = document.getElementById("receipt-content").innerHTML;
+    const blob = new Blob([receiptHTML], { type: "text/html" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `receipt_${confirmation.receipt_id}.html`;
+    link.click();
+  }
+
 
   // Function to render transaction cards
   const renderTransactions = (data) => {
@@ -82,8 +96,8 @@ function SplitHistory() {
       >
         <p className="font-semibold text-blue-900">{transaction.description || 'No Description'}</p>
         <p className="text-sm text-gray-500">{transaction.date} - Billers: {transaction.name}</p>
-        <p className="font-bold text-blue-600">${transaction.amount}</p>
-        <button className="btn btn-success text-white px-3" onClick={() =>  setShowForm(transaction.receipt_id)}>Pay</button>
+        <p className="font-bold text-blue-600">${transaction.amount ? Number(transaction.amount).toFixed(2) : "0.00"}</p>
+        <button className="btn btn-success text-white px-3" onClick={() =>  setShowForm(transaction.receipt_id)}>Mark as Paid</button>
 
         {showForm === transaction.receipt_id && (
             <div className='flex items-center justify-between'>
@@ -100,14 +114,14 @@ function SplitHistory() {
               </select>
               
               <button className='btn btn-success text-white px-3 mx-1' onClick={() => handleSubmitPayment(transaction)}>
-              Submit Payment</button>
+              {activeTab == 'incoming'? 'Confirm Payment Received' : 'Submit Payment'}</button>
             </div>
           )}
           <ConfirmationModal
             isOpen={confirmation}
             title="✅ Payment Receipt"
-            message='It is recommended to dowwnload your Payment Receipt as proof of payment'
-            onConfirm={handleDownloadReceipt}
+            message="This transaction will be removed from your Payment History permanently. It is recommended to download your Payment Receipt as proof of payment."
+            onConfirm={handleDownload}
             onCancel={() => setConfirmation(false)}
             cancelText="Close"
             successText="Download Receipt"
@@ -117,37 +131,20 @@ function SplitHistory() {
   };
 
   const handleSubmitPayment = async (transaction) => {
-    // const paymentDetails = { 
-    //   amount: paymentDate,
-    //   method: paymentMethod,
-    // };
-
     try {
-    //   const response = await fetch(`http://localhost:3000/api/payments/${transactionpayment_id}`, {
-    //     method: "PUT",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify(paymentDetails),
-    //   });
-
-    //   if (response.ok) {
-    //     const data = await response.json();
-        setConfirmation(transaction);
-        setShowForm(null); // Close form after successful payment
+      // const response = await fetch(`http://localhost:3000/api/payments/${transaction.payment_id}`, {
+      //   method: "DELETE",
+      //   headers: { "Content-Type": "application/json" },
+      // });
+      // if (response.ok) {
+      setConfirmation(transaction);
+      setShowForm(null); // Close form after successful payment
       // } else {
-        // alert("Payment failed. Please try again.");
+      //   alert("Payment failed. Please try again.");
       // }
     } catch (error) {
       console.error("Error processing payment:", error);
     }
-  };
-
-  const handleDownloadReceipt = () => {
-    const receiptContent = `Receipt ID: ${confirmation.receipt_id}\nReceipt Description: ${confirmation.description}\nDue: $${confirmation.amount}\nPaid: $${confirmation.amount}\nDate Paid: ${paymentDate}\nPayment Method: ${paymentMethod}\nStatus: Payment Successful!`;
-    const blob = new Blob([receiptContent], { type: "text/plain" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = `Receipt_${confirmation.receipt_id}.txt`;
-    link.click();
   };
 
   return (
@@ -176,6 +173,12 @@ function SplitHistory() {
         {activeTab === 'incoming' && renderTransactions(incomingData)}
         {activeTab === 'outgoing' && renderTransactions(outgoingData)}
       </div>
+
+      {confirmation && paymentDate && paymentMethod && (
+      <div id="receipt-content" style={{position: 'absolute', left: '-9999px', top: '-9999px'}}>
+        <PaymentReceipt receipt={confirmation} date={paymentDate} method={paymentMethod} />
+      </div>
+      )}
 
       {/* Bottom Navbar */}
       <Navbar />
