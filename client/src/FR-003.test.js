@@ -1,9 +1,9 @@
-import { act } from "react"; // ✅ Correct `act` import
+import { act } from "react"; // Correct `act` import
 import "@testing-library/jest-dom";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import AddReceipt from "./components/AddReceipt";
 
-// ✅ Mock the `fetch` API for all necessary endpoints
+// Mock the `fetch` API for all necessary endpoints
 global.fetch = jest.fn((url) => {
   if (url.includes("/api/groups/name/")) {
     return Promise.resolve({
@@ -28,7 +28,7 @@ describe("AddReceipt Component - Valid Inputs", () => {
     window.alert = jest.fn();
     mockSetReceipts = jest.fn();
 
-    // ✅ Mock `fetch()` responses before rendering
+    // Mock `fetch()` responses before rendering
     global.fetch.mockImplementation((url) => {
       if (url.includes("/api/groups/name/")) {
         return Promise.resolve({
@@ -45,7 +45,7 @@ describe("AddReceipt Component - Valid Inputs", () => {
       return Promise.reject(new Error("Unexpected API call"));
     });
 
-    // ✅ Ensure `render()` is correctly wrapped in `await act`
+    // Ensure `render()` is correctly wrapped in `await act`
     await act(async () => {
       render(<AddReceipt receipts={[]} setReceipts={mockSetReceipts} />);
     });
@@ -68,7 +68,7 @@ describe("AddReceipt Component - Valid Inputs", () => {
       fireEvent.click(screen.getByRole("button", { name: /add receipt/i }));
     });
 
-    // ✅ Ensure `mockSetReceipts` is called after fetch is resolved
+    // Ensure `mockSetReceipts` is called after fetch is resolved
     await waitFor(() => {
       expect(mockSetReceipts).toHaveBeenCalledTimes(1);
     });
