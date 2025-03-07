@@ -1,5 +1,5 @@
 import React from 'react';
-import Navbar from '../components/Navbar'; // Adjust the path as necessary
+import Navbar from '../components/Navbar';
 
 function UserProfile() {
   // Retrieve the user from localStorage

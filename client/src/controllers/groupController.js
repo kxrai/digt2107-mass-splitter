@@ -41,35 +41,44 @@ const getGroupByName = async (req, res) => {
     });
 };
 
-// Get all groups
-// const getAllGroups = async (req, res) => {
-//     const userEmail = req.query.email; // Get user's email from the request
-//     if (!userEmail) {
-//         return res.status(400).json({ error: 'User email is required' });
-//     }
+// Get all groups user is in
+const getAllGroups = async (req, res) => {
+    const { email } = req.params; // Get user's email from the request
+    if (!email) {
+        return res.status(400).json({ error: 'User email is required' });
+    }
 
-//     Group.findByUserEmail(userEmail, (err, results) => {
-//         if (err) return res.status(500).json({ error: 'Failed to fetch user groups' });
-//         res.status(200).json(results); // Send only groups the user is part of
+    Group.findByUserEmail(email, (err, results) => {
+        if (err) return res.status(500).json({ error: 'Failed to fetch user groups' });
+        res.status(200).json(results); // Send only groups the user is part of
+    });
+};
+
+// // Hard coded groups
+// const getAllGroups = async (req, res) => {
+//     Group.findAll((err, results) => {
+//         if (err) return res.status(500).json({ error: 'Failed to fetch groups' });
+
+//         // ✅ Hardcoded test group
+//         const testGroup = {
+//             group_id: 9999, // Unique ID for testing
+//             group_name: "testGroup-1",
+//             billers: JSON.stringify(["testAlicia", "testMahjabin", "testSienna", "testSteeve"]),
+//         };
+
+//         // ✅ Ensure test group is **always included** with actual user groups
+//         const updatedResults = [...results, testGroup];
+
+//         res.status(200).json(updatedResults);
 //     });
 // };
 
-// Hard coded groups
-const getAllGroups = async (req, res) => {
-    Group.findAll((err, results) => {
-        if (err) return res.status(500).json({ error: 'Failed to fetch groups' });
-
-        // ✅ Hardcoded test group
-        const testGroup = {
-            group_id: 9999, // Unique ID for testing
-            group_name: "testGroup-1",
-            billers: JSON.stringify(["testAlicia", "testMahjabin", "testSienna", "testSteeve"]),
-        };
-
-        // ✅ Ensure test group is **always included** with actual user groups
-        const updatedResults = [...results, testGroup];
-
-        res.status(200).json(updatedResults);
+// Get all group members of a group
+const getAllMembers = async (req, res) => {
+    const { id } = req.params;
+    Group.findAllMembers(id, (err, results) => {
+        if (err) return res.status(500).json({ error: 'Failed to find group members' });
+        res.status(200).json(results);
     });
 };
 
@@ -100,6 +109,7 @@ module.exports = {
     getGroupById,
     getGroupByName,
     getAllGroups,
+    getAllMembers,
     updateGroup,
     deleteGroup
 };

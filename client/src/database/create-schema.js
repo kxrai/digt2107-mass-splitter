@@ -1,4 +1,4 @@
-// create-schema.js
+// To run this script, use this command in the terminal: node client/src/database/create-schema.js
 
 const mysql = require('mysql2/promise');
 const path = require('path');
@@ -51,7 +51,7 @@ async function createTables(connection) {
   `;
 
   await connection.query(createUsersTableQuery);
-  console.log('Users table created or already exists.');
+  console.log('Users table created.');
 
   // Create users sample data
   const usersSampleDataQuery = `
@@ -71,10 +71,10 @@ async function createTables(connection) {
   `;
 
   await connection.query(createGroupsTableQuery);
-  console.log('Pay_groups table created or already exists.');
+  console.log('Pay_groups table created.');
 
   // Create pay_groups sample data
-  const jsonString = JSON.stringify(["jabineus25@gmail.com"]);
+  const jsonString = JSON.stringify(["Mahjabin"]);
   const groupsSampleDataQuery = `
     INSERT INTO pay_groups (group_name, billers) VALUES ('Group1', ?)
     `;
@@ -94,7 +94,7 @@ async function createTables(connection) {
   `;
 
   await connection.query(createGroupMembersTableQuery);
-  console.log('Group_members table created or already exists.');
+  console.log('Group_members table created.');
   
   // Create group_members sample data
   const groupMembersSampleDataQuery = `
@@ -115,12 +115,12 @@ async function createTables(connection) {
       group_id INT NOT NULL,
       billers VARCHAR(255) NOT NULL,
       date TIMESTAMP DEFAULT NOW(),
-      FOREIGN KEY (group_id) REFERENCES pay_groups(group_id)
+      FOREIGN KEY (group_id) REFERENCES pay_groups(group_id) ON DELETE CASCADE
     )
   `;
 
   await connection.query(createReceiptsQuery);
-  console.log('Receipts table created or already exists.');
+  console.log('Receipts table created.');
 
   // Create receipts sample data
   const receiptsSampleDataQuery = `
@@ -139,6 +139,7 @@ async function createTables(connection) {
       debt DECIMAL(10, 2) NOT NULL,
       paid DECIMAL(10, 2) NOT NULL,
       date TIMESTAMP DEFAULT NOW(),
+      type VARCHAR (10) NOT NULL,
       method VARCHAR(50),
       FOREIGN KEY (receipt_id) REFERENCES receipts(receipt_id) ON DELETE CASCADE,
       FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
@@ -146,38 +147,34 @@ async function createTables(connection) {
   `;
 
   await connection.query(createPaymentsQuery);
-  console.log('Payments table created or already exists.');
+  console.log('Payments table created.');
   
   // Create payments sample data
   const paymentsSampleDataQuery = `
-    INSERT INTO payments (receipt_id, user_id, debt, paid, method) VALUES (1, 3, 500, 500, 'incoming')
+    INSERT INTO payments (receipt_id, user_id, debt, paid, type) VALUES (1, 3, 500, 500, 'incoming')
     `;
 
   await connection.query(paymentsSampleDataQuery);
   console.log('Payments table sample data created.');
-  
-  // Create 'friends' table
-  const createFriendsQuery = `
-    CREATE TABLE IF NOT EXISTS friends (
-      user_id INT,
-      friend_id INT,
-      PRIMARY KEY (user_id, friend_id),
-      FOREIGN KEY (friend_id) REFERENCES users(user_id) ON DELETE CASCADE,
-      FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
-    )
-  `;
 
-  await connection.query(createFriendsQuery);
-  console.log('Friends table created or already exists.');
-  
-  // Create friends sample data
-  const friendsSampleDataQuery = `
-    INSERT INTO friends (user_id, friend_id) VALUES (1, 3);
-    `;
+  // Create an event that will clear all unused receipts and paid transactions every month
+  const cleanupQuery = `
+    CREATE EVENT cleanup_payment_receipts
+    ON SCHEDULE EVERY 2 MINUTE
+    DO
+    BEGIN
+        -- Delete payments where debt = 0
+        DELETE FROM payments WHERE debt = 0;
 
-  await connection.query(friendsSampleDataQuery);
-  console.log('Friends table sample data created.');
+        -- Delete receipts that have no related payments
+        DELETE FROM receipts 
+        WHERE NOT EXISTS (
+            SELECT 1 FROM payments WHERE payments.receipt_id = receipts.receipt_id
+        );
+    END;`;
   
+  await connection.query(cleanupQuery);
+  console.log('Cleanup_payments_receipts event created.');
 }
 
 // Start the schema creation process

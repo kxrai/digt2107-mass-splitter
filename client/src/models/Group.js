@@ -35,17 +35,25 @@ const Group = {
         });
     },
 
-    // ✅ NEW FUNCTION: Find groups by user's email
     findByUserEmail: (email, callback) => {
         const sql = `
-            SELECT g.group_id, g.group_name
-            FROM pay_groups g
-            JOIN group_members gm ON g.group_id = gm.group_id
-            JOIN users u ON gm.user_id = u.user_id
+            SELECT pg.group_id, pg.group_name
+            FROM users u
+            JOIN group_members gm ON u.user_id = gm.user_id
+            JOIN pay_groups pg ON gm.group_id = pg.group_id
             WHERE u.email = ?`;
         db.query(sql, [email], callback);
     },
     
+    findAllMembers: (id, callback) => {
+        const sql = `
+            SELECT u.user_id, u.username, u.email
+            FROM group_members gm
+            JOIN users u ON gm.user_id = u.user_id
+            WHERE gm.group_id = ?`;
+        db.query(sql, [id], callback);
+    },
+
     update: (id, group, callback) => {
         const sql = 'UPDATE pay_groups SET group_name = ? WHERE group_id = ?';
         db.query(sql, [group.group_name, id], callback);
