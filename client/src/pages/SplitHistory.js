@@ -42,16 +42,18 @@ function SplitHistory() {
           const formattedPayment = {
             receipt_id: details.receipt_id,
             payment_id: payment.payment_id,
+            group_id: details.group_id,
             name: details.billers,
             date: formattedDate,
             amount: payment.debt,
+            paid: payment.paid,
             description: details.description,
           };
           console.log(formattedPayment);
 
-          if (payment.method === 'incoming') {
+          if (payment.type === 'incoming') {
             incoming.push(formattedPayment);
-          } else if (payment.method === 'outgoing') {
+          } else if (payment.type === 'outgoing') {
             outgoing.push(formattedPayment);
           }
         }
@@ -95,9 +97,13 @@ function SplitHistory() {
         className="p-4 bg-white rounded-lg shadow-md border border-blue-100 hover:shadow-lg"
       >
         <p className="font-semibold text-blue-900">{transaction.description || 'No Description'}</p>
-        <p className="text-sm text-gray-500">{transaction.date} - Billers: {transaction.name}</p>
-        <p className="font-bold text-blue-600">${transaction.amount ? Number(transaction.amount).toFixed(2) : "0.00"}</p>
+        <p className="text-sm text-gray-500">{transaction.date} - Billers: {transaction.name}, Group ID: {transaction.group_id}</p>
+        <p className="text-sm text-gray-500">Receipt ID: {transaction.receipt_id}</p>
+        <p className="font-bold text-blue-600">{transaction.amount > 0 ? '$' + Number(transaction.amount).toFixed(2) : "✅ Paid"}</p>
+        {transaction.amount > 0 ?
         <button className="btn btn-success text-white px-3" onClick={() =>  setShowForm(transaction.receipt_id)}>Mark as Paid</button>
+        : <div><button className='font-semibold text-blue-900 hover:text-blue-500' onClick={() => setConfirmation(transaction)}>Download Details</button></div>
+        }
 
         {showForm === transaction.receipt_id && (
             <div className='flex items-center justify-between'>
@@ -111,16 +117,16 @@ function SplitHistory() {
                 <option value="PayPal">PayPal</option>
                 <option value="Bank Transfer">E-Transfer / Bank Transfer</option>
                 <option value="Cash">Cash</option>
-              </select>
-              
+              </select> 
               <button className='btn btn-success text-white px-3 mx-1' onClick={() => handleSubmitPayment(transaction)}>
-              {activeTab == 'incoming'? 'Confirm Payment Received' : 'Submit Payment'}</button>
+              {activeTab == 'incoming'? 'Confirm Payment Received' : 'Submit Payment'}</button> 
+              
             </div>
           )}
           <ConfirmationModal
             isOpen={confirmation}
             title="✅ Payment Receipt"
-            message="This transaction will be removed from your Payment History permanently. It is recommended to download your Payment Receipt as proof of payment."
+            message="This transaction will be deleted from Payment History automatically after a month. You may delete it prior to that. It is recommended to download your Payment Receipt as proof of payment."
             onConfirm={handleDownload}
             onCancel={() => setConfirmation(false)}
             cancelText="Close"
@@ -132,16 +138,17 @@ function SplitHistory() {
 
   const handleSubmitPayment = async (transaction) => {
     try {
-      // const response = await fetch(`http://localhost:3000/api/payments/${transaction.payment_id}`, {
-      //   method: "DELETE",
-      //   headers: { "Content-Type": "application/json" },
-      // });
-      // if (response.ok) {
-      setConfirmation(transaction);
-      setShowForm(null); // Close form after successful payment
-      // } else {
-      //   alert("Payment failed. Please try again.");
-      // }
+      const response = await fetch(`http://localhost:3000/api/payments/${transaction.payment_id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: transaction.amount, method: paymentMethod}),
+      });
+      if (response.ok) {
+        window.location.reload(false);
+        setShowForm(null); // Close form after successful payment
+      } else {
+        alert("Payment failed. Please try again.");
+      }
     } catch (error) {
       console.error("Error processing payment:", error);
     }
@@ -174,7 +181,7 @@ function SplitHistory() {
         {activeTab === 'outgoing' && renderTransactions(outgoingData)}
       </div>
 
-      {confirmation && paymentDate && paymentMethod && (
+      {confirmation && (
       <div id="receipt-content" style={{position: 'absolute', left: '-9999px', top: '-9999px'}}>
         <PaymentReceipt receipt={confirmation} date={paymentDate} method={paymentMethod} />
       </div>

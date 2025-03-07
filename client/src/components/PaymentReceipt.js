@@ -14,12 +14,13 @@ const PaymentReceipt = ({ receipt, date, method }) => {
     >
       <h2 style={{ textAlign: "center" }}>Payment Receipt</h2>
       <div style={{marginTop: '1rem',}}>
-        <p><strong>ID:</strong> {receipt.receipt_id}</p>
+        <p><strong>Receipt ID:</strong> {receipt.receipt_id}</p>
+        <p><strong>Group ID:</strong> {receipt.group_id}</p>
         <p><strong>Description:</strong> {receipt.description}</p>
         <p><strong>Receipt Date:</strong> {new Date(receipt.date).toLocaleDateString()}</p>
         <p><strong>Date of Payment:</strong> {new Date(date).toLocaleDateString()}</p>
         <p><strong>Debt:</strong> ${receipt.amount ? Number(receipt.amount).toFixed(2) : "0.00"}</p>
-        <p><strong>Paid:</strong> ${receipt.amount ? Number(receipt.amount).toFixed(2) : "0.00"}</p>
+        <p><strong>Paid:</strong> ${receipt.paid ? Number(receipt.paid).toFixed(2) : "0.00"}</p>
         <p><strong>Payment Method:</strong> {method}</p>
         <p style={{ color: "rgb(22, 163, 74)", fontWeight: "bold", textAlign: "center" }}> {/* text-green-600 */}
           Payment Successful!

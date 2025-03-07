@@ -2,7 +2,7 @@ const db = require('../database/db-connection');
 
 const Payment = {
     create: (bill, callback) => {
-        const sql = 'INSERT INTO payments (receipt_id, user_id, debt, paid, method) VALUES (?, ?, ?, ?, ?)';
+        const sql = 'INSERT INTO payments (receipt_id, user_id, debt, paid, type) VALUES (?, ?, ?, ?, ?)';
         db.query(sql, [bill.receipt_id, bill.user_id, bill.amount, 0, bill.type], callback);
     },
 
@@ -17,8 +17,8 @@ const Payment = {
     },
     
     update: (id, payment, callback) => {
-        const sql = 'UPDATE payments SET debt = ?, method = ? WHERE payment_id = ?';
-        db.query(sql, [payment.amount, payment.method, id], callback);
+        const sql = 'UPDATE payments SET debt = ?, paid = ?, method = ? WHERE payment_id = ?';
+        db.query(sql, [0, payment.amount, payment.method, id], callback);
     },
     
     delete: (id, callback) => {
