@@ -5,9 +5,9 @@ function ReceiptList({ receipts, setReceipts }) {
   const [editingReceipt, setEditingReceipt] = useState(null);
   const [editedValues, setEditedValues] = useState({ id: '', amount: '', date: '', description: '' });
   const [showEditModal, setShowEditModal] = useState(false);
-  const dateInputRef = useRef(null); // ✅ Reference to the date input
+  const dateInputRef = useRef(null); // Reference to the date input
 
-  // ✅ Open Edit Modal & Populate Fields
+  // Open Edit Modal & Populate Fields
   const editReceipt = (id) => {
     const existingReceipt = receipts.find((r) => r.id === id);
     if (existingReceipt) {
@@ -17,25 +17,18 @@ function ReceiptList({ receipts, setReceipts }) {
     }
   };
 
-  // ✅ Handle Input Changes
+  // Handle Input Changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEditedValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  // ✅ Save Changes to Receipt
+  // Save Changes to Receipt
   const saveChanges = () => {
     setReceipts((prevReceipts) =>
       prevReceipts.map((r) => (r.id === editingReceipt ? { ...r, ...editedValues } : r))
     );
     setShowEditModal(false);
-  };
-
-  // ✅ Click Calendar Icon to Open Date Picker
-  const openDatePicker = () => {
-    if (dateInputRef.current) {
-      dateInputRef.current.showPicker(); // ✅ Triggers the native date picker
-    }
   };
 
   return (
@@ -48,7 +41,7 @@ function ReceiptList({ receipts, setReceipts }) {
           {receipts.map((receipt) => (
             <li key={receipt.id} className="flex justify-between items-center p-2 bg-gray-100 rounded mb-2">
               <div>
-                <p><span className="font-semibold">${receipt.amount.toFixed(2)}</span> - {receipt.description || 'No description'}</p>
+                <p><span className="font-semibold">${Number(receipt.amount).toFixed(2)}</span> - {receipt.description || 'No description'}</p>
                 <p className="text-sm text-gray-500">{receipt.date}</p>
               </div>
               <button
@@ -62,14 +55,14 @@ function ReceiptList({ receipts, setReceipts }) {
         </ul>
       )}
 
-      {/* ✅ DaisyUI Edit Modal with Clickable Calendar Icon */}
+      {/* DaisyUI Edit Modal*/}
       {showEditModal && (
         <dialog className="modal modal-open">
-          <div className="modal-box" style={{ backgroundColor: '#98D8EF' }}> {/* Light blue modal */}
-            <h3 className="font-bold text-lg text-white">Edit Receipt</h3>
+          <div className="modal-box" style={{ backgroundColor: '#cff3e8' }}> {/* Light blue modal */}
+            <h3 className="font-bold text-lg text-blue-900">Edit Receipt</h3>
 
             {/* Amount Input */}
-            <label className="label text-white">Total Amount</label>
+            <label className="label text-blue-700">Total Amount</label>
             <input
               type="number"
               name="amount"
@@ -78,26 +71,21 @@ function ReceiptList({ receipts, setReceipts }) {
               className="input input-bordered mb-4 w-full text-blue-900 bg-white"
             />
 
-            {/* Date Input with Clickable Calendar Icon */}
-            <label className="label text-white">Date</label>
+            {/* Date Input */}
+            <label className="label text-blue-700">Date</label>
             <div className="relative">
               <input
                 type="date"
                 name="date"
-                ref={dateInputRef} // ✅ Reference for triggering
+                ref={dateInputRef} // Reference for triggering
                 value={editedValues.date}
                 onChange={handleChange}
-                className="input input-bordered w-full text-blue-900 bg-white pr-10"
-              />
-              {/* ✅ Calendar Icon is Now Clickable */}
-              <CalendarIcon
-                className="h-5 w-5 absolute right-3 top-3 text-gray-700 cursor-pointer"
-                onClick={openDatePicker} // ✅ Triggers the picker
+                className="input input-bordered w-full text-blue-900 bg-white"
               />
             </div>
 
             {/* Description Input */}
-            <label className="label text-white">Description</label>
+            <label className="label text-blue-700">Description</label>
             <textarea
               name="description"
               value={editedValues.description}

@@ -1,7 +1,6 @@
 // src/pages/Homepage.js
 import React from 'react';
 import { Link } from 'react-router-dom';
-import RecentSplits from '../components/RecentSplits';
 import Navbar from '../components/Navbar';
 
 /**
@@ -15,22 +14,9 @@ import Navbar from '../components/Navbar';
  * - Bottom navigation for easy access to other parts of the application
  */
 function Homepage() {
-  // Sample data for recent splits; in production, this data would likely come from a database or API
-  const recentSplitsData = [
-    { name: 'Cafe Coffee Day', date: '2024-11-01', group: 'Friends', amount: 26.0 },
-    { name: 'Pizza Night', date: '2024-11-03', group: 'Family', amount: 45.5 },
-    { name: 'Grocery Run', date: '2024-11-05', group: 'Roommates', amount: 60.0 },
-  ];
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center">
-      
-      {/* Most Recent Split Card */}
-      <div className="w-full max-w-3xl mt-6 px-4">
-        <div className="recent-history-card bg-gradient-to-r from-pink-200 via-purple-200 to-blue-200 rounded-lg shadow-md p-4">
-          <p className="text-lg font-semibold text-blue-700">Most Recent Split</p>
-        </div>
-      </div>
 
       {/* Friends Section */}
       <div className="w-full max-w-3xl mt-6 px-4">
@@ -121,10 +107,6 @@ function Homepage() {
           </Link>
         </div>
       </div>
-
-      {/* Recent Splits Section */}
-      {/* Render a list of recent splits, passing in sample data */}
-      <RecentSplits splits={recentSplitsData} />
 
       {/* Bottom Navigation */}
       <Navbar />

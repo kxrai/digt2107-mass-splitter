@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from 'r
 import { googleLogout } from '@react-oauth/google';
 import HomePage from './pages/HomePage.js';
 import SplitHistory from './pages/SplitHistory.js';
-import AddFriend from './pages/AddFriend.js';
 import CreateGroup from './pages/CreateGroup.js';
 import GroupPage from './pages/GroupPage.js';
 import AddReceipt from './components/AddReceipt';
@@ -113,7 +112,6 @@ function App() {
         {/* <Route element={<ProtectedRoute/>}>  */}
           <Route path="/home" element={<HomePage />} />
           <Route path="/split-history" element={<SplitHistory />} />
-          <Route path="/add-friend" element={<AddFriend />} />
           <Route path="/create-group" element={<CreateGroup />} />
           <Route path="/groups" element={<GroupPage />} />
           <Route path="/add-receipt" element={<AddReceipt />} />

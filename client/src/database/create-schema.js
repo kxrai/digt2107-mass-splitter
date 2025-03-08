@@ -160,7 +160,7 @@ async function createTables(connection) {
   // Create an event that will clear all unused receipts and paid transactions every month
   const cleanupQuery = `
     CREATE EVENT cleanup_payment_receipts
-    ON SCHEDULE EVERY 2 MINUTE
+    ON SCHEDULE EVERY 1 MONTH
     DO
     BEGIN
         -- Delete payments where debt = 0
