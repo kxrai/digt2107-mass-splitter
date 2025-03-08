@@ -58,27 +58,18 @@ function SplitHistory() {
             outgoing.push(formattedPayment);
           }
         }
-
         setIncomingData(incoming);
         setOutgoingData(outgoing);
       } catch (error) {
         console.error('Error fetching data:', error);
-      } finally { setLoading(false); }
+      } finally { setLoading(false); 
+        const mock = 
+        [{receipt_id: 1, payment_id: 2, group_id: 3, name: 'Alicia', date: '07/08/2025', amount: 500, paid: 0, description: 'Party'},
+          {receipt_id: 2, payment_id: 3, group_id: 1, name: 'Steeve', date: '07/09/2025', amount: 0, paid: 100, description: 'Breakfast'}
+        ]; setIncomingData(mock);}
     };
     fetchPayments();
   }, []); // Runs only once when component mounts
-
-  useEffect(() => {
-    if (confirmation) {
-      console.log('confirmation is true');
-    }
-    if (paymentDate) {
-      console.log(paymentDate);
-    }
-    if (paymentMethod) {
-      console.log(paymentMethod);
-    }
-  }, [confirmation, paymentDate, paymentMethod]);
 
   const handleDownload = () => {
     const receiptHTML = document.getElementById("receipt-content").innerHTML;
