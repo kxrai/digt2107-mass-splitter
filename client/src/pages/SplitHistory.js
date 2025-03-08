@@ -173,42 +173,42 @@ function SplitHistory() {
   };
 
   return (
-    <div className="grid-bg min-h-screen bg-blue-50 p-4">
-      {/* Page Title */}
-      <h2 className="text-2xl font-bold text-blue-900 text-center mb-4">Payment History</h2>
-
-      {/* Centered Tabs */}
-      <div className="tabs tabs-boxed justify-center bg-blue-100 rounded-lg p-2 mb-4">
-        <a
-          className={`tab ${activeTab === 'incoming' ? 'tab-active text-blue-600' : 'text-blue-900'}`}
-          onClick={() => setActiveTab('incoming')}
-        >
-          Incoming
-        </a>
-        <a
-          className={`tab ${activeTab === 'outgoing' ? 'tab-active text-blue-600' : 'text-blue-900'}`}
-          onClick={() => setActiveTab('outgoing')}
-        >
-          Outgoing
-        </a>
-      </div>
-
-      {/* Content for the selected tab */}
-      <div className="space-y-4">
-        {loading && <p className="text-gray-500">Loading transactions...</p>}
-        {activeTab === 'incoming' && renderTransactions(incomingData)}
-        {activeTab === 'outgoing' && renderTransactions(outgoingData)}
-      </div>
-
-      {confirmation && (
-      <div id="receipt-content" style={{position: 'absolute', left: '-9999px', top: '-9999px'}}>
-        <PaymentReceipt receipt={confirmation} date={paymentDate} method={paymentMethod} />
-      </div>
-      )}
-
-      {/* Bottom Navbar */}
+    <div>
       <Navbar />
-    </div>
+      <div className="grid-bg min-h-screen bg-blue-50 p-4">
+        {/* Page Title */}
+        <h2 className="text-2xl font-bold text-blue-900 text-center mb-4">Payment History</h2>
+
+        {/* Centered Tabs */}
+        <div className="tabs tabs-boxed justify-center bg-blue-100 rounded-lg p-2 mb-4">
+          <a
+            className={`tab ${activeTab === 'incoming' ? 'tab-active text-blue-600' : 'text-blue-900'}`}
+            onClick={() => setActiveTab('incoming')}
+          >
+            Incoming
+          </a>
+          <a
+            className={`tab ${activeTab === 'outgoing' ? 'tab-active text-blue-600' : 'text-blue-900'}`}
+            onClick={() => setActiveTab('outgoing')}
+          >
+            Outgoing
+          </a>
+        </div>
+
+        {/* Content for the selected tab */}
+        <div className="space-y-4">
+          {loading && <p className="text-gray-500">Loading transactions...</p>}
+          {activeTab === 'incoming' && renderTransactions(incomingData)}
+          {activeTab === 'outgoing' && renderTransactions(outgoingData)}
+        </div>
+
+        {confirmation && (
+        <div id="receipt-content" style={{position: 'absolute', left: '-9999px', top: '-9999px'}}>
+          <PaymentReceipt receipt={confirmation} date={paymentDate} method={paymentMethod} />
+        </div>
+        )}
+      </div>
+    </div >
   );
 }
 
