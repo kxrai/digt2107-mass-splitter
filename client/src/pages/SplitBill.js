@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import ConfirmationModal from '../components/ConfirmationModal';
 import '../App.css';
+import axios from "axios";
 
 function SplitBill() {
   const navigate = useNavigate();
@@ -108,6 +109,8 @@ function SplitBill() {
   const confirmProceed = async () => {
     // Step 1: Save all the receipts in the database
     try {
+      const descriptions = [];
+      receipts.map((receipt) => descriptions.push(receipt.description));
       const receiptPromises = receipts.map((receipt) =>
         fetch(`http://localhost:3000/api/receipts/create`, {method: "POST", headers: { "Content-Type": "application/json", },
           body: JSON.stringify({
@@ -128,11 +131,11 @@ function SplitBill() {
       const paymentPromises = [];
       console.log("Total Amount:", totalAmount);
       console.log("Split Percentages:", splitPercentages);
-      receiptIds.forEach((receiptId) => {
+      receiptIds.forEach((receiptId, receiptIndex) => {
         groupMembers.forEach((member, index) => {
           const amountOwed = billers.includes(member.username) ? billerOwedAmounts : (((splitPercentages[index] / 100) * totalAmount) / receipts.length); // Get the amount owed by this member
           const method = billers.includes(member.username) ? 'incoming' : 'outgoing'; // Check if they are a biller
-  
+          // Create a payment transaction
           const paymentPromise = fetch(`http://localhost:3000/api/payments/create`, {method: "POST", headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               receipt_id: receiptId,
@@ -142,6 +145,14 @@ function SplitBill() {
             }),
           });
           paymentPromises.push(paymentPromise);
+          // Send an email notification
+          fetch("http://localhost:5000/send-email", {method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                email: member.email,
+                billAmount: amountOwed.toFixed(2),
+                billDescription: descriptions[receiptIndex],
+            }),
+          });
         });
       });
       // Execute all payment requests concurrently
@@ -151,7 +162,7 @@ function SplitBill() {
     } catch (error) {
       console.error("Error submitting receipts and payments:", error);
     }
-    
+    // Clear localStorage
     localStorage.removeItem('receipts');
     localStorage.removeItem('selectedGroup');
     setShowConfirmModal(false);
@@ -206,12 +217,6 @@ function SplitBill() {
         {/* Title & Back Button Aligned (Commented Out) */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">Split Bill</h1>
-          {/* <button 
-            className="btn btn-outline btn-primary text-lg px-6"
-            onClick={handleBack}
-          >
-            ← Back to Edit
-          </button> */}
         </div>
 
         {/* Display Receipts */}

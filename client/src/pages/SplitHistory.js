@@ -14,25 +14,26 @@ function SplitHistory() {
   const [paymentMethod, setPaymentMethod] = useState("");
   const [confirmation, setConfirmation] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); 
   const [activeTab, setActiveTab] = useState('incoming'); // State to track the active tab
 
+  // Retrieve user's payment history
   useEffect(() => {
     const fetchPayments = async () => {
       // Get current logged-in user's ID
       const loggedInUser = JSON.parse(localStorage.getItem('googleToken'));
       if (!loggedInUser) return;
-
       const user_id = loggedInUser.id;
 
       try {
+        // Get all user's payment transactions
         const response = await fetch(`http://localhost:3000/api/payments/user/${user_id}`);
         if (!response.ok) throw new Error('Failed to fetch payments');
 
         const data = await response.json();
         const incoming = [];
         const outgoing = [];
-
+        // Fetch receipt data for each payment transaction
         for (const payment of data) {
           const detailsResponse = await fetch(`http://localhost:3000/api/receipts/${payment.receipt_id}`);
           if (!detailsResponse.ok) continue;
@@ -51,7 +52,6 @@ function SplitHistory() {
             description: details.description,
             method: payment.method
           };
-          console.log(formattedPayment);
 
           if (payment.type === 'incoming') {
             incoming.push(formattedPayment);
@@ -59,19 +59,22 @@ function SplitHistory() {
             outgoing.push(formattedPayment);
           }
         }
+        // Set data for each tab
         setIncomingData(incoming);
         setOutgoingData(outgoing);
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally { setLoading(false); 
-        const mock = 
-        [{receipt_id: 1, payment_id: 2, group_id: 3, name: 'Alicia', date: '07/08/2025', amount: 500, paid: 0, description: 'Party'},
-          {receipt_id: 2, payment_id: 3, group_id: 1, name: 'Steeve', date: '07/09/2025', amount: 0, paid: 100, description: 'Breakfast'}
-        ]; setIncomingData(mock);}
+        // const mock = 
+        // [{receipt_id: 1, payment_id: 2, group_id: 3, name: 'Alicia', date: '07/08/2025', amount: 500, paid: 0, description: 'Party'},
+        //   {receipt_id: 2, payment_id: 3, group_id: 1, name: 'Steeve', date: '07/09/2025', amount: 0, paid: 100, description: 'Breakfast'}
+        // ]; setIncomingData(mock);
+      }
     };
     fetchPayments();
   }, []); // Runs only once when component mounts
 
+  // Downloads receipt to user's computer
   const handleDownload = () => {
     const receiptHTML = document.getElementById("receipt-content").innerHTML;
     const blob = new Blob([receiptHTML], { type: "text/html" });
@@ -80,7 +83,7 @@ function SplitHistory() {
     link.download = `receipt_${confirmation.receipt_id}.html`;
     link.click();
   }
-
+  // Deletes payment transaction
   const handleDeleteTransaction = async () => {
     try {
       const response = await fetch(`http://localhost:3000/api/payments/${confirmDelete}`, { method: 'DELETE' });
@@ -105,7 +108,7 @@ function SplitHistory() {
          &nbsp;&nbsp;&nbsp;<button className="btn btn-sm bg-red-500 text-white hover:bg-red-600" onClick={() => setConfirmDelete(transaction.payment_id)}>
          <TrashIcon className="h-4 w-4" /></button></div>
         }
-
+        {/* Form for Marking as Paid */}
         {showForm === transaction.receipt_id && (
             <div className='flex items-center justify-between'>
               <label className='font-semibold'>Date Paid:  </label>
@@ -124,6 +127,7 @@ function SplitHistory() {
               
             </div>
           )}
+          {/* Pop up for downloading receipt */}
           <ConfirmationModal
             isOpen={confirmation}
             title="✅ Payment Receipt"
@@ -133,6 +137,7 @@ function SplitHistory() {
             cancelText="Close"
             successText="Download Receipt"
           />
+          {/* Pop up for deleteing transaction */}
           <ConfirmationModal
             isOpen={confirmDelete}
             title="⚠️ Confirm Deletion"
@@ -145,7 +150,7 @@ function SplitHistory() {
       </div>
     ));
   };
-
+  // Mark transaction as paid
   const handleSubmitPayment = async (transaction) => {
     try {
       const response = await fetch(`http://localhost:3000/api/payments/${transaction.payment_id}`, {
