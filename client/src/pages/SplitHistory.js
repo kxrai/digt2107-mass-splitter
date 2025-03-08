@@ -49,6 +49,7 @@ function SplitHistory() {
             amount: payment.debt,
             paid: payment.paid,
             description: details.description,
+            method: payment.method
           };
           console.log(formattedPayment);
 
@@ -150,7 +151,7 @@ function SplitHistory() {
       const response = await fetch(`http://localhost:3000/api/payments/${transaction.payment_id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: transaction.amount, method: paymentMethod}),
+        body: JSON.stringify({ amount: transaction.amount, method: paymentMethod, date: paymentDate}),
       });
       if (response.ok) {
         window.location.reload(false);
@@ -192,8 +193,8 @@ function SplitHistory() {
           {activeTab === 'incoming' && renderTransactions(incomingData)}
           {activeTab === 'outgoing' && renderTransactions(outgoingData)}
         </div>
-
-        {confirmation && (
+        {console.log(paymentDate, paymentMethod)}
+        {confirmation &&(
         <div id="receipt-content" style={{position: 'absolute', left: '-9999px', top: '-9999px'}}>
           <PaymentReceipt receipt={confirmation} date={paymentDate} method={paymentMethod} />
         </div>

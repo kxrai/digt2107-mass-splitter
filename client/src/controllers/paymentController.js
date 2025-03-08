@@ -1,5 +1,4 @@
-const express = require('express');
-const Payment = require('../models/Payment'); // Path to your Payment model
+const Payment = require('../models/Payment');
 
 // Route to create a new Payment
 const createPayment = async (req, res) => {
@@ -11,21 +10,6 @@ const createPayment = async (req, res) => {
             return res.status(500).json({ error: 'Failed to create Payment' });
         }
         res.status(201).json({ message: 'Payment created successfully', PaymentId: result.insertId });
-    });
-};
-
-// Route to find a Payment by ID
-const getPaymentById = async (req, res) => {
-    const paymentId = req.params.id;
-    Payment.findById(paymentId, (err, result) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).json({ error: 'Failed to fetch Payment' });
-        }
-        if (result.length === 0) {
-            return res.status(404).json({ message: 'Payment not found' });
-        }
-        res.status(200).json(result[0]);
     });
 };
 
@@ -76,7 +60,6 @@ const deletePayment = async (req, res) => {
 
 module.exports = {
     createPayment,
-    getPaymentById,
     getPaymentByUser,
     deletePayment,
     updatePayment

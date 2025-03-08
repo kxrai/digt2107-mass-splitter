@@ -13,8 +13,8 @@ const Payment = {
     },
     // Update a payment transaction
     update: (id, payment, callback) => {
-        const sql = 'UPDATE payments SET debt = ?, paid = ?, method = ? WHERE payment_id = ?';
-        db.query(sql, [0, payment.amount, payment.method, id], callback);
+        const sql = 'UPDATE payments SET debt = ?, paid = ?, method = ?, date = ? WHERE payment_id = ?';
+        db.query(sql, [0, payment.amount, payment.method, payment.date, id], callback);
     },
     // Delete a payment transaction
     delete: (id, callback) => {

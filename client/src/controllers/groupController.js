@@ -1,6 +1,4 @@
-const express = require('express');
-const router = express.Router();
-const Group = require('../models/Group'); // Adjust path if necessary
+const Group = require('../models/Group');
 
 // Create a new group
 const createGroup = async (req, res) => {
@@ -41,7 +39,7 @@ const getGroupByName = async (req, res) => {
     });
 };
 
-// Get all groups user is in
+// Get all the groups a user is in
 const getAllGroups = async (req, res) => {
     const { email } = req.params; // Get user's email from the request
     if (!email) {
@@ -54,42 +52,12 @@ const getAllGroups = async (req, res) => {
     });
 };
 
-// // Hard coded groups
-// const getAllGroups = async (req, res) => {
-//     Group.findAll((err, results) => {
-//         if (err) return res.status(500).json({ error: 'Failed to fetch groups' });
-
-//         // ✅ Hardcoded test group
-//         const testGroup = {
-//             group_id: 9999, // Unique ID for testing
-//             group_name: "testGroup-1",
-//             billers: JSON.stringify(["testAlicia", "testMahjabin", "testSienna", "testSteeve"]),
-//         };
-
-//         // ✅ Ensure test group is **always included** with actual user groups
-//         const updatedResults = [...results, testGroup];
-
-//         res.status(200).json(updatedResults);
-//     });
-// };
-
-// Get all group members of a group
+// Get all the members in a group
 const getAllMembers = async (req, res) => {
     const { id } = req.params;
     Group.findAllMembers(id, (err, results) => {
         if (err) return res.status(500).json({ error: 'Failed to find group members' });
         res.status(200).json(results);
-    });
-};
-
-// Update a group
-const updateGroup = async (req, res) => {
-    const { id } = req.params;
-    const group = req.body; // Expecting { group_name: "Updated Group Name" }
-    Group.update(id, group, (err, result) => {
-        if (err) return res.status(500).json({ error: 'Failed to update group' });
-        if (result.affectedRows === 0) return res.status(404).json({ error: 'Group not found' });
-        res.status(200).json({ message: 'Group updated' });
     });
 };
 
@@ -110,6 +78,5 @@ module.exports = {
     getGroupByName,
     getAllGroups,
     getAllMembers,
-    updateGroup,
     deleteGroup
 };

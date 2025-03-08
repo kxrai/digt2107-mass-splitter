@@ -9,7 +9,6 @@ const findFreePort = require('find-free-port');
 const userRoutes = require('../client/src/routes/userRoutes');
 const receiptRoutes = require('../client/src/routes/receiptRoutes');
 const groupRoutes = require('../client/src/routes/groupRoutes');
-const friendRoutes = require('../client/src/routes/friendRoutes');
 const paymentRoutes = require('../client/src/routes/paymentRoutes');
 
 const app = express();
@@ -51,7 +50,6 @@ db.connect((err) => {
 app.use('/api/users', userRoutes);
 app.use('/api/receipts', receiptRoutes);
 app.use('/api/groups', groupRoutes);
-// app.use('/api/friends', friendRoutes);
 app.use('/api/payments', paymentRoutes);
 
 // ✅ Default Route (Fixes "Cannot GET /" Error)
