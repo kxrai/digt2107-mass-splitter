@@ -21,56 +21,76 @@ function SplitHistory() {
     const fetchPayments = async () => {
       // Get current logged-in user's ID
       const loggedInUser = JSON.parse(localStorage.getItem('googleToken'));
-      if (!loggedInUser) return;
-
+      if (!loggedInUser) {
+        console.error("No logged-in user found.");
+        return;
+      }
+  
       const user_id = loggedInUser.id;
-
+  
       try {
         const response = await fetch(`http://localhost:3000/api/payments/user/${user_id}`);
-        if (!response.ok) throw new Error('Failed to fetch payments');
-
-        const data = await response.json();
-        const incoming = [];
-        const outgoing = [];
-
-        for (const payment of data) {
-          const detailsResponse = await fetch(`http://localhost:3000/api/receipts/${payment.receipt_id}`);
-          if (!detailsResponse.ok) continue;
-          const details = await detailsResponse.json();
-
-          const date = new Date(details.receipt_date);
-          const formattedDate = date.toLocaleDateString();
-          const formattedPayment = {
-            receipt_id: details.receipt_id,
-            payment_id: payment.payment_id,
-            group_id: details.group_id,
-            name: details.billers,
-            date: formattedDate,
-            amount: payment.debt,
-            paid: payment.paid,
-            description: details.description,
-            method: payment.method
-          };
-          console.log(formattedPayment);
-
-          if (payment.type === 'incoming') {
-            incoming.push(formattedPayment);
-          } else if (payment.type === 'outgoing') {
-            outgoing.push(formattedPayment);
+        const text = await response.text(); // ✅ Get raw response
+        console.log("Raw API Response:", text); // 🔍 Debugging output
+  
+        try {
+          const data = JSON.parse(text); // ✅ Try parsing JSON
+          console.log("Parsed JSON Response:", data);
+  
+          if (!Array.isArray(data)) {
+            console.error("Expected an array but got:", typeof data);
+            return;
           }
+  
+          const incoming = [];
+          const outgoing = [];
+  
+          for (const payment of data) {
+            const detailsResponse = await fetch(`http://localhost:3000/api/receipts/${payment.receipt_id}`);
+            const detailsText = await detailsResponse.text(); // Get raw response
+            console.log(`Receipt details for ID ${payment.receipt_id}:`, detailsText);
+  
+            try {
+              const details = JSON.parse(detailsText);
+              const date = new Date(details.receipt_date);
+              const formattedDate = date.toLocaleDateString();
+              const formattedPayment = {
+                receipt_id: details.receipt_id,
+                payment_id: payment.payment_id,
+                group_id: details.group_id,
+                name: details.billers,
+                date: formattedDate,
+                amount: payment.debt,
+                paid: payment.paid,
+                description: details.description,
+                method: payment.method
+              };
+  
+              if (payment.type === 'incoming') {
+                incoming.push(formattedPayment);
+              } else if (payment.type === 'outgoing') {
+                outgoing.push(formattedPayment);
+              }
+            } catch (error) {
+              console.error("Failed to parse receipt details:", detailsText);
+            }
+          }
+  
+          setIncomingData(incoming);
+          setOutgoingData(outgoing);
+        } catch (jsonError) {
+          console.error("Error parsing JSON response:", text);
         }
-        setIncomingData(incoming);
-        setOutgoingData(outgoing);
       } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally { setLoading(false); 
-        const mock = 
-        [{receipt_id: 1, payment_id: 2, group_id: 3, name: 'Alicia', date: '07/08/2025', amount: 500, paid: 0, description: 'Party'},
-          {receipt_id: 2, payment_id: 3, group_id: 1, name: 'Steeve', date: '07/09/2025', amount: 0, paid: 100, description: 'Breakfast'}
-        ]; setIncomingData(mock);}
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
     };
+  
     fetchPayments();
-  }, []); // Runs only once when component mounts
+  }, []);
+  
 
   const handleDownload = () => {
     const receiptHTML = document.getElementById("receipt-content").innerHTML;

@@ -18,10 +18,19 @@ const getPaymentByUser = async (req, res) => {
     const userId = req.params.id;
     Payment.findByUser(userId, (err, results) => {
         if (err) {
-            console.error(err);
+            console.error("Database Error:", err);
             return res.status(500).json({ error: 'Failed to fetch Payments' });
         }
-        res.status(200).json(results);
+
+        console.log("🔍 Raw DB Response:", results);
+
+        // Validate that `results` is an array
+        if (!Array.isArray(results)) {
+            console.error("❌ Unexpected response format from DB:", typeof results);
+            return res.status(500).json({ error: "Unexpected response format" });
+        }
+
+        res.status(200).json(results); // Send JSON array
     });
 };
 
