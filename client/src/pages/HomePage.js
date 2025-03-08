@@ -16,7 +16,6 @@ import Navbar from '../components/Navbar';
 function Homepage() {
 
   return (
-<<<<<<< HEAD
     <div className="grid-bg min-h-screen bg-gray-50 flex flex-col items-center">
       
       {/* Most Recent Split Card */}
@@ -25,9 +24,6 @@ function Homepage() {
           <p className="text-lg font-semibold text-blue-700">Most Recent Split</p>
         </div>
       </div>
-=======
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center">
->>>>>>> development
 
       {/* Groups Section */}
       <div className="w-full max-w-3xl mt-6 px-4">

@@ -114,10 +114,6 @@ function App() {
         {/* <Route element={<ProtectedRoute/>}>  */}
           <Route path="/home" element={<HomePage />} />
           <Route path="/split-history" element={<SplitHistory />} />
-<<<<<<< HEAD
-          {/* <Route path="/add-friend" element={<AddFriend />} /> */}
-=======
->>>>>>> development
           <Route path="/create-group" element={<CreateGroup />} />
           <Route path="/groups" element={<GroupPage />} />
           <Route path="/add-receipt" element={<AddReceipt />} />
