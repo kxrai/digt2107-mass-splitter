@@ -172,6 +172,7 @@ function CreateGroup() {
             Save Group
           </button>
         </div>
+        <Navbar />
       </div>
     </>
   );
