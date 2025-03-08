@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useReactToPrint } from "react-to-print";
+import { TrashIcon } from '@heroicons/react/24/outline';
 import Navbar from '../components/Navbar';
 import ConfirmationModal from '../components/ConfirmationModal';
 import PaymentReceipt from '../components/PaymentReceipt';
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+
 
 function SplitHistory() {
 
@@ -14,6 +13,8 @@ function SplitHistory() {
   const [paymentDate, setPaymentDate] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [confirmation, setConfirmation] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('incoming'); // State to track the active tab
 
   useEffect(() => {
@@ -62,7 +63,7 @@ function SplitHistory() {
         setOutgoingData(outgoing);
       } catch (error) {
         console.error('Error fetching data:', error);
-      }
+      } finally { setLoading(false); }
     };
     fetchPayments();
   }, []); // Runs only once when component mounts
@@ -88,21 +89,29 @@ function SplitHistory() {
     link.click();
   }
 
+  const handleDeleteTransaction = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/payments/${confirmDelete}`, { method: 'DELETE' });
+      if (response.ok) {window.location.reload(false);}
+    } catch {alert('Failed to delete transaction');}
+  }
 
   // Function to render transaction cards
   const renderTransactions = (data) => {
     return data.map((transaction, index) => (
       <div
-        key={index}
-        className="p-4 bg-white rounded-lg shadow-md border border-blue-100 hover:shadow-lg"
+        key={index} className="p-4 bg-white rounded-lg shadow-md border border-blue-100 hover:shadow-lg"
       >
         <p className="font-semibold text-blue-900">{transaction.description || 'No Description'}</p>
-        <p className="text-sm text-gray-500">{transaction.date} - Billers: {transaction.name}, Group ID: {transaction.group_id}</p>
+        <p className="text-sm text-gray-500">{transaction.date} - Biller(s): {transaction.name}, Group ID: {transaction.group_id}</p>
         <p className="text-sm text-gray-500">Receipt ID: {transaction.receipt_id}</p>
         <p className="font-bold text-blue-600">{transaction.amount > 0 ? '$' + Number(transaction.amount).toFixed(2) : "✅ Paid"}</p>
+
         {transaction.amount > 0 ?
         <button className="btn btn-success text-white px-3" onClick={() =>  setShowForm(transaction.receipt_id)}>Mark as Paid</button>
-        : <div><button className='font-semibold text-blue-900 hover:text-blue-500' onClick={() => setConfirmation(transaction)}>Download Details</button></div>
+        : <div><button className='font-semibold text-blue-900 hover:text-blue-500' onClick={() => setConfirmation(transaction)}>Download Details</button>
+         &nbsp;&nbsp;&nbsp;<button className="btn btn-sm bg-red-500 text-white hover:bg-red-600" onClick={() => setConfirmDelete(transaction.payment_id)}>
+         <TrashIcon className="h-4 w-4" /></button></div>
         }
 
         {showForm === transaction.receipt_id && (
@@ -131,6 +140,15 @@ function SplitHistory() {
             onCancel={() => setConfirmation(false)}
             cancelText="Close"
             successText="Download Receipt"
+          />
+          <ConfirmationModal
+            isOpen={confirmDelete}
+            title="⚠️ Confirm Deletion"
+            message="Are you sure you want to delete this transaction? This action cannot be undone."
+            onConfirm={handleDeleteTransaction}
+            onCancel={() => setConfirmDelete(null)}
+            cancelText="No, Cancel"
+            successText="Yes, Delete"
           />
       </div>
     ));
@@ -177,6 +195,7 @@ function SplitHistory() {
 
       {/* Content for the selected tab */}
       <div className="space-y-4">
+        {loading && <p className="text-gray-500">Loading transactions...</p>}
         {activeTab === 'incoming' && renderTransactions(incomingData)}
         {activeTab === 'outgoing' && renderTransactions(outgoingData)}
       </div>

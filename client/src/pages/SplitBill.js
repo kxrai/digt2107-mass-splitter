@@ -68,7 +68,7 @@ function SplitBill() {
   
     const calculateBillersOwed = () => {
       let billerIndexes = groupMembers
-        .map((member, index) => (billers.includes(member.email) ? index : null))
+        .map((member, index) => (billers.includes(member.username) ? index : null))
         .filter((index) => index !== null);
   
       let totalBillerContribution = billerIndexes.reduce((sum, index) => sum + splitPercentages[index], 0);
@@ -130,8 +130,8 @@ function SplitBill() {
       console.log("Split Percentages:", splitPercentages);
       receiptIds.forEach((receiptId) => {
         groupMembers.forEach((member, index) => {
-          const amountOwed = billers.includes(member.email) ? billerOwedAmounts : ((splitPercentages[index] / 100) * totalAmount); // Get the amount owed by this member
-          const method = billers.includes(member.email) ? 'incoming' : 'outgoing'; // Check if they are a biller
+          const amountOwed = billers.includes(member.username) ? billerOwedAmounts : (((splitPercentages[index] / 100) * totalAmount) / receipts.length); // Get the amount owed by this member
+          const method = billers.includes(member.username) ? 'incoming' : 'outgoing'; // Check if they are a biller
   
           const paymentPromise = fetch(`http://localhost:3000/api/payments/create`, {method: "POST", headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

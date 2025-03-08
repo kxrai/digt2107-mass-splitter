@@ -28,21 +28,7 @@ function AddReceipt({ receipts, setReceipts }) {
             userGroups = await response.json();
           }
         }
-
-        // Ensure the test group is always included
-        const testGroup = {
-          group_id: "testGroup-1",
-          group_name: "Test Group 1",
-          members: ["testAlicia", "testMahjabin", "testSienna", "testSteeve"],
-        };
-
-        // Merge test group with user groups (avoid duplicates)
-        const updatedGroups = [...userGroups, testGroup].filter(
-          (group, index, self) =>
-            index === self.findIndex((g) => g.group_id === group.group_id)
-        );
-
-        setGroups(updatedGroups);
+        setGroups(userGroups);
       } catch (error) {
         console.error('Error fetching user groups:', error);
       }

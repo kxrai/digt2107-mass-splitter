@@ -115,7 +115,7 @@ async function createTables(connection) {
       group_id INT NOT NULL,
       billers VARCHAR(255) NOT NULL,
       date TIMESTAMP DEFAULT NOW(),
-      FOREIGN KEY (group_id) REFERENCES pay_groups(group_id)
+      FOREIGN KEY (group_id) REFERENCES pay_groups(group_id) ON DELETE CASCADE
     )
   `;
 

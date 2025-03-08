@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TrashIcon } from '@heroicons/react/24/outline';
+import ConfirmationModal from './ConfirmationModal';
 
 function UserGroups() {
   const [groups, setGroups] = useState([]);
@@ -11,7 +12,7 @@ function UserGroups() {
     fetchGroups();
   }, []);
 
-  // ✅ Fetch User Groups
+  // Fetch User Groups
   const fetchGroups = async () => {
     try {
       const userInfo = JSON.parse(localStorage.getItem('googleToken'));
@@ -34,7 +35,7 @@ function UserGroups() {
     }
   };
 
-  // ✅ Delete Group Function
+  // Delete Group Function
   const handleDeleteGroup = async (groupId) => {
     try {
       const response = await fetch(`http://localhost:5000/api/groups/${groupId}`, {
@@ -42,10 +43,11 @@ function UserGroups() {
       });
 
       if (!response.ok) {
+        setConfirmDelete(null); // Close confirmation popup
         throw new Error('Failed to delete group.');
       }
 
-      // ✅ Remove deleted group from UI
+      // Remove deleted group from UI
       setGroups(groups.filter(group => group.group_id !== groupId));
       setConfirmDelete(null); // Close confirmation popup
     } catch (err) {
@@ -78,23 +80,16 @@ function UserGroups() {
         </ul>
       )}
 
-      {/* ✅ Delete Confirmation Popup */}
-      {confirmDelete && (
-        <dialog className="modal modal-open">
-          <div className="modal-box">
-            <h3 className="font-bold text-lg">⚠️ Confirm Deletion</h3>
-            <p className="py-4">Are you sure you want to delete this group? This action cannot be undone.</p>
-            <div className="modal-action">
-              <button className="btn btn-error" onClick={() => handleDeleteGroup(confirmDelete)}>
-                Yes, Delete
-              </button>
-              <button className="btn btn-primary" onClick={() => setConfirmDelete(null)}>
-                No, Cancel
-              </button>
-            </div>
-          </div>
-        </dialog>
-      )}
+      {/* Delete Confirmation Popup */}
+      <ConfirmationModal
+        isOpen={confirmDelete}
+        title="⚠️ Confirm Deletion"
+        message="Are you sure you want to delete this group? All receipts and payments asscoiated with this group will be deleted (for all members). This action cannot be undone."
+        onConfirm={() => handleDeleteGroup(confirmDelete)}
+        onCancel={() => setConfirmDelete(null)}
+        cancelText="No, Cancel"
+        successText="Yes, Delete"
+      />
     </div>
   );
 }
