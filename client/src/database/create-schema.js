@@ -156,7 +156,25 @@ async function createTables(connection) {
 
   await connection.query(paymentsSampleDataQuery);
   console.log('Payments table sample data created.');
+
+  // Create an event that will clear all unused receipts and paid transactions every month
+  const cleanupQuery = `
+    CREATE EVENT cleanup_payment_receipts
+    ON SCHEDULE EVERY 2 MINUTE
+    DO
+    BEGIN
+        -- Delete payments where debt = 0
+        DELETE FROM payments WHERE debt = 0;
+
+        -- Delete receipts that have no related payments
+        DELETE FROM receipts 
+        WHERE NOT EXISTS (
+            SELECT 1 FROM payments WHERE payments.receipt_id = receipts.receipt_id
+        );
+    END;`;
   
+  await connection.query(cleanupQuery);
+  console.log('Cleanup_payments_receipts event created.');
 }
 
 // Start the schema creation process
