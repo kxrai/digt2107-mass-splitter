@@ -2,12 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
-
-const defaultGroupImages = [
-  "https://source.unsplash.com/48x48/?group,people",
-  "https://source.unsplash.com/48x48/?friends",
-  "https://source.unsplash.com/48x48/?team"
-];
+import groupPlaceholder from "../assets/group_placeholder.jpg";
 
 function Homepage() {
   const [groups, setGroups] = useState([]);
@@ -35,6 +30,12 @@ function Homepage() {
     } catch (error) {
       console.error("Error fetching groups:", error);
     }
+  };
+
+  const getRandomColor = (groupName) => {
+    const colors = ["#F87171", "#60A5FA", "#34D399", "#FBBF24", "#A78BFA", "#F472B6"];
+    const index = groupName.charCodeAt(0) % colors.length;
+    return colors[index];
   };
 
   return (
@@ -65,10 +66,7 @@ function Homepage() {
       <div className="w-full max-w-3xl mt-6 px-4">
         <div className="bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 rounded-lg shadow-lg p-6">
           <div className="flex justify-between items-center mb-2">
-            {/* Groups Title - Now Navy Blue */}
             <h2 className="text-2xl font-bold text-blue-900">Groups</h2>
-
-            {/* "See All" Link for Logged-in Users */}
             {isLoggedIn && (
               <Link to="/groups" className="text-blue-500 underline text-sm hover:text-blue-700" aria-label="See all groups">
                 See All
@@ -82,18 +80,30 @@ function Homepage() {
               groups.map((group, index) => (
                 <div key={group.group_id} className="relative text-center">
                   <p className="text-sm font-semibold">{group.group_name}</p>
-                  <img
-                    src={group.profileImage || defaultGroupImages[index % defaultGroupImages.length]}
-                    alt={group.group_name}
-                    className="w-12 h-12 rounded-full object-cover border border-gray-300 shadow-md"
-                  />
+                  
+                  {/* Check if group has a name, else show placeholder */}
+                  {group.group_name ? (
+                    <div 
+                      className="w-12 h-12 rounded-full flex items-center justify-center text-white text-lg font-semibold border border-gray-300 shadow-md"
+                      style={{ backgroundColor: getRandomColor(group.group_name) }}
+                    >
+                      {group.group_name.charAt(0).toUpperCase()}
+                    </div>
+                  ) : (
+                    <img
+                      src={groupPlaceholder}
+                      alt="Mock Group"
+                      className="w-12 h-12 rounded-full object-cover border border-gray-300 shadow-md"
+                    />
+                  )}
                 </div>
               ))
             ) : (
+              // Show mock images when user is NOT logged in
               [...Array(3)].map((_, index) => (
                 <div key={index} className="relative text-center">
                   <img
-                    src={defaultGroupImages[index % defaultGroupImages.length]}
+                    src={groupPlaceholder}
                     alt="Mock Group"
                     className="w-12 h-12 rounded-full object-cover border border-gray-300 shadow-md"
                   />
@@ -131,7 +141,7 @@ function Homepage() {
 
       {/* Bottom Navigation */}
       <Navbar /> 
-    </div> // ✅ This is the correct closing tag for the main div
+    </div>
   );
 }
 
