@@ -20,32 +20,14 @@ function SplitHistory() {
     const fetchPayments = async () => {
       try {
         // Get current logged-in user's ID
-        const storedUser = localStorage.getItem('googleToken');
-        if (!storedUser) {
-          console.error("No user token found in localStorage.");
-          return;
-        }
-  
-        let loggedInUser;
-        try {
-          loggedInUser = JSON.parse(storedUser);
-        } catch (error) {
-          console.error("Error parsing JSON from localStorage:", error);
-          return;
-        }
-  
-        if (!loggedInUser || typeof loggedInUser !== "object") {
-          console.error("Invalid user object in localStorage.");
-          return;
-        }
-  
-        const user_id = loggedInUser.id;
-        if (!user_id) {
+        const loggedInUser = JSON.parse(localStorage.getItem('googleToken'));
+        if (!loggedInUser) {
           console.error("User ID is missing.");
           return;
         }
-  
-        // Fetch data from API
+        const user_id = loggedInUser.id;
+
+        // Fetch payment transactions data from API
         const response = await fetch(`http://localhost:3000/api/payments/user/${user_id}`);
         if (!response.ok) throw new Error('Failed to fetch payments');
   
@@ -54,7 +36,8 @@ function SplitHistory() {
   
         const incoming = [];
         const outgoing = [];
-  
+
+        // Fetch receipt data from API
         for (const payment of data) {
           const detailsResponse = await fetch(`http://localhost:3000/api/receipts/${payment.receipt_id}`);
           if (!detailsResponse.ok) continue;
@@ -79,13 +62,13 @@ function SplitHistory() {
             outgoing.push(formattedPayment);
           }
         }
-  
+        // Set data for each tab
         setIncomingData(incoming);
         setOutgoingData(outgoing);
       } catch (error) {
         console.error('Error fetching payments:', error);
       } finally {
-        setLoading(false);
+        setLoading(false); // Stop loading
       }
     };
   
@@ -116,27 +99,32 @@ function SplitHistory() {
   // Function to render transaction cards
   const renderTransactions = (data) => {
     return data.map((transaction, index) => (
-      <div key={index} className="p-4 bg-white rounded-lg shadow-md border border-blue-100 hover:shadow-lg">
-        <p className="font-semibold text-blue-900">{transaction.description || 'No Description'}</p>
-        <p className="text-sm text-gray-500">{transaction.date} - Biller(s): {transaction.name}, Group ID: {transaction.group_id}</p>
-        <p className="text-sm text-gray-500">Receipt ID: {transaction.receipt_id}</p>
-        <p className="font-bold text-blue-600">{transaction.amount > 0 ? `$${transaction.amount.toFixed(2)}` : "✅ Paid"}</p>
-
-        {transaction.amount > 0 ? (
-          <button className="btn btn-success text-white px-3" onClick={() => setShowForm(transaction.receipt_id)}>
-            Mark as Paid
-          </button>
-        ) : (
-          <div>
-            <button className="font-semibold text-blue-900 hover:text-blue-500" onClick={() => setConfirmation(transaction)}>
-              Download Details
+      <div key={index} className="p-6 bg-white rounded-lg shadow-md border border-blue-100 hover:shadow-lg">
+        <div className='flex justify-between items-center'>
+        <div className="flex-1">
+          <p className="font-semibold text-blue-900">{transaction.description || 'No Description'}</p>
+          <p className="text-sm text-gray-500">{transaction.date} - Biller(s): {transaction.name}, Group ID: {transaction.group_id}</p>
+          <p className="text-sm text-gray-500">Receipt ID: {transaction.receipt_id}</p>
+          <p className="font-bold text-blue-600">{transaction.amount > 0 ? `$${Number(transaction.amount).toFixed(2)}` : "✅ Paid"}</p>
+        </div>
+        <div className="flex items-center gap-2">
+          {transaction.amount > 0 ? (
+            <button className="btn btn-success text-white px-3" onClick={() => setShowForm(transaction.receipt_id)}>
+              Mark as Paid
             </button>
-            &nbsp;&nbsp;&nbsp;
-            <button className="btn btn-sm bg-red-500 text-white hover:bg-red-600" onClick={() => setConfirmDelete(transaction.payment_id)}>
-              <TrashIcon className="h-4 w-4" />
-            </button>
-          </div>
-        )}
+          ) : (
+            <>
+              <button className="font-semibold text-blue-900 hover:text-blue-500" onClick={() => setConfirmation(transaction)}>
+                Download Details
+              </button>
+              &nbsp;&nbsp;&nbsp;
+              <button className="btn btn-sm bg-red-500 text-white hover:bg-red-600" onClick={() => setConfirmDelete(transaction.payment_id)}>
+                <TrashIcon className="h-4 w-4" />
+              </button>     
+            </>    
+          )}
+        </div>
+        </div>
 
         {/* Form for Marking as Paid */}
         {showForm === transaction.receipt_id && (
@@ -196,11 +184,41 @@ function SplitHistory() {
           </a>
         </div>
 
+        {/* Transaction data */}
         <div className="space-y-4">
           {loading && <p className="text-gray-500">Loading transactions...</p>}
           {activeTab === 'incoming' && renderTransactions(incomingData)}
           {activeTab === 'outgoing' && renderTransactions(outgoingData)}
         </div>
+        
+        {/* Payment Receipt */}
+        {confirmation &&(
+        <div id="receipt-content" style={{position: 'absolute', left: '-9999px', top: '-9999px'}}>
+          <PaymentReceipt receipt={confirmation} date={paymentDate} method={paymentMethod} />
+        </div>
+        )}
+
+        {/* Pop up for downloading receipt */}
+        <ConfirmationModal
+          isOpen={confirmation}
+          title="✅ Payment Receipt"
+          message="This transaction will be deleted from Payment History automatically after a month. You may delete it prior to that. It is recommended to download your Payment Receipt as proof of payment."
+          onConfirm={handleDownload}
+          onCancel={() => setConfirmation(false)}
+          cancelText="Close"
+          successText="Download Receipt"
+        />
+
+        {/* Pop up for deleteing transaction */}
+        <ConfirmationModal
+          isOpen={confirmDelete}
+          title="⚠️ Confirm Deletion"
+          message="Are you sure you want to delete this transaction? This action cannot be undone."
+          onConfirm={handleDeleteTransaction}
+          onCancel={() => setConfirmDelete(null)}
+          cancelText="No, Cancel"
+          successText="Yes, Delete"
+        />
       </div>
     </div>
   );

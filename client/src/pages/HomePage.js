@@ -25,7 +25,7 @@ function Homepage() {
 
   const fetchGroups = async (email) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/groups?email=${email}`);
+      const response = await fetch(`http://localhost:3000/api/groups/email/${email}`);
       if (response.ok) {
         const data = await response.json();
         setGroups(data);
@@ -77,12 +77,13 @@ function Homepage() {
           </div>
 
           {/* Group Avatars */}
-          <div className="flex mt-2 space-x-4">
+          <div className="flex flex-wrap mt-2 gap-4">
             {isLoggedIn && groups.length > 0 ? (
-              groups.slice(0, 3).map((group, index) => (
-                <div key={group.group_id} className="relative">
+              groups.map((group, index) => (
+                <div key={group.group_id} className="relative text-center">
+                  <p className="text-sm font-semibold">{group.group_name}</p>
                   <img
-                    src={group.profileImage || defaultGroupImages[index % defaultGroupImages.length]} 
+                    src={group.profileImage || defaultGroupImages[index % defaultGroupImages.length]}
                     alt={group.group_name}
                     className="w-12 h-12 rounded-full object-cover border border-gray-300 shadow-md"
                   />
@@ -90,9 +91,9 @@ function Homepage() {
               ))
             ) : (
               [...Array(3)].map((_, index) => (
-                <div key={index} className="relative">
+                <div key={index} className="relative text-center">
                   <img
-                    src={defaultGroupImages[index % defaultGroupImages.length]} 
+                    src={defaultGroupImages[index % defaultGroupImages.length]}
                     alt="Mock Group"
                     className="w-12 h-12 rounded-full object-cover border border-gray-300 shadow-md"
                   />

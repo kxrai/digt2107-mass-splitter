@@ -5,7 +5,6 @@ const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2');
 const findFreePort = require('find-free-port');
-//const { Resend } = require("resend");
 const nodemailer = require("nodemailer");
 
 const userRoutes = require('../client/src/routes/userRoutes');
@@ -69,7 +68,7 @@ const transporter = nodemailer.createTransport({
 });
 
 app.post("/send-email", async (req, res) => {
-  const { email, billAmount, billDescription } = req.body;
+  const { email, type, billAmount, billDescription } = req.body;
   const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
@@ -77,6 +76,7 @@ app.post("/send-email", async (req, res) => {
       headers: { "Message-ID": `<${Date.now()}@mass-splitter.com>` }, // Ensures a unique message
       html: `<h2>New Receipt Submitted</h2>
              <h3>A new bill has been created that contains this receipt</h3>
+             <p><strong>Type:</strong> $${type}</p>
              <p><strong>Amount:</strong> $${billAmount}</p>
              <p><strong>Description:</strong> ${billDescription || 'No Description'}</p>
              <p>Log in to view more details in your Payment History.</p>`
@@ -88,25 +88,6 @@ app.post("/send-email", async (req, res) => {
       res.status(500).json({ success: false, error: error.message });
   }
 });
-
-// Resend Route (email system)
-// const resend = new Resend(process.env.RESEND_API_KEY);
-// app.post("/send-email", async (req, res) => {
-//   try {
-//       const { to, subject, message } = req.body;
-
-//       const data = await resend.emails.send({
-//           from: "your-email@yourdomain.com", // Use a verified domain email
-//           to: to,
-//           subject: subject,
-//           html: `<p>${message}</p>`,
-//       });
-
-//       res.status(200).json({ success: true, data });
-//   } catch (error) {
-//       res.status(500).json({ success: false, error: error.message });
-//   }
-// });
 
 // Automatically find a free port starting at 5000
 const DEFAULT_PORT = 5000;

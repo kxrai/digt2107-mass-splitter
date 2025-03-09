@@ -157,6 +157,11 @@ async function createTables(connection) {
   await connection.query(paymentsSampleDataQuery);
   console.log('Payments table sample data created.');
 
+  // Turn on events
+  const eventQuery = `SET GLOBAL event_scheduler = ON`;
+  await connection.query(eventQuery);
+  console.log('Event scheduler is enabled.');
+
   // Create an event that will clear all unused receipts and paid transactions every month
   const cleanupQuery = `
     CREATE EVENT cleanup_payment_receipts

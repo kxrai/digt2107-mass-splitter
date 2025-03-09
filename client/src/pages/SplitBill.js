@@ -149,6 +149,7 @@ function SplitBill() {
           fetch("http://localhost:5000/send-email", {method: "POST", headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 email: member.email,
+                type: method,
                 billAmount: amountOwed.toFixed(2),
                 billDescription: descriptions[receiptIndex],
             }),

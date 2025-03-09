@@ -68,7 +68,7 @@ function UserGroups() {
         <ul className="list-disc list-inside">
           {groups.map((group) => (
             <li key={group.group_id} className="flex justify-between items-center p-2 bg-gray-100 rounded mb-2">
-              <span>{group.group_name}</span>
+              <span>ID: {group.group_id} - {group.group_name}</span>
               <button 
                 className="btn btn-sm bg-red-500 text-white hover:bg-red-600"
                 onClick={() => setConfirmDelete(group.group_id)}
