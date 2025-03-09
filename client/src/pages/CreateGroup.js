@@ -9,6 +9,12 @@ function CreateGroup() {
   const [members, setMembers] = useState([]);
   const [billers, setBillers] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
+  const [groupImage, setGroupImage] = useState(null);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setGroupImage(file);
+  };
 
   const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
@@ -116,6 +122,8 @@ function CreateGroup() {
               placeholder="Enter group name"
             />
           </div>
+
+          {/* member email section */}
           <div className="mt-4">
             <label htmlFor="memberEmail" className="block text-gray-700 font-medium">
               Add Member by Email
@@ -168,6 +176,25 @@ function CreateGroup() {
             </ul>
             {billers.length === 0 && <p className="text-gray-500 mt-2">No billers designated yet.</p>}
           </div>
+
+        {/* Upload Group Picture - New Section */}
+        <div className="mt-4">
+          <label htmlFor="groupImage" className="block text-gray-700 font-medium">Upload Group Picture</label>
+          <input
+            id="groupImage"
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="mt-2"
+          />
+          {groupImage && (
+            <div className="mt-2">
+              <p className="text-sm text-gray-500">Selected Image:</p>
+              <img src={URL.createObjectURL(groupImage)} alt="Group Preview" className="w-20 h-20 object-cover rounded-full border mt-1" />
+            </div>
+          )}
+        </div>
+
           <button onClick={handleSaveGroup} className="w-full mt-6 py-2 bg-green-500 text-white font-semibold rounded">
             Save Group
           </button>

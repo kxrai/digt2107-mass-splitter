@@ -62,50 +62,47 @@ function Homepage() {
       </div>
   
       {/* Groups Section */}
-      {/* Groups Section Card */}
-<div className="w-full max-w-3xl mt-6 px-4">
-  <div className="bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 rounded-lg shadow-lg p-6">
-    <div className="flex justify-between items-center mb-2">
-      {/* Groups Title - Now Navy Blue */}
-      <h2 className="text-2xl font-bold text-blue-900">Groups</h2>
+      <div className="w-full max-w-3xl mt-6 px-4">
+        <div className="bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 rounded-lg shadow-lg p-6">
+          <div className="flex justify-between items-center mb-2">
+            {/* Groups Title - Now Navy Blue */}
+            <h2 className="text-2xl font-bold text-blue-900">Groups</h2>
 
-      {/* "See All" Link for Logged-in Users */}
-      {isLoggedIn && (
-        <Link to="/groups" className="text-blue-500 underline text-sm hover:text-blue-700" aria-label="See all groups">
-          See All
-        </Link>
-      )}
-    </div>
-
-    {/* Group Avatars */}
-    <div className="flex mt-2 space-x-4">
-      {isLoggedIn && groups.length > 0 ? (
-        groups.slice(0, 3).map((group, index) => (
-          <div key={group.group_id} className="relative">
-            <img
-              src={group.profileImage || defaultGroupImages[index % defaultGroupImages.length]} 
-              alt={group.group_name}
-              className="w-12 h-12 rounded-full object-cover border border-gray-300 shadow-md"
-            />
+            {/* "See All" Link for Logged-in Users */}
+            {isLoggedIn && (
+              <Link to="/groups" className="text-blue-500 underline text-sm hover:text-blue-700" aria-label="See all groups">
+                See All
+              </Link>
+            )}
           </div>
-        ))
-      ) : (
-        [...Array(3)].map((_, index) => (
-          <div key={index} className="relative">
-            <img
-              src={defaultGroupImages[index % defaultGroupImages.length]} 
-              alt="Mock Group"
-              className="w-12 h-12 rounded-full object-cover border border-gray-300 shadow-md"
-            />
+
+          {/* Group Avatars */}
+          <div className="flex mt-2 space-x-4">
+            {isLoggedIn && groups.length > 0 ? (
+              groups.slice(0, 3).map((group, index) => (
+                <div key={group.group_id} className="relative">
+                  <img
+                    src={group.profileImage || defaultGroupImages[index % defaultGroupImages.length]} 
+                    alt={group.group_name}
+                    className="w-12 h-12 rounded-full object-cover border border-gray-300 shadow-md"
+                  />
+                </div>
+              ))
+            ) : (
+              [...Array(3)].map((_, index) => (
+                <div key={index} className="relative">
+                  <img
+                    src={defaultGroupImages[index % defaultGroupImages.length]} 
+                    alt="Mock Group"
+                    className="w-12 h-12 rounded-full object-cover border border-gray-300 shadow-md"
+                  />
+                </div>
+              ))
+            )}
           </div>
-        ))
-      )}
-    </div>
-  </div>
-</div>
+        </div>
+      </div>
 
-
-  
       {/* Create Group Button (only for logged-in users) */}
       {isLoggedIn && (
         <Link
