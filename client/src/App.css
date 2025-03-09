@@ -59,17 +59,25 @@ input[type="date"]:focus::-webkit-calendar-picker-indicator {
   left: 0;
   width: 100vw;
   min-height: 100vh;
-  background-color: white;
+
+  /* Softer, Pastel Blue-to-Peach Gradient */
+  background: linear-gradient(to bottom, #B0D8F2, #FFE8D6); 
+
+  /* Grid Overlay */
   background-image: 
     repeating-linear-gradient(
-      to right, rgba(173, 216, 230, 0.4) 0px, rgba(173, 216, 230, 0.4) 2px, transparent 2px, transparent 80px
+      to right, rgba(255, 255, 255, 0.15) 0px, rgba(255, 255, 255, 0.15) 2px, transparent 2px, transparent 80px
     ),
     repeating-linear-gradient(
-      to bottom, rgba(173, 216, 230, 0.4) 0px, rgba(173, 216, 230, 0.4) 2px, transparent 2px, transparent 80px
-    );
+      to bottom, rgba(255, 255, 255, 0.15) 0px, rgba(255, 255, 255, 0.15) 2px, transparent 2px, transparent 80px
+    ),
+    linear-gradient(to bottom, #B0D8F2, #FFE8D6); /* Ensures gradient is applied */
+
   background-size: cover;
+  background-blend-mode: overlay; /* Blends grid + gradient smoothly */
   z-index: -10; /* Moves it behind everything */
 }
+
 
 /* ✅ Ensure full scrolling & prevent background from cutting content */
 body {
