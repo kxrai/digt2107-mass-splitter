@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/pages/UserProfile.js</title>
+    <title>Code coverage report for components/ConfirmationModal.js</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../prettify.css" />
-    <link rel="stylesheet" href="../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../sort-arrow-sprite.png);
+            background-image: url(../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/pages</a> UserProfile.js</h1>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">components</a> ConfirmationModal.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/6</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/3</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
@@ -87,37 +87,13 @@
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a>
-<a name='L26'></a><a href='#L26'>26</a>
-<a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">32x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -136,58 +112,46 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-import Navbar from '../components/Navbar';
 &nbsp;
-function UserProfile() {
-  // Retrieve the user from localStorage
-  const storedUser = localStorage.getItem('googleToken');
-  const loggedInUser = storedUser ? JSON.parse(storedUser) : <span class="branch-1 cbranch-no" title="branch not covered" >null;</span>
+// Creates a pop up (the user can cancel or proceed with their action)
+function ConfirmationModal({ isOpen, title, message, onConfirm, onCancel, successText, cancelText }) {
+  if (!isOpen) return null;
 &nbsp;
   return (
-    &lt;div className="grid-bg min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4"&gt;
-      &lt;div className="bg-white shadow-md rounded-lg p-6 w-full max-w-md"&gt;
-        &lt;h1 className="text-2xl font-bold mb-4 text-center"&gt;User Profile&lt;/h1&gt;
-&nbsp;
-        {/* Check if user exists before rendering */}
-        {loggedInUser ? (
-          &lt;div className="text-center"&gt;
-            &lt;img
-              src={loggedInUser.picture || <span class="branch-1 cbranch-no" title="branch not covered" >"https://via.placeholder.com/150"}</span> // Fallback image
-              alt="User Avatar"
-              className="w-24 h-24 rounded-full mx-auto mb-4"
-            /&gt;
-            &lt;h2 className="text-xl font-semibold"&gt;{loggedInUser.name}&lt;/h2&gt;
-            &lt;p className="text-gray-600"&gt;{loggedInUser.email}&lt;/p&gt;
-          &lt;/div&gt;
-        ) : (
-<span class="branch-1 cbranch-no" title="branch not covered" >          &lt;p className="text-gray-600 text-center"&gt;No user data found. Please log in.&lt;/p&gt;</span>
-        )}
+    &lt;dialog className="modal modal-open"&gt;
+      &lt;div className="modal-box"&gt;
+        &lt;h3 className="font-bold text-lg"&gt;{title}&lt;/h3&gt;
+        &lt;p className="py-4"&gt;{message}&lt;/p&gt;
+        &lt;div className="modal-action"&gt;
+          &lt;button className="btn btn-error" onClick={onCancel}&gt;
+            {cancelText}
+          &lt;/button&gt;
+          &lt;button className="btn btn-primary" onClick={onConfirm}&gt;
+            {successText}
+          &lt;/button&gt;
+        &lt;/div&gt;
       &lt;/div&gt;
-&nbsp;
-      {/* Navbar at the bottom */}
-      &lt;Navbar /&gt;
-    &lt;/div&gt;
+    &lt;/dialog&gt;
   );
 }
 &nbsp;
-export default UserProfile;
-&nbsp;</pre></td></tr></table></pre>
+export default ConfirmationModal;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-10T05:02:47.592Z
+                at 2025-03-10T04:59:35.157Z
             </div>
-        <script src="../../prettify.js"></script>
+        <script src="../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../sorter.js"></script>
-        <script src="../../block-navigation.js"></script>
+        <script src="../sorter.js"></script>
+        <script src="../block-navigation.js"></script>
     </body>
 </html>
     

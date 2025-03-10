@@ -36,17 +36,22 @@ describe('AddReceipt Component - Valid Inputs', () => {
     fetchMock.mockResponseOnce(JSON.stringify({ success: true }));
   
     // Enter a valid amount
-    fireEvent.change(screen.getByLabelText(/total amount/i), { target: { value: '50.00' } });
+    fireEvent.change(screen.getByLabelText(/Total Amount/i), { target: { value: '50.00' } });
   
     // Enter a valid date
-    fireEvent.change(screen.getByLabelText(/date/i), { target: { value: '2023-11-08' } });
+    fireEvent.change(screen.getByLabelText(/Date/i), { target: { value: '2023-11-08' } });
   
     // Enter a description
-    fireEvent.change(screen.getByLabelText(/description \(optional\)/i), { target: { value: 'Dinner Party' } });
+    fireEvent.change(screen.getByLabelText(/Description \(optional\)/i), { target: { value: 'Dinner Party' } });
+
+    // Enter a valid group
+    fireEvent.change(screen.getByLabelText(/Select Group/i), { target: { value: '1' } });
   
     // Click Save Receipt button
     fireEvent.click(screen.getByRole('button', { name: /Add Receipt/i }));
-    //expect(screen.getByText("$50.00 - Dinner Party")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText("$50.00 - Dinner Party")).toBeInTheDocument();
+    });
 
   //Wait for the mockSetReceipts function to be called with the correct data
     await waitFor(() => {
@@ -56,6 +61,7 @@ describe('AddReceipt Component - Valid Inputs', () => {
             amount: 50.0, // Ensure it's stored as a number
             date: '2023-11-08',
             description: 'Dinner Party',
+            group_id: "1",
           }),
         ])
       );
@@ -68,6 +74,6 @@ describe('AddReceipt Component - Valid Inputs', () => {
     fireEvent.click(screen.getByRole('button', {name: /Add Receipt/i}));
 
     // Check if the alert function was called with the correct message
-    expect(window.alert).toHaveBeenCalledWith('Please fill in all fields, including the group name.');
+    expect(window.alert).toHaveBeenCalledWith('Please provide amount, date, and select a group.');
   });
 });

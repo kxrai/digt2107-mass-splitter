@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/pages/UserProfile.js</title>
+    <title>Code coverage report for components/PaymentReceipt.js</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../prettify.css" />
-    <link rel="stylesheet" href="../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../sort-arrow-sprite.png);
+            background-image: url(../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,20 +19,20 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/pages</a> UserProfile.js</h1>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">components</a> PaymentReceipt.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/3</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/6</span>
+                <span class='fraction'>2/4</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/3</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
@@ -96,18 +96,11 @@
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L34'></a><a href='#L34'>34</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -135,42 +128,40 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-import Navbar from '../components/Navbar';
-&nbsp;
-function UserProfile() {
-  // Retrieve the user from localStorage
-  const storedUser = localStorage.getItem('googleToken');
-  const loggedInUser = storedUser ? JSON.parse(storedUser) : <span class="branch-1 cbranch-no" title="branch not covered" >null;</span>
-&nbsp;
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from "react";
+// Creates a Payment receipt to download
+const PaymentReceipt = ({ receipt }) =&gt; {
   return (
-    &lt;div className="grid-bg min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4"&gt;
-      &lt;div className="bg-white shadow-md rounded-lg p-6 w-full max-w-md"&gt;
-        &lt;h1 className="text-2xl font-bold mb-4 text-center"&gt;User Profile&lt;/h1&gt;
-&nbsp;
-        {/* Check if user exists before rendering */}
-        {loggedInUser ? (
-          &lt;div className="text-center"&gt;
-            &lt;img
-              src={loggedInUser.picture || <span class="branch-1 cbranch-no" title="branch not covered" >"https://via.placeholder.com/150"}</span> // Fallback image
-              alt="User Avatar"
-              className="w-24 h-24 rounded-full mx-auto mb-4"
-            /&gt;
-            &lt;h2 className="text-xl font-semibold"&gt;{loggedInUser.name}&lt;/h2&gt;
-            &lt;p className="text-gray-600"&gt;{loggedInUser.email}&lt;/p&gt;
-          &lt;/div&gt;
-        ) : (
-<span class="branch-1 cbranch-no" title="branch not covered" >          &lt;p className="text-gray-600 text-center"&gt;No user data found. Please log in.&lt;/p&gt;</span>
-        )}
+    &lt;div
+      style={{
+        background: "linear-gradient(to bottom right, rgb(191, 219, 254), rgb(216, 180, 254), rgb(255, 218, 185))", 
+        color: "rgb(45, 55, 72)", // text-gray-800
+        padding: "20px",
+        borderRadius: "10px",
+        color: "black",
+        width: "300px",
+      }}
+    &gt; {/* Payment transaction information */}
+      &lt;h2 style={{ textAlign: "center" }}&gt;Payment Receipt&lt;/h2&gt;
+      &lt;div style={{marginTop: '1rem',}}&gt;
+        &lt;p&gt;&lt;strong&gt;Receipt ID:&lt;/strong&gt; {receipt.receipt_id}&lt;/p&gt;
+        &lt;p&gt;&lt;strong&gt;Group ID:&lt;/strong&gt; {receipt.group_id}&lt;/p&gt;
+        &lt;p&gt;&lt;strong&gt;Description:&lt;/strong&gt; {receipt.description}&lt;/p&gt;
+        &lt;p&gt;&lt;strong&gt;Date of Payment:&lt;/strong&gt; {new Date(receipt.date).toLocaleDateString()}&lt;/p&gt;
+        &lt;p&gt;&lt;strong&gt;Debt:&lt;/strong&gt; ${receipt.amount ? <span class="branch-0 cbranch-no" title="branch not covered" >Number(receipt.amount).toFixed(2) </span>: "0.00"}&lt;/p&gt;
+        &lt;p&gt;&lt;strong&gt;Paid:&lt;/strong&gt; ${receipt.paid ? Number(receipt.paid).toFixed(2) : <span class="branch-1 cbranch-no" title="branch not covered" >"0.00"}</span>&lt;/p&gt;
+        &lt;p&gt;&lt;strong&gt;Payment Method:&lt;/strong&gt; {receipt.method}&lt;/p&gt;
+        &lt;p style={{ color: "rgb(22, 163, 74)", fontWeight: "bold", textAlign: "center" }}&gt; {/* text-green-600 */}
+          Payment Successful!
+        &lt;/p&gt;
       &lt;/div&gt;
-&nbsp;
-      {/* Navbar at the bottom */}
-      &lt;Navbar /&gt;
     &lt;/div&gt;
   );
-}
+};
 &nbsp;
-export default UserProfile;
+&nbsp;
+export default PaymentReceipt;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -178,16 +169,16 @@ export default UserProfile;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-10T05:02:47.592Z
+                at 2025-03-10T02:22:07.131Z
             </div>
-        <script src="../../prettify.js"></script>
+        <script src="../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../sorter.js"></script>
-        <script src="../../block-navigation.js"></script>
+        <script src="../sorter.js"></script>
+        <script src="../block-navigation.js"></script>
     </body>
 </html>
     

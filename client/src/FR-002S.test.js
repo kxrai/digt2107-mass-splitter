@@ -14,10 +14,7 @@ describe("HomePage Layout and Navigation Tests", () => {
     );
 
     // Verify all key sections are present
-    expect(screen.getByText("Most Recent Split")).toBeInTheDocument();
-    expect(screen.getByText("Friends")).toBeInTheDocument();
-    expect(screen.getByText("Groups")).toBeInTheDocument();
-    expect(screen.getByText("Recent Splits")).toBeInTheDocument();
+    expect(screen.getByText("Welcome to MASS Splitter! 💸")).toBeInTheDocument();
 
     // Check if the navigation bar exists
     const navBar = screen.queryByTestId('bottom-navigation-bar');
@@ -34,7 +31,6 @@ describe("HomePage Layout and Navigation Tests", () => {
       <MemoryRouter initialEntries={['/']}>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/add-friend" element={<div>Add Friend Page</div>} />
           <Route path="/add-receipt" element={<div>Add Receipt Page</div>} />
           <Route path="/split-history" element={<div>Split History Page</div>} />
           <Route path="/account" element={<div>Account Page</div>} />
@@ -49,14 +45,6 @@ describe("HomePage Layout and Navigation Tests", () => {
       expect(screen.getByText("Most Recent Split")).toBeInTheDocument();
     } else {
       console.warn("Home navigation icon not found.");
-    }
-
-    const addFriendIcon = screen.queryByTestId('nav-add-friend-icon');
-    if (addFriendIcon) {
-      fireEvent.click(addFriendIcon);
-      expect(screen.getByText("Add Friend Page")).toBeInTheDocument();
-    } else {
-      console.warn("Add Friend navigation icon not found.");
     }
 
     const addReceiptIcon = screen.queryByTestId('nav-add-receipt-icon');
@@ -81,26 +69,6 @@ describe("HomePage Layout and Navigation Tests", () => {
       expect(screen.getByText("Account Page")).toBeInTheDocument();
     } else {
       console.warn("Account navigation icon not found.");
-    }
-  });
-
-  // Test Case: Verify Add Friend Button in Friends Section
-  it("should navigate to add friend page when Add Friend button is clicked", () => {
-    render(
-      <MemoryRouter initialEntries={['/']}>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/add-friend" element={<div>Add Friend Page</div>} />
-        </Routes>
-      </MemoryRouter>
-    );
-
-    const addFriendButton = screen.queryByTestId('add-friend-button');
-    if (addFriendButton) {
-      fireEvent.click(addFriendButton);
-      expect(screen.getByText("Add Friend Page")).toBeInTheDocument();
-    } else {
-      console.warn("Add Friend button not found in Friends section.");
     }
   });
 

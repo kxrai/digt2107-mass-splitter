@@ -16,10 +16,11 @@ describe("HomePage Layout and Key Sections Tests", () => {
     );
 
     // Check for the presence of key sections
-    expect(screen.getByText("Most Recent Split")).toBeInTheDocument();
-    expect(screen.getByText("Friends")).toBeInTheDocument();
-    expect(screen.getByText("Groups")).toBeInTheDocument();
-    expect(screen.getByText("Recent Splits")).toBeInTheDocument();
+    expect(screen.getByText("Welcome to MASS Splitter! 💸")).toBeInTheDocument();
+    expect(screen.getByText("Create groups & add members")).toBeInTheDocument();
+    expect(screen.getByText("Track who owes what with receipts")).toBeInTheDocument();
+    expect(screen.getByText("Split expenses evenly or customize payments")).toBeInTheDocument();
+    expect(screen.getByText("Keep a history of all transactions")).toBeInTheDocument();
   });
 
   // Test Case: Confirm Navigation Links in Bottom Navigation Bar
@@ -32,8 +33,8 @@ describe("HomePage Layout and Key Sections Tests", () => {
 
     // Check if each navbar link has the correct href
     expect(screen.getByRole('link', { name: "Home" })).toHaveAttribute('href', '/home');
-    expect(screen.getByRole('link', { name: "Add Friend" })).toHaveAttribute('href', '/add-friend');
-    expect(screen.getByRole('link', { name: "Add Receipt" })).toHaveAttribute('href', '/split-bill');
+    expect(screen.getByRole('link', { name: "Groups" })).toHaveAttribute('href', '/groups');
+    expect(screen.getByRole('link', { name: "Add Receipt" })).toHaveAttribute('href', '/create-bill');
     expect(screen.getByRole('link', { name: "Split History" })).toHaveAttribute('href', '/split-history');
     expect(screen.getByRole('link', { name: "Account" })).toHaveAttribute('href', '/account');
   });
