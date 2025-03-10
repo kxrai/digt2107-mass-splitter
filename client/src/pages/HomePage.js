@@ -18,6 +18,7 @@ function Homepage() {
       setIsLoggedIn(false);
     }
   }, []);
+
   // Get all the groups the user is in
   const fetchGroups = async (email) => {
     try {
@@ -33,6 +34,7 @@ function Homepage() {
     }
   };
 
+  // Generate background color for letter avatar
   const getRandomColor = (groupName) => {
     const colors = ["#F87171", "#60A5FA", "#34D399", "#FBBF24", "#A78BFA", "#F472B6"];
     const index = groupName.charCodeAt(0) % colors.length;
@@ -78,28 +80,42 @@ function Homepage() {
             )}
           </div>
 
-          {/* Group Avatars */}
-          <div className="flex flex-wrap mt-2 gap-4">
+          {/* Group Avatars - "Create Group" always appears first */}
+          <div className="flex flex-wrap mt-2 gap-4 items-center">
+            {/* Create Group Button - Always First */}
+            <Link
+              to="/create-group"
+              className="w-12 h-12 rounded-full bg-white flex items-center justify-center border border-slate-800 shadow-md"
+              aria-label="Create Group"
+              data-testid="create-group-button"
+            >
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                strokeWidth="1.5" 
+                stroke="currentColor" 
+                className="w-6 h-6 stroke-slate-800"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 0 0 2.25-2.25V6a2.25 2.25 0 0 0-2.25-2.25H6A2.25 2.25 0 0 0 3.75 6v2.25A2.25 2.25 0 0 0 6 10.5Z"
+                />
+              </svg>
+            </Link>
+
+            {/* If logged in, display groups, else show mock placeholders */}
             {isLoggedIn && groups.length > 0 ? (
-              groups.map((group, index) => (
+              groups.map((group) => (
                 <div key={group.group_id} className="relative text-center">
                   <p className="text-sm font-semibold">{group.group_name}</p>
-                  
-                  {/* Check if group has a name, else show placeholder */}
-                  {group.group_name ? (
-                    <div 
-                      className="w-12 h-12 rounded-full flex items-center justify-center text-white text-lg font-semibold border border-gray-300 shadow-md"
-                      style={{ backgroundColor: getRandomColor(group.group_name) }}
-                    >
-                      {group.group_name.charAt(0).toUpperCase()}
-                    </div>
-                  ) : (
-                    <img
-                      src={groupPlaceholder}
-                      alt="Mock Group"
-                      className="w-12 h-12 rounded-full object-cover border border-gray-300 shadow-md"
-                    />
-                  )}
+                  <div 
+                    className="w-12 h-12 rounded-full flex items-center justify-center text-white text-lg font-semibold border border-gray-300 shadow-md"
+                    style={{ backgroundColor: getRandomColor(group.group_name) }}
+                  >
+                    {group.group_name.charAt(0).toUpperCase()}
+                  </div>
                 </div>
               ))
             ) : (
@@ -117,31 +133,6 @@ function Homepage() {
           </div>
         </div>
       </div>
-
-      {/* Create Group Button */}
-      {isLoggedIn && (
-        <Link
-          to="/create-group"
-          className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-blue-500 mt-4"
-          aria-label="Create Group"
-          data-testid="create-group-button"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 0 0 2.25-2.25V6a2.25 2.25 0 0 0-2.25-2.25H6A2.25 2.25 0 0 0 3.75 6v2.25A2.25 2.25 0 0 0 6 10.5Zm0 9.75h2.25A2.25 2.25 0 0 0 10.5 18v-2.25a2.25 2.25 0 0 0-2.25-2.25H6a2.25 2.25 0 0 0-2.25 2.25V18A2.25 2.25 0 0 0 6 20.25Zm9.75-9.75H18a2.25 2.25 0 0 0 2.25-2.25V6A2.25 2.25 0 0 0 18 3.75h-2.25A2.25 2.25 0 0 0 13.5 6v2.25a2.25 2.25 0 0 0 2.25 2.25Z"
-            />
-          </svg>
-        </Link>
-      )}
 
       {/* Bottom Navigation */}
       <Navbar /> 
