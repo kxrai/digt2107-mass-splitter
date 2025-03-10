@@ -111,7 +111,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
 
         {/* Protected Routes */}
-        {/* <Route element={<ProtectedRoute/>}>  */}
+        <Route element={<ProtectedRoute/>}> 
           <Route path="/home" element={<HomePage />} />
           <Route path="/split-history" element={<SplitHistory />} />
           <Route path="/create-group" element={<CreateGroup />} />
@@ -120,7 +120,7 @@ function App() {
           <Route path="/create-bill" element={<CreateBill />} />
           <Route path="/split-bill" element={<SplitBill />} />
           <Route path="/account" element={<UserProfile />} />
-        {/* </Route> */}
+        </Route>
         
       </Routes>
     </Router>

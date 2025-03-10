@@ -15,10 +15,12 @@ function CreateGroup() {
     const file = e.target.files[0];
     setGroupImage(file);
   };
+  
+  const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email); // Checks if the user entered a valid email address
 
-  const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
-
+  // Adds a member to the group
   const handleAddMember = async () => {
+    // Checks for valid email address
     if (memberEmail.trim() === '') {
       setErrorMessage('Please enter an email address');
       return;
@@ -31,7 +33,7 @@ function CreateGroup() {
       setErrorMessage('Member already added');
       return;
     }
-
+    // Checks if the member is a valid user
     try {
       const response = await fetch(`http://localhost:3000/api/users/email/${memberEmail}`, { method: 'GET' });
       if (!response.ok) {
@@ -45,12 +47,12 @@ function CreateGroup() {
       setErrorMessage(error.message || 'Failed to fetch user');
     }
   };
-
+  // Removes a member from group
   const handleRemoveMember = (email) => {
     setMembers(members.filter((member) => member.email !== email));
     setBillers(billers.filter((billerEmail) => billerEmail !== email));
   };
-
+  // Adds a biller to the group
   const handleSelectBiller = (name) => {
     if (!members.some((member) => member.name === name)) {
       setErrorMessage('The selected biller must be a member of the group');
@@ -61,17 +63,17 @@ function CreateGroup() {
       setErrorMessage('');
     }
   };
-
+  // Removes a biller from the group
   const handleDeselectBiller = (name) => {
     setBillers(billers.filter((billerName) => billerName !== name));
   };
-
+  // Saves the group
   const handleSaveGroup = async () => {
     if (groupName.trim() === '' || members.length === 0) {
       setErrorMessage('Please enter a group name and add at least one member');
       return;
     }
-
+    // Creates a group
     try {
       const createGroupResponse = await fetch('http://localhost:3000/api/groups/create', {
         method: 'POST',
@@ -85,7 +87,7 @@ function CreateGroup() {
 
       const groupData = await createGroupResponse.json();
       const groupId = groupData.groupId;
-
+      // Adds group members
       for (const member of members) {
         await fetch('http://localhost:3000/api/groups/addMember', {
           method: 'POST',
@@ -95,7 +97,7 @@ function CreateGroup() {
       }
       setErrorMessage('Group created successfully!');
       setTimeout(() => {
-        navigate('/home');
+        navigate('/groups'); //navigates to group page after the group is created
       }, 3000);
       
     } catch (error) {
@@ -105,6 +107,7 @@ function CreateGroup() {
 
   return (
     <>
+    {/* Create group form */}
       <div className="min-h-screen flex flex-col items-center bg-gray-50">
         <h1 className="text-2xl font-semibold mt-6">Create Group</h1>
         <div className="w-11/12 md:w-3/4 lg:w-1/2 mt-4 bg-white p-6 rounded-lg shadow-md">
@@ -123,7 +126,7 @@ function CreateGroup() {
             />
           </div>
 
-          {/* member email section */}
+          {/* Member search by email section */}
           <div className="mt-4">
             <label htmlFor="memberEmail" className="block text-gray-700 font-medium">
               Add Member by Email
@@ -142,6 +145,7 @@ function CreateGroup() {
               </button>
             </div>
           </div>
+          {/* Member add/remove section */}
           <div className="mt-6">
             <p className="font-medium text-gray-700">Group Members</p>
             <ul className="mt-2 space-y-2">
@@ -156,6 +160,7 @@ function CreateGroup() {
             </ul>
             {members.length === 0 && <p className="text-gray-500 mt-2">No members added yet.</p>}
           </div>
+          {/* Biller add/remove section */}
           <div className="mt-6">
             <p className="font-medium text-gray-700">Designate Billers</p>
             <ul className="mt-2 space-y-2">

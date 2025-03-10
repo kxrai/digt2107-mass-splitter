@@ -13,6 +13,7 @@ function Homepage() {
   const [groups, setGroups] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  // Get the logged in user's email
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("googleToken"));
     if (userInfo) {
@@ -22,7 +23,7 @@ function Homepage() {
       setIsLoggedIn(false);
     }
   }, []);
-
+  // Get all the groups the user is in
   const fetchGroups = async (email) => {
     try {
       const response = await fetch(`http://localhost:3000/api/groups/email/${email}`);
@@ -65,10 +66,10 @@ function Homepage() {
       <div className="w-full max-w-3xl mt-6 px-4">
         <div className="bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 rounded-lg shadow-lg p-6">
           <div className="flex justify-between items-center mb-2">
-            {/* Groups Title - Now Navy Blue */}
+            {/* Groups Title */}
             <h2 className="text-2xl font-bold text-blue-900">Groups</h2>
 
-            {/* "See All" Link for Logged-in Users */}
+            {/* "See All" Link for group page */}
             {isLoggedIn && (
               <Link to="/groups" className="text-blue-500 underline text-sm hover:text-blue-700" aria-label="See all groups">
                 See All
@@ -104,7 +105,7 @@ function Homepage() {
         </div>
       </div>
 
-      {/* Create Group Button (only for logged-in users) */}
+      {/* Create Group Button */}
       {isLoggedIn && (
         <Link
           to="/create-group"
@@ -131,7 +132,7 @@ function Homepage() {
 
       {/* Bottom Navigation */}
       <Navbar /> 
-    </div> // ✅ This is the correct closing tag for the main div
+    </div> 
   );
 }
 

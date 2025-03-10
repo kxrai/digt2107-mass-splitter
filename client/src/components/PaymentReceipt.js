@@ -1,5 +1,5 @@
 import React from "react";
-
+// Creates a Payment receipt to download
 const PaymentReceipt = ({ receipt }) => {
   return (
     <div
@@ -11,7 +11,7 @@ const PaymentReceipt = ({ receipt }) => {
         color: "black",
         width: "300px",
       }}
-    >
+    > {/* Payment transaction information */}
       <h2 style={{ textAlign: "center" }}>Payment Receipt</h2>
       <div style={{marginTop: '1rem',}}>
         <p><strong>Receipt ID:</strong> {receipt.receipt_id}</p>

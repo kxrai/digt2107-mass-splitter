@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Creates a pop up (the user can cancel or proceed with their action)
 function ConfirmationModal({ isOpen, title, message, onConfirm, onCancel, successText, cancelText }) {
   if (!isOpen) return null;
 

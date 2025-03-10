@@ -11,7 +11,7 @@ function AddReceipt({ receipts, setReceipts }) {
 
   const dateInputRef = useRef(null); // Reference for the date input field
 
-  // Fetch user groups and include test group
+  // Fetch groups user is in
   useEffect(() => {
     const fetchGroups = async () => {
       try {
@@ -37,11 +37,13 @@ function AddReceipt({ receipts, setReceipts }) {
     fetchGroups();
   }, []);
 
+  // Update new value
   const handleChange = (e) => {
     const { name, value } = e.target;
     setReceipt((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Add receipt
   const addOrUpdateReceipt = async () => {
     if (receipt.amount && receipt.date && receipt.groupId) {
       const newReceipt = {
@@ -65,6 +67,7 @@ function AddReceipt({ receipts, setReceipts }) {
   };
 
   return (
+    // Form to add receipt
     <div className="card bg-gradient-to-br from-blue-100 to-blue-200 shadow-xl">
       <div className="card-body">
         <h2 className="card-title flex items-center text-blue-800">
@@ -103,7 +106,7 @@ function AddReceipt({ receipts, setReceipts }) {
             onChange={handleChange}
             className="textarea textarea-bordered mb-4 text-blue-900 bg-white"
           />
-
+          {/* Only display groups a user is in */}
           <label htmlFor="groupId" className="label text-blue-700">Select Group</label>
           <select
             name="groupId"

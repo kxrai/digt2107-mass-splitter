@@ -44,7 +44,7 @@ export async function checkUser(token) {
                     password: '',
                 }),
             });
-
+            // Save new user's info in localStorage
             if (createResponse.ok) {
                 const newUser = await createResponse.json();
                 const userInfo = { id: newUser.userId, name: token.name, email: token.email, picture: token.picture };

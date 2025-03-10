@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import ConfirmationModal from '../components/ConfirmationModal';
 import '../App.css';
-import axios from "axios";
 
 function SplitBill() {
   const navigate = useNavigate();
@@ -24,7 +23,7 @@ function SplitBill() {
 
     const storedGroup = localStorage.getItem('selectedGroup') || null;
     setSelectedGroup(storedGroup);
-    console.log(selectedGroup);
+
   }, []);
 
   //Fetch Group details (memebers, billers)
@@ -80,7 +79,6 @@ function SplitBill() {
       let splitAmount = totalNonBillerAmount / billerIndexes.length;
       // Further divide this amount by the number of receipts
       let amountPerReceipt = splitAmount / receipts.length;
-      console.log("Biller reimbursements:", amountPerReceipt);
       setBillerOwedAmounts(amountPerReceipt);
     };
   
@@ -129,8 +127,7 @@ function SplitBill() {
 
       // Step 2: Create Payments for Each Group Member and Receipt
       const paymentPromises = [];
-      console.log("Total Amount:", totalAmount);
-      console.log("Split Percentages:", splitPercentages);
+      
       receiptIds.forEach((receiptId, receiptIndex) => {
         groupMembers.forEach((member, index) => {
           const amountOwed = billers.includes(member.username) ? billerOwedAmounts : (((splitPercentages[index] / 100) * totalAmount) / receipts.length); // Get the amount owed by this member
@@ -159,7 +156,7 @@ function SplitBill() {
       // Execute all payment requests concurrently
       const paymentResponses = await Promise.all(paymentPromises);
       const paymentData = await Promise.all(paymentResponses.map((res) => res.json()));
-      console.log("Payments created:", paymentData);
+
     } catch (error) {
       console.error("Error submitting receipts and payments:", error);
     }
@@ -215,7 +212,7 @@ function SplitBill() {
     <div className="min-h-screen bg-white p-6 grid-bg">
       <div className="container mx-auto">
         
-        {/* Title & Back Button Aligned (Commented Out) */}
+        {/* Title  */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">Split Bill</h1>
         </div>
@@ -308,6 +305,7 @@ function SplitBill() {
           >Submit Bill</button>
         </div>
 
+        {/* Pop up for cancelling bill */}
         <ConfirmationModal
         isOpen={showCancelModal}
         title="⚠️ Warning"
@@ -317,7 +315,7 @@ function SplitBill() {
         cancelText="Yes, Cancel"
         successText="No, Go Back"
       />
-
+      {/* Pop up for submitting bill */}
       <ConfirmationModal
         isOpen={showConfirmModal}
         title="🔒 Final Confirmation"

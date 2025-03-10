@@ -8,7 +8,7 @@ function GroupsPage() {
       {/* Page Content */}
       <div className="container mx-auto p-4 pb-16"> {/* Added padding-bottom to avoid overlap */}
         <h1 className="text-3xl font-bold text-center mb-6">Manage Your Groups</h1>
-        <UserGroups />
+        <UserGroups /> 
       </div>
 
       {/* Navbar - Fixed at the Bottom & Unaffected by Page CSS */}

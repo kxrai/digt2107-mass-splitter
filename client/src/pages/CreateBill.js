@@ -78,6 +78,7 @@ function CreateBill() {
         <div className="h-32"></div>
       </div>
 
+      {/* Pop up for deleting receipts */}
       <ConfirmationModal
         isOpen={showCancelModal}
         title="⚠️ Warning"
@@ -87,7 +88,8 @@ function CreateBill() {
         cancelText="Yes, Cancel"
         successText="No, Go Back"
       />
-
+      
+      {/* Pop up for confirming receipts before splitting bill */}
       <ConfirmationModal
         isOpen={showConfirmModal}
         title="🔒 Final Confirmation"
@@ -97,44 +99,6 @@ function CreateBill() {
         cancelText="No, Go Back"
         successText="Yes, Proceed"
       />
-
-      {/* DaisyUI Modal for Cancel Confirmation */}
-      {/* {showCancelModal && (
-        <dialog className="modal modal-open">
-          <div className="modal-box">
-            <h3 className="font-bold text-lg">⚠️ Warning</h3>
-            <p className="py-4">Your receipts will be deleted and not saved. Are you sure?</p>
-            <div className="modal-action">
-              <button className="btn btn-error" onClick={confirmCancel}>
-                Yes, Cancel
-              </button>
-              <button className="btn btn-primary" onClick={() => setShowCancelModal(false)}>
-                No, Go Back
-              </button>
-            </div>
-          </div>
-        </dialog>
-      )} */}
-
-      {/* New DaisyUI Modal for Confirm Lock-in */}
-      {/* {showConfirmModal && (
-        <dialog className="modal modal-open">
-          <div className="modal-box">
-            <h3 className="font-bold text-lg">🔒 Final Confirmation</h3>
-            <p className="py-4">
-              Once you confirm, you <strong>cannot</strong> go back to edit receipts. Are you sure?
-            </p>
-            <div className="modal-action">
-              <button className="btn btn-error" onClick={() => setShowConfirmModal(false)}>
-                No, Go Back
-              </button>
-              <button className="btn btn-success" onClick={confirmProceed}>
-                Yes, Proceed
-              </button>
-            </div>
-          </div>
-        </dialog>
-      )} */}
 
       {/* Navbar stays fixed below */}
       <Navbar />

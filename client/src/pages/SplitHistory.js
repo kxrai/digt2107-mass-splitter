@@ -100,7 +100,7 @@ function SplitHistory() {
   const renderTransactions = (data) => {
     return data.map((transaction, index) => (
       <div key={index} className="p-6 bg-white rounded-lg shadow-md border border-blue-100 hover:shadow-lg">
-        <div className='flex justify-between items-center'>
+        <div className='flex justify-between items-center'> 
         <div className="flex-1">
           <p className="font-semibold text-blue-900">{transaction.description || 'No Description'}</p>
           <p className="text-sm text-gray-500">{transaction.date} - Biller(s): {transaction.name}, Group ID: {transaction.group_id}</p>
@@ -152,6 +152,7 @@ function SplitHistory() {
   // Mark transaction as paid
   const handleSubmitPayment = async (transaction) => {
     try {
+      // Update the payment transaction 
       const response = await fetch(`http://localhost:3000/api/payments/${transaction.payment_id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
