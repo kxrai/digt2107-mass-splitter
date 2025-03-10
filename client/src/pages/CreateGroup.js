@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import groupPlaceholder from '../assets/group_placeholder.jpg';
 
 function CreateGroup() {
   const navigate = useNavigate();
@@ -9,14 +10,8 @@ function CreateGroup() {
   const [members, setMembers] = useState([]);
   const [billers, setBillers] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [groupImage, setGroupImage] = useState(null);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setGroupImage(file);
-  };
-  
-  const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email); // Checks if the user entered a valid email address
+  const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
   // Adds a member to the group
   const handleAddMember = async () => {
@@ -105,6 +100,12 @@ function CreateGroup() {
     }
   };
 
+  const getRandomColor = (groupName) => {
+    const colors = ["#F87171", "#60A5FA", "#34D399", "#FBBF24", "#A78BFA", "#F472B6"];
+    const index = groupName.charCodeAt(0) % colors.length;
+    return colors[index];
+  };
+
   return (
     <>
     {/* Create group form */}
@@ -126,7 +127,27 @@ function CreateGroup() {
             />
           </div>
 
-          {/* Member search by email section */}
+          {/* Generated Letter Avatar OR Mock Image */}
+          <div className="flex items-center justify-center mt-4">
+            {groupName.trim() ? (
+              <div 
+                className="w-16 h-16 flex items-center justify-center rounded-full border border-gray-300 shadow-md"
+                style={{ backgroundColor: getRandomColor(groupName) }}
+              >
+                <span className="text-white text-xl font-bold">
+                  {groupName.charAt(0).toUpperCase()}
+                </span>
+              </div>
+            ) : (
+              <img
+                src={groupPlaceholder}
+                alt="Group Placeholder"
+                className="w-16 h-16 object-cover rounded-full border border-gray-300 shadow-md"
+              />
+            )}
+          </div>
+
+          {/* Member Email Section */}
           <div className="mt-4">
             <label htmlFor="memberEmail" className="block text-gray-700 font-medium">
               Add Member by Email
@@ -145,7 +166,6 @@ function CreateGroup() {
               </button>
             </div>
           </div>
-          {/* Member add/remove section */}
           <div className="mt-6">
             <p className="font-medium text-gray-700">Group Members</p>
             <ul className="mt-2 space-y-2">
@@ -160,7 +180,6 @@ function CreateGroup() {
             </ul>
             {members.length === 0 && <p className="text-gray-500 mt-2">No members added yet.</p>}
           </div>
-          {/* Biller add/remove section */}
           <div className="mt-6">
             <p className="font-medium text-gray-700">Designate Billers</p>
             <ul className="mt-2 space-y-2">
@@ -181,24 +200,6 @@ function CreateGroup() {
             </ul>
             {billers.length === 0 && <p className="text-gray-500 mt-2">No billers designated yet.</p>}
           </div>
-
-        {/* Upload Group Picture - New Section */}
-        <div className="mt-4">
-          <label htmlFor="groupImage" className="block text-gray-700 font-medium">Upload Group Picture</label>
-          <input
-            id="groupImage"
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="mt-2"
-          />
-          {groupImage && (
-            <div className="mt-2">
-              <p className="text-sm text-gray-500">Selected Image:</p>
-              <img src={URL.createObjectURL(groupImage)} alt="Group Preview" className="w-20 h-20 object-cover rounded-full border mt-1" />
-            </div>
-          )}
-        </div>
 
           <button onClick={handleSaveGroup} className="w-full mt-6 py-2 bg-green-500 text-white font-semibold rounded">
             Save Group

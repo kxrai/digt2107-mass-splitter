@@ -68,8 +68,12 @@ DaisyUI
       ```bash
       node client/src/database/create-schema.js
    Your database will be created with sample data!
+
+3. Set up your Google OAuth and Gmail SMTP
+   - Set up Google OAuth and replace the Google OAuth Credentials with your own
+   - Create an app password for your gmail and replace the Email SMTP credentials with your own 
    
-3. Run the project:
+4. Run the project:
    - Start React Frontend on one terminal
       ```bash
       cd client
