@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import { googleLogout } from '@react-oauth/google';
 import HomePage from './pages/HomePage.js';
 import SplitHistory from './pages/SplitHistory.js';
@@ -95,13 +95,6 @@ export function MainApp() {
 }
 
 function App() {
-  // Check if the user is logged in based on localStorage
-  const loggedIn = Boolean(localStorage.getItem('loggedIn'));
-
-  /**const ProtectedRoute = ({ children }) => {
-    return loggedIn ? children : <Navigate to="/login" />;
-  };**/
-
   return (
     <div className="grid-bg min-h-screen flex flex-col"> {/* ✅ Grid background applied globally */}
     <Router>
