@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { DocumentPlusIcon } from '@heroicons/react/24/outline';
+import { DocumentPlusIcon, CalendarIcon } from '@heroicons/react/24/outline';
 import { v4 as uuidv4 } from 'uuid';
 import '../App.css';
 
@@ -7,6 +7,7 @@ function AddReceipt({ receipts, setReceipts }) {
   const [receipt, setReceipt] = useState({ id: '', amount: '', date: '', description: '', groupId: '' });
   const [groups, setGroups] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState(null); // Track locked group selection
+  const [isEditing, setIsEditing] = useState(false);
 
   const dateInputRef = useRef(null); // Reference for the date input field
 
