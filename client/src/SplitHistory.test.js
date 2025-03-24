@@ -144,10 +144,8 @@ describe('SplitHistory Component', () => {
       });
       // Mock URL.createObjectURL to return a dummy URL
       global.URL.createObjectURL = jest.fn(() => 'blob:dummy');
-
       // Store the original document.createElement function
       const originalCreateElement = document.createElement;
-
       // Mock only anchor elements and preserve all others
       jest.spyOn(document, 'createElement').mockImplementation((tagName) => {
         if (tagName === 'a') {
@@ -157,7 +155,6 @@ describe('SplitHistory Component', () => {
         }
         return originalCreateElement.call(document, tagName);
       });
-
       // Render the component inside MemoryRouter for routing support
       render(
         <MemoryRouter>
@@ -180,7 +177,6 @@ describe('SplitHistory Component', () => {
 
   describe('handleSubmitPayment function', () => {
     it('should submit payment and reload the page when payment is confirmed', async () => {
-
       fetch.mockResolvedValueOnce({
         ok: true,
       });
