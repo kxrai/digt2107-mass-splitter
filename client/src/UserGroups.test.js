@@ -37,8 +37,8 @@ describe('UserGroups Component', () => {
 
     render(<UserGroups />);
 
-    await waitFor(() => expect(screen.getByText('Family')).toBeInTheDocument());
-    expect(screen.getByText('Friends')).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByText('ID: 1 - Family')).toBeInTheDocument());
+    expect(screen.getByText('ID: 2 - Friends')).toBeInTheDocument();
   });
 
   test('displays message when no groups are found', async () => {
@@ -57,14 +57,14 @@ describe('UserGroups Component', () => {
 
     render(<UserGroups />);
 
-    await waitFor(() => expect(screen.getByText('Family')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText('ID: 1 - Family')).toBeInTheDocument());
 
     fireEvent.click(screen.getByRole('button'));
     await waitFor(() => expect(screen.getByText('⚠️ Confirm Deletion')).toBeInTheDocument());
 
     fireEvent.click(screen.getByText('Yes, Delete'));
 
-    await waitFor(() => expect(screen.queryByText('Family')).not.toBeInTheDocument());
+    await waitFor(() => expect(screen.queryByText('ID: 1 - Family')).not.toBeInTheDocument());
   });
 
   test('displays error message when deletion fails', async () => {
@@ -77,7 +77,7 @@ describe('UserGroups Component', () => {
 
     render(<UserGroups />);
 
-    await waitFor(() => expect(screen.getByText('Family')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText('ID: 1 - Family')).toBeInTheDocument());
 
     fireEvent.click(screen.getByRole('button'));
     await waitFor(() => expect(screen.getByText('⚠️ Confirm Deletion')).toBeInTheDocument());

@@ -118,7 +118,7 @@ function SplitHistory() {
                 Download Details
               </button>
               &nbsp;&nbsp;&nbsp;
-              <button className="btn btn-sm bg-red-500 text-white hover:bg-red-600" onClick={() => setConfirmDelete(transaction.payment_id)}>
+              <button data-testid="delete-button" className="btn btn-sm bg-red-500 text-white hover:bg-red-600" onClick={() => setConfirmDelete(transaction.payment_id)}>
                 <TrashIcon className="h-4 w-4" />
               </button>     
             </>    
@@ -129,8 +129,8 @@ function SplitHistory() {
         {/* Form for Marking as Paid */}
         {showForm === transaction.receipt_id && (
           <div className='flex items-center justify-between'>
-            <label className='font-semibold'>Date Paid: </label>
-            <input type="date" value={paymentDate} onChange={(e) => setPaymentDate(e.target.value)} />
+            <label for="date" className='font-semibold'>Date Paid: </label>
+            <input id="date" type="date" value={paymentDate} onChange={(e) => setPaymentDate(e.target.value)} />
 
             <label className='font-semibold'>Payment Method: </label>
             <select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>

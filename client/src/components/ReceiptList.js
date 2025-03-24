@@ -62,21 +62,23 @@ function ReceiptList({ receipts, setReceipts }) {
             <h3 className="font-bold text-lg text-blue-900">Edit Receipt</h3>
 
             {/* Amount Input */}
-            <label className="label text-blue-700">Total Amount</label>
+            <label for="amount" className="label text-blue-700">Total Amount</label>
             <input
               type="number"
               name="amount"
+              id="amount"
               value={editedValues.amount}
               onChange={handleChange}
               className="input input-bordered mb-4 w-full text-blue-900 bg-white"
             />
 
             {/* Date Input */}
-            <label className="label text-blue-700">Date</label>
+            <label for="date" className="label text-blue-700">Date</label>
             <div className="relative">
               <input
                 type="date"
                 name="date"
+                id="date"
                 ref={dateInputRef} // Reference for triggering
                 value={editedValues.date}
                 onChange={handleChange}
@@ -85,9 +87,10 @@ function ReceiptList({ receipts, setReceipts }) {
             </div>
 
             {/* Description Input */}
-            <label className="label text-blue-700">Description</label>
+            <label for="description" className="label text-blue-700">Description</label>
             <textarea
               name="description"
+              id="description"
               value={editedValues.description}
               onChange={handleChange}
               className="textarea textarea-bordered mb-4 w-full text-blue-900 bg-white"
