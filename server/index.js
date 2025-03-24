@@ -28,7 +28,8 @@ app.options('*', cors());
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, '../client/build')));
+app.use(express.static(path.join(__dirname, 'build')));
+// app.use(express.static(path.join(__dirname, '../client/build')));
 
 // Database Connection (Persistent Connection)
 const db = mysql.createConnection({
@@ -100,4 +101,8 @@ findFreePort(DEFAULT_PORT, (err, freePort) => {
   app.listen(freePort, () => {
     console.log(`🚀 Server running on port ${freePort}`);
   });
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
