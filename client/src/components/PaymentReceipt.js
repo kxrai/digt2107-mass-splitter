@@ -8,7 +8,6 @@ const PaymentReceipt = ({ receipt }) => {
         color: "rgb(45, 55, 72)", // text-gray-800
         padding: "20px",
         borderRadius: "10px",
-        color: "black",
         width: "300px",
       }}
     > {/* Payment transaction information */}
