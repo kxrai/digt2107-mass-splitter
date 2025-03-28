@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, act } from 'react';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import Navbar from '../components/Navbar';
 import ConfirmationModal from '../components/ConfirmationModal';
@@ -32,7 +32,6 @@ function SplitHistory() {
         if (!response.ok) throw new Error('Failed to fetch payments');
   
         const data = await response.json();
-        console.log("Fetched payment data:", data);
   
         const incoming = [];
         const outgoing = [];
@@ -158,7 +157,21 @@ function SplitHistory() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount: transaction.amount, method: paymentMethod, date: paymentDate }),
       });
+      // Send email to notify payment action
       if (response.ok) {
+        fetch("http://localhost:5000/send-email", {method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+              email: (JSON.parse(localStorage.getItem('googleToken'))).email,
+              subject: activeTab == 'incoming' ? 'New Payment Confirmed' : 'New Payment Submitted',
+              html: `<h2>New Payment Update</h2>
+                  <h3>A payment has been ${activeTab == 'incoming' ? 'confirmed for you' : 'submitted to you'}:</h3>
+                  <p><strong>Receipt ID:</strong> ${transaction.receipt_id}</p>
+                  <p><strong>Date Paid:</strong> ${paymentDate}</p>
+                  <p><strong>Total Amount Owed:</strong> $${transaction.amount}</p>
+                  <p><strong>Description:</strong> ${transaction.description}</p>
+                  <p>Log in to view more details in your Payment History.</p>`
+          }),
+        });
         window.location.reload(false);
         setShowForm(null);
       } else {
@@ -193,9 +206,9 @@ function SplitHistory() {
         </div>
         
         {/* Payment Receipt */}
-        {confirmation &&(
+        {confirmation && (
         <div id="receipt-content" style={{position: 'absolute', left: '-9999px', top: '-9999px'}}>
-          <PaymentReceipt receipt={confirmation} date={paymentDate} method={paymentMethod} />
+          <PaymentReceipt receipt={confirmation} />
         </div>
         )}
 

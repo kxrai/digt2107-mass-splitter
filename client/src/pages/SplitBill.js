@@ -127,6 +127,7 @@ function SplitBill() {
 
       // Step 2: Create Payments for Each Group Member and Receipt
       const paymentPromises = [];
+      const emailData = {}; // Store email data per user
       
       receiptIds.forEach((receiptId, receiptIndex) => {
         groupMembers.forEach((member, index) => {
@@ -142,20 +143,37 @@ function SplitBill() {
             }),
           });
           paymentPromises.push(paymentPromise);
-          // Send an email notification
-          fetch("http://localhost:5000/send-email", {method: "POST", headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                email: member.email,
-                type: method,
-                billAmount: amountOwed.toFixed(2),
-                billDescription: descriptions[receiptIndex],
-            }),
-          });
+          // Aggregate email data per user
+          if (!emailData[member.email]) {
+              emailData[member.email] = {
+                  descriptions: [],
+                  totalAmount: 0,
+                  method: method,
+              };
+          }
+          emailData[member.email].descriptions.push(descriptions[receiptIndex] || 'No Description');
+          emailData[member.email].totalAmount += parseFloat(amountOwed.toFixed(2));
         });
       });
       // Execute all payment requests concurrently
       const paymentResponses = await Promise.all(paymentPromises);
       const paymentData = await Promise.all(paymentResponses.map((res) => res.json()));
+      // Send one email per user with all receipts and total amount
+      Object.entries(emailData).forEach(([email, data]) => {
+        fetch("http://localhost:5000/send-email", {method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                email: email,
+                subject: 'New Bill Submitted',
+                html: `<h2>New Receipt(s) Submitted</h2>
+                    <h3>A new bill has been created that contains the following receipt(s):</h3>
+                    <p><strong>Type:</strong> ${data.method}</p>
+                    <p><strong>Total Amount Owed:</strong> $${data.totalAmount}</p>
+                    <p><strong>Receipts:</strong></p>
+                    <ul>${data.descriptions.map(desc => `<li>${desc}</li>`).join('')}</ul>
+                    <p>Log in to view more details in your Payment History.</p>`
+            }),
+        });
+      });
 
     } catch (error) {
       console.error("Error submitting receipts and payments:", error);

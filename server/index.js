@@ -69,18 +69,13 @@ const transporter = nodemailer.createTransport({
 });
 
 app.post("/send-email", async (req, res) => {
-  const { email, type, billAmount, billDescription } = req.body;
+  const { email, subject, html } = req.body;
   const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
-      subject: `New Receipt Submitted - Ref #${Date.now()}`,
+      subject: `${subject} - Ref #${Date.now()}`,
       headers: { "Message-ID": `<${Date.now()}@mass-splitter.com>` }, // Ensures a unique message
-      html: `<h2>New Receipt Submitted</h2>
-             <h3>A new bill has been created that contains this receipt</h3>
-             <p><strong>Type:</strong> $${type}</p>
-             <p><strong>Amount:</strong> $${billAmount}</p>
-             <p><strong>Description:</strong> ${billDescription || 'No Description'}</p>
-             <p>Log in to view more details in your Payment History.</p>`
+      html: `${html}`
   };
   try {
       await transporter.sendMail(mailOptions);

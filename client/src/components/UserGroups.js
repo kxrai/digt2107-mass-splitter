@@ -4,6 +4,7 @@ import ConfirmationModal from './ConfirmationModal';
 
 function UserGroups() {
   const [groups, setGroups] = useState([]);
+  const [groupMembers, setGroupMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [confirmDelete, setConfirmDelete] = useState(null);
@@ -27,7 +28,18 @@ function UserGroups() {
       }
 
       const data = await response.json();
+      const allMembers = [];
+      
+      for (const group of data){
+        const memberResponse = await fetch(`http://localhost:3000/api/groups/members/${group.group_id}`, { method: 'GET'});
+        if (!memberResponse.ok) {
+          throw new Error('Failed to fetch group members.');
+        }
+        const members = await memberResponse.json();
+        allMembers.push(members.map(member => (member.username)).join(", "));
+      }
       setGroups(data);
+      setGroupMembers(allMembers);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -66,9 +78,10 @@ function UserGroups() {
         <p className="text-gray-500">You are not in any groups.</p>
       ) : (
         <ul className="list-disc list-inside">
-          {groups.map((group) => (
+          {groups.map((group, index) => (
             <li key={group.group_id} className="flex justify-between items-center p-2 bg-gray-100 rounded mb-2">
               <span>ID: {group.group_id} - {group.group_name}</span>
+              <span>Members: {(groupMembers[index])}</span>
               <button 
                 className="btn btn-sm bg-red-500 text-white hover:bg-red-600"
                 onClick={() => setConfirmDelete(group.group_id)}

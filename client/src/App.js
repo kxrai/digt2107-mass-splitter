@@ -98,12 +98,8 @@ function App() {
   // Check if the user is logged in based on localStorage
   const loggedIn = Boolean(localStorage.getItem('loggedIn'));
 
-  /**const ProtectedRoute = ({ children }) => {
-    return loggedIn ? children : <Navigate to="/login" />;
-  };**/
-
   return (
-    <div className="grid-bg min-h-screen flex flex-col"> {/* ✅ Grid background applied globally */}
+    <div className="grid-bg min-h-screen flex flex-col"> {/* Grid background applied globally */}
     <Router>
       <Routes>
         {/* Public Routes */}

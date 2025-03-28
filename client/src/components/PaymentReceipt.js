@@ -16,7 +16,7 @@ const PaymentReceipt = ({ receipt }) => {
         <p><strong>Receipt ID:</strong> {receipt.receipt_id}</p>
         <p><strong>Group ID:</strong> {receipt.group_id}</p>
         <p><strong>Description:</strong> {receipt.description}</p>
-        <p><strong>Date of Payment:</strong> {new Date(receipt.date).toLocaleDateString()}</p>
+        <p><strong>Receipt Date:</strong> {new Date(receipt.date).toLocaleDateString()}</p>
         <p><strong>Debt:</strong> ${receipt.amount ? Number(receipt.amount).toFixed(2) : "0.00"}</p>
         <p><strong>Paid:</strong> ${receipt.paid ? Number(receipt.paid).toFixed(2) : "0.00"}</p>
         <p><strong>Payment Method:</strong> {receipt.method}</p>
