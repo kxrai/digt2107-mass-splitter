@@ -20,7 +20,8 @@ function ReceiptList({ receipts, setReceipts }) {
   // Handle Input Changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setEditedValues((prev) => ({ ...prev, [name]: value }));
+    if (name == 'amount') { setEditedValues((prev) => ({ ...prev, [name]: parseFloat(value) })); }
+    else { setEditedValues((prev) => ({ ...prev, [name]: value })); }
   };
 
   // Save Changes to Receipt
