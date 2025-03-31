@@ -176,10 +176,9 @@ describe('SplitHistory Component', () => {
   });
 
   describe('handleSubmitPayment function', () => {
-    it('should submit payment and reload the page when payment is confirmed', async () => {
-      fetch.mockResolvedValueOnce({
-        ok: true,
-      });
+    it('should submit payment, send confirmation email and reload page', async () => {
+      fetch.mockResolvedValueOnce({ ok: true }); //Mock payment update request
+      fetch.mockResolvedValueOnce({ ok: true }); // Mock email request
 
       render(
       <MemoryRouter>
@@ -209,6 +208,15 @@ describe('SplitHistory Component', () => {
             method: 'Credit Card',
             date: '2021-02-02',
           }),
+        });
+      });
+
+      // Verify that an email request was sent
+      await waitFor(() => {
+        expect(fetch).toHaveBeenCalledWith("http://localhost:5000/send-email", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: expect.stringContaining('"subject":"New Payment Confirmed"'),
         });
       });
 

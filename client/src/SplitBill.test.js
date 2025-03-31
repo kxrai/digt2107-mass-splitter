@@ -146,8 +146,9 @@ describe('SplitBill Page', () => {
     fetchMock.mockResponseOnce(JSON.stringify({ receiptId: 123 }), { status: 200 });
     // 2. Payment creation POST requests for each group member and receipt.
     fetchMock.mockResponses(
-      [JSON.stringify({ paymentId: 1 }), { status: 200 }],
-      [JSON.stringify({ paymentId: 2 }), { status: 200 }]
+      [JSON.stringify({ paymentId: 1 }), { status: 200 }],   // Payment for user 1
+      [JSON.stringify({ paymentId: 2 }), { status: 200 }],   // Payment for user 2
+      { ok: true } //Mock email request
     );
     // Simulate clicking "Yes, Proceed" in the modal
     const yesProceedButton = screen.getByText('Yes, Proceed');
